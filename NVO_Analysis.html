@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVO — Novo Nordisk Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1a;
+    --surface: #111827;
+    --surface2: #1a2335;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --red: #ff4560;
+    --green: #00e096;
+    --yellow: #ffd166;
+    --text: #e8edf5;
+    --muted: #6b7fa3;
+    --dim: #3a4a65;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #0d1b30 0%, #0a1220 50%, #091018 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 40px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: 'NVO';
+    position: absolute;
+    right: -20px; top: -20px;
+    font-family: 'Syne', sans-serif;
+    font-size: 200px;
+    font-weight: 800;
+    color: rgba(0,212,255,0.03);
+    pointer-events: none;
+    letter-spacing: -10px;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .

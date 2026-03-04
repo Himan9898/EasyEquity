@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Easy Equity — Research Made Simple</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & ROOT ─────────────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f5f6f8;
+  --surface:#ffffff;
+  --surface2:#eef1f6;
+  --border:#dde2ec;
+  --border2:#c8d0e0;
+  --navy:#0a1628;
+  --navy2:#132040;
+  --blue:#1a56db;
+  --blue2:#2563eb;
+  --blue-light:#eff4ff;
+  --green:#0e7c4a;
+  --green-bg:#edfaf3;
+  --red:#c0192b;
+  --red-bg:#fff0f1;
+  --amber:#b45309;
+  --text:#0a1628;
+  --muted:#5a6880;
+  --subtle:#f0f2f7;
+  --ticker-up:#0e7c4a;
+  --ticker-dn:#c0192b;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* ── TICKER TAPE ──────────────────────────────────────────── */
+.ticker-tape{background:var(--navy);padding:7px 0;overflow:hidden;border-bottom:1px solid #1e2d45;}
+.ticker-inner{display:flex;gap:0;white-space:nowrap;animation:tickerScroll 35s linear infinite;}
+.ticker-inner:hover{animation-play-state:paused;}
+.tick-item{display:inline-flex;align-items:center;gap:8px;padding:0 28px;border-right:1px solid #1e2d45;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,0.7);}
+.tick-sym{color:#fff;font-weight:500;}
+.tick-up{color:#34d399;}
+.tick-dn{color:#f87171;}
+.tick-pct{font-size:10px;}
+@keyframes tickerScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* ── NAV ──────────────────────────────────────────────────── */
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 60px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(10,22,40,0.07);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-mark{width:34px;height:34px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.logo-mark svg{width:18px;height:18px;}
+.logo-text{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--navy);letter-spacing:-0.5px;}
+.logo-text span{color:var(--blue);}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-links a{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;padding:7px 14px;border-radius:6px;transition:all .2s;letter-spacing:0.2px;}
+.nav-links a:hover{color:var(--navy);background:var(--subtle);}
+.nav-links a.active{color:var(--blue);background:var(--blue-light);}
+.nav-cta{background:var(--blue);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;border-radius:7px;text-decoration:none;border:none;cursor:pointer;transition:all .2s;letter-spacing:0.2px;}
+.nav-cta:hover{background:#1347c0;transform:translateY(-1px);box-shadow:0 4px 14px rgba(26,86,219,0.35);}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero{background:var(--navy);padding:80px 60px 70px;position:relative;overflow:hidden;}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+.hero-glow{position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(37,99,235,0.2) 0%,transparent 65%);pointer-events:none;}
+.hero-inner{max-width:800px;position:relative;}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.3);border-radius:20px;padding:5px 14px;margin-bottom:24px;}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:#60a5fa;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.hero-badge span{font-family:'JetBrains Mono',monospace;font-size:11px;color:#93c5fd;letter-spacing:1px;text-transform:uppercase;}
+.hero h1{font-family:'Syne',sans-serif;font-size:54px;font-weight:800;color:#fff;line-height:1.08;letter-spacing:-1.5px;margin-bottom:18px;}
+.hero h1 em{font-family:'Instrument Serif',serif;font-style:italic;color:#60a5fa;font-weight:400;}
+.hero-sub{font-size:17px;color:rgba(255,255,255,0.55);line-height:1.65;max-width:560px;margin-bottom:36px;font-weight:400;}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-primary{background:var(--blue2);color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;padding:13px 26px;border-radius:8px;text-decoration:none;border:none;cursor:pointer;transition:all .2s;}
+.btn-primary:hover{background:#1347c0;transform:translateY(-2px);box-shadow:0 6px 20px rgba(37,99,235,0.4);}
+.btn-secondary{background:rgba(255,255,255,0.07);color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:600;padding:13px 26px;border-radius:8px;text-decoration:none;border:1px solid rgba(255,255,255,0.15);cursor:pointer;transition:all .2s;}
+.btn-secondary:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.25);}
+.hero-stats{display:flex;gap:40px;margin-top:52px;padding-top:36px;border-top:1px solid rgba(255,255,255,0.08);}
+.hstat{text-align:left;}
+.hstat-num{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;letter-spacing:-1px;}
+.hstat-num span{color:#60a5fa;}
+.hstat-lbl{font-size:12px;color:rgba(255,255,255,0.4);margin-top:3px;font-weight:500;letter-spacing:0.5px;}
+
+/* ── SECTION WRAPPER ──────────────────────────────────────── */
+.section{padding:64px 60px;}
+.section-alt{background:var(--surface);}
+.sec-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;gap:20px;flex-wrap:wrap;}
+.sec-title{font-size:26px;font-weight:800;color:var(--navy);letter-spacing:-0.5px;}
+.sec-sub{font-size:14px;color:var(--muted);margin-top:4px;font-weight:400;}
+.sec-link{font-size:13px;font-weight:700;color:var(--blue);text-decoration:none;white-space:nowrap;}
+.sec-link:hover{text-decoration:underline;}
+
+/* ── NEWS SECTION ─────────────────────────────────────────── */
+.news-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:16px;}
+.news-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .2s;text-decoration:none;display:block;}
+.news-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(10,22,40,0.1);border-color:var(--border2);}
+.news-card.featured{grid-row:span 2;}
+.nc-img{height:200px;background:var(--surface2);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.nc-img.featured-img{height:260px;}
+.nc-img-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;opacity:0.15;}
+.nc-tag{position:absolute;top:12px;left:12px;background:var(--navy);color:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;padding:4px 9px;border-radius:3px;text-transform:uppercase;}
+.nc-tag.bull{background:var(--green);}
+.nc-tag.bear{background:var(--red);}
+.nc-tag.neutral{background:var(--amber);}
+.nc-body{padding:16px;}
+.nc-ticker{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue);letter-spacing:1px;margin-bottom:6px;font-weight:500;}
+.nc-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--navy);line-height:1.4;margin-bottom:8px;}
+.news-card.featured .nc-title{font-size:18px;line-height:1.35;}
+.nc-excerpt{font-size:12px;color:var(--muted);line-height:1.6;font-family:'Instrument Serif',serif;font-weight:400;}
+.nc-meta{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
+.nc-date{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);}
+.nc-read{font-size:11px;font-weight:700;color:var(--blue);}
+
+/* ── REPORTS SECTION ──────────────────────────────────────── */
+.reports-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.report-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;cursor:pointer;transition:all .2s;text-decoration:none;display:block;position:relative;overflow:hidden;}
+.report-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.report-card.bull-card::before{background:linear-gradient(90deg,var(--green),#34d399);}
+.report-card.bear-card::before{background:linear-gradient(90deg,var(--red),#f87171);}
+.report-card.neutral-card::before{background:linear-gradient(90deg,var(--amber),#fbbf24);}
+.report-card.wait-card::before{background:linear-gradient(90deg,#6366f1,#a78bfa);}
+.report-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(10,22,40,0.1);border-color:var(--border2);}
+.rc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.rc-ticker{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--navy);letter-spacing:-0.5px;}
+.rc-verdict{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;padding:4px 9px;border-radius:4px;font-weight:500;text-transform:uppercase;}
+.verdict-wait{background:rgba(99,102,241,0.1);color:#6366f1;}
+.verdict-watch{background:rgba(180,83,9,0.1);color:var(--amber);}
+.verdict-buy{background:rgba(14,124,74,0.1);color:var(--green);}
+.verdict-low{background:rgba(192,25,43,0.1);color:var(--red);}
+.rc-company{font-size:12px;color:var(--muted);margin-bottom:12px;font-weight:400;}
+.rc-desc{font-family:'Instrument Serif',serif;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;}
+.rc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.rc-tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 8px;border-radius:3px;background:var(--subtle);color:var(--muted);border:1px solid var(--border);}
+.rc-footer{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--border);}
+.rc-price{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--navy);}
+.rc-bq{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);}
+.rc-bq strong{color:var(--blue);}
+.rc-arrow{font-size:16px;color:var(--blue);transition:transform .2s;}
+.report-card:hover .rc-arrow{transform:translateX(4px);}
+
+/* ── ARTICLES ─────────────────────────────────────────────── */
+.articles-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.article-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px 24px;cursor:pointer;transition:all .2s;text-decoration:none;display:flex;gap:18px;align-items:flex-start;}
+.article-card:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(10,22,40,0.09);border-color:var(--border2);}
+.ac-num{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--border2);line-height:1;flex-shrink:0;width:48px;}
+.ac-body{}
+.ac-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;margin-bottom:6px;font-weight:500;}
+.ac-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--navy);line-height:1.35;margin-bottom:7px;}
+.ac-excerpt{font-family:'Instrument Serif',serif;font-size:13px;color:var(--muted);line-height:1.6;}
+.ac-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:10px;}
+
+/* ── STATS / CLIENTS SERVED ───────────────────────────────── */
+.stats-section{background:var(--navy);padding:64px 60px;}
+.stats-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.stats-left{}
+.stats-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:#60a5fa;text-transform:uppercase;margin-bottom:14px;}
+.stats-heading{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:#fff;line-height:1.15;letter-spacing:-0.5px;margin-bottom:16px;}
+.stats-heading em{font-family:'Instrument Serif',serif;font-style:italic;color:#93c5fd;font-weight:400;}
+.stats-para{font-size:15px;color:rgba(255,255,255,0.5);line-height:1.7;font-weight:400;}
+.stats-right{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.stat-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);padding:28px 24px;transition:background .2s;}
+.stat-box:hover{background:rgba(255,255,255,0.07);}
+.stat-box:first-child{border-radius:12px 0 0 0;}
+.stat-box:nth-child(2){border-radius:0 12px 0 0;}
+.stat-box:nth-child(3){border-radius:0 0 0 12px;}
+.stat-box:last-child{border-radius:0 0 12px 0;}
+.stat-num{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:#fff;letter-spacing:-1px;line-height:1;}
+.stat-num span{color:#60a5fa;}
+.stat-lbl{font-size:13px;color:rgba(255,255,255,0.4);margin-top:6px;font-weight:500;}
+.stat-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.25);margin-top:4px;}
+
+/* ── CONNECT / BOOKING ────────────────────────────────────── */
+.connect-section{padding:64px 60px;background:var(--bg);}
+.connect-inner{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:56px 60px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.conn-left{}
+.conn-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:14px;}
+.conn-title{font-family:'Syne',sans-serif;font-size:34px;font-weight:800;color:var(--navy);letter-spacing:-0.5px;line-height:1.15;margin-bottom:14px;}
+.conn-title em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--blue);font-weight:400;}
+.conn-para{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:24px;font-weight:400;}
+.conn-features{display:flex;flex-direction:column;gap:12px;}
+.conn-feat{display:flex;align-items:flex-start;gap:12px;}
+.cf-icon{width:32px;height:32px;border-radius:7px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}
+.cf-text{}
+.cf-title{font-size:13px;font-weight:700;color:var(--navy);}
+.cf-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.conn-right{}
+.booking-card{background:var(--navy);border-radius:12px;padding:36px;position:relative;overflow:hidden;}
+.bc-glow{position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(37,99,235,0.3),transparent 65%);pointer-events:none;}
+.bc-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:6px;}
+.bc-sub{font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:28px;}
+.form-group{margin-bottom:14px;}
+.form-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:rgba(255,255,255,0.5);text-transform:uppercase;margin-bottom:6px;display:block;}
+.form-input,.form-select,.form-textarea{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:7px;padding:11px 14px;font-family:'Syne',sans-serif;font-size:13px;color:#fff;outline:none;transition:border-color .2s;font-weight:400;}
+.form-input::placeholder,.form-textarea::placeholder{color:rgba(255,255,255,0.25);}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(37,99,235,0.6);background:rgba(255,255,255,0.08);}
+.form-select{color:rgba(255,255,255,0.7);cursor:pointer;}
+.form-select option{background:#1a2540;color:#fff;}
+.form-textarea{resize:vertical;min-height:80px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-book{width:100%;background:var(--blue2);color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;padding:14px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;margin-top:6px;letter-spacing:0.3px;}
+.btn-book:hover{background:#1347c0;transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,0.4);}
+.bc-note{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.25);text-align:center;margin-top:12px;}
+
+/* ── SUCCESS STATE ────────────────────────────────────────── */
+.success-msg{display:none;text-align:center;padding:24px;}
+.success-msg.show{display:block;}
+.success-icon{font-size:40px;margin-bottom:10px;}
+.success-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:6px;}
+.success-sub{font-size:13px;color:rgba(255,255,255,0.5);}
+
+/* ── FOOTER ───────────────────────────────────────────────── */
+footer{background:var(--navy2);border-top:1px solid #1e2d45;padding:36px 60px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.ft-logo{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#fff;}
+.ft-logo span{color:#60a5fa;}
+.ft-links{display:flex;gap:20px;}
+.ft-links a{font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;font-weight:500;transition:color .2s;}
+.ft-links a:hover{color:rgba(255,255,255,0.8);}
+.ft-copy{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.2);}
+.ft-disc{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.2);max-width:600px;text-align:center;line-height:1.5;}
+
+/* ── SCROLL ANIMATIONS ────────────────────────────────────── */
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .hero{padding:50px 20px 44px;}
+  .hero h1{font-size:36px;}
+  .hero-stats{gap:24px;flex-wrap:wrap;}
+  .section{padding:44px 20px;}
+  .stats-section{padding:44px 20px;}
+  .connect-section{padding:44px 20px;}
+  .connect-inner{padding:28px 20px;grid-template-columns:1fr;gap:32px;}
+  .stats-inner{grid-template-columns:1fr;gap:32px;}
+  .news-grid{grid-template-columns:1fr;}
+  .news-card.featured{grid-row:span 1;}
+  .reports-grid{grid-template-columns:1fr;}
+  .articles-grid{grid-template-columns:1fr;}
+  footer{padding:24px 20px;flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- TICKER TAPE -->
+<div class="ticker-tape">
+  <div class="ticker-inner" id="tickerInner">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 18 18" fill="none"><polyline points="2,13 6,8 10,11 16,4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="4" r="1.5" fill="white"/></svg>
+    </div>
+    <span class="logo-text">Easy<span>Equity</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="#news" class="active">News</a>
+    <a href="#reports">Reports</a>
+    <a href="#articles">Articles</a>
+    <a href="#connect">1-on-1</a>
+  </div>
+  <a href="#connect" class="nav-cta">Book a Call</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      <span>Independent Equity Research</span>
+    </div>
+    <h1>Stock research,<br><em>finally explained</em><br>in plain language.</h1>
+    <p class="hero-sub">Deep-dive company analysis written for real investors — no jargon, no fluff. Just the numbers, the story, and an honest verdict.</p>
+    <div class="hero-actions">
+      <a href="#reports" class="btn-primary">Read Latest Reports</a>
+      <a href="#connect" class="btn-secondary">Book a 1-on-1 Call</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-num">12<span>+</span></div>
+        <div class="hstat-lbl">Reports Published</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">4</div>
+        <div class="hstat-lbl">Sectors Covered</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">100<span>%</span></div>
+        <div class="hstat-lbl">Independent Research</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">0</div>
+        <div class="hstat-lbl">Conflicts of Interest</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="section section-alt" id="news">
+  <div class="sec-header">
+    <div>
+      <div class="sec-title">Top Stories</div>
+      <div class="sec-sub">Latest news on covered stocks — updated regularly</div>
+    </div>
+    <a href="#" class="sec-link">All News →</a>
+  </div>
+  <div class="news-grid fade-up">
+    <a href="UNH_Analysis.html" class="news-card featured">
+      <div class="nc-img featured-img">
+        <div class="nc-img-bg">🏥</div>
+        <div class="nc-tag bear">Breaking</div>
+      </div>
+      <div class="nc-body">
+        <div class="nc-ticker">UNH · UnitedHealth Group</div>
+        <div class="nc-title">UNH Medical Cost Ratio Hits 89.9% — EPS Cut Four Times in 2025, CEO Change Underway</div>
+        <div class="nc-excerpt">America's largest health insurer faces a perfect storm: surging utilisation, V28 model losses, DOJ investigation, and leadership upheaval. The 2027 recovery thesis is intact — but execution risk is high.</div>
+        <div class="nc-meta">
+          <span class="nc-date">Mar 2026</span>
+          <span class="nc-read">Read Full Report →</span>
+        </div>
+      </div>
+    </a>
+    <a href="DOCS_Analysis.html" class="news-card">
+      <div class="nc-img">
+        <div class="nc-img-bg">🩺</div>
+        <div class="nc-tag neutral">Watch</div>
+      </div>
+      <div class="nc-body">
+        <div class="nc-ticker">DOCS · Doximity</div>
+        <div class="nc-title">Pharma Budget Freeze Hits Doximity — Q4 Guided at Just +4% Growth</div>
+        <div class="nc-excerpt">MFN agreements caused pharma clients to pause bookings. AI adoption accelerating but not yet in revenue guidance. Moat remains intact.</div>
+        <div class="nc-meta">
+          <span class="nc-date">Mar 2026</span>
+          <span class="nc-read">Read Report →</span>
+        </div>
+      </div>
+    </a>
+    <a href="BRBR_Analysis.html" class="news-card">
+      <div class="nc-img">
+        <div class="nc-img-bg">💪</div>
+        <div class="nc-tag bear">Caution</div>
+      </div>
+      <div class="nc-body">
+        <div class="nc-ticker">BRBR · BellRing Brands</div>
+        <div class="nc-title">Securities Class Action Filed — Channel Destocking Hits Core Shakes Revenue</div>
+        <div class="nc-excerpt">Premier Protein RTD share fell 500bps to 25%. Core shakes revenue negative for first time. GLP-1 tailwind real but trust broken.</div>
+        <div class="nc-meta">
+          <span class="nc-date">Feb 2026</span>
+          <span class="nc-read">Read Report →</span>
+        </div>
+      </div>
+    </a>
+    <a href="SAFE_Analysis.html" class="news-card">
+      <div class="nc-img">
+        <div class="nc-img-bg">🏗️</div>
+        <div class="nc-tag bull">Income</div>
+      </div>
+      <div class="nc-body">
+        <div class="nc-ticker">SAFE · Safehold</div>
+        <div class="nc-title">Only Public Ground Lease REIT Trading at 0.41x Book — Rate Relief the Key Catalyst</div>
+        <div class="nc-excerpt">$220M new originations in Q2 2025. Net margin improving each quarter. Dividend 5.23% pays you while waiting for rate-driven re-rate.</div>
+        <div class="nc-meta">
+          <span class="nc-date">Mar 2026</span>
+          <span class="nc-read">Read Report →</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- REPORTS -->
+<section class="section" id="reports">
+  <div class="sec-header">
+    <div>
+      <div class="sec-title">Research Reports</div>
+      <div class="sec-sub">Deep-dive analysis on individual stocks — plain language, honest verdict</div>
+    </div>
+    <a href="#" class="sec-link">All Reports →</a>
+  </div>
+  <div class="reports-grid fade-up">
+
+    <a href="DOCS_Analysis.html" class="report-card neutral-card">
+      <div class="rc-top">
+        <div>
+          <div class="rc-ticker">DOCS</div>
+          <div class="rc-company">Doximity · Healthcare Tech · California</div>
+        </div>
+        <div class="rc-verdict verdict-watch">Phased Buy</div>
+      </div>
+      <div class="rc-desc">LinkedIn for doctors — 80%+ of US physicians on one platform, 117% revenue retention, #1 ROIC of 47 peers. Pharma budget headwind is cyclical, not structural.</div>
+      <div class="rc-tags">
+        <span class="rc-tag">Healthcare</span>
+        <span class="rc-tag">SaaS</span>
+        <span class="rc-tag">AI Optionality</span>
+        <span class="rc-tag">Network Effect</span>
+      </div>
+      <div class="rc-footer">
+        <div>
+          <div class="rc-price">$26.38 &nbsp;·&nbsp; <span style="color:var(--red)">↓75% from ATH</span></div>
+          <div class="rc-bq">BQ <strong>23</strong>/30 &nbsp;·&nbsp; P/E 22 vs Ind. 54</div>
+        </div>
+        <div class="rc-arrow">→</div>
+      </div>
+    </a>
+
+    <a href="UNH_Analysis.html" class="report-card bear-card">
+      <div class="rc-top">
+        <div>
+          <div class="rc-ticker">UNH</div>
+          <div class="rc-company">UnitedHealth Group · Insurance · Minnesota</div>
+        </div>
+        <div class="rc-verdict verdict-low">Low Conv.</div>
+      </div>
+      <div class="rc-desc">Largest US health insurer under simultaneous pressure: MCR at 89.9%, Optum near breakeven, DOJ investigation, four EPS guidance cuts in 2025. PEG 0.80 looks cheap — but 2027 recovery needs too many things to go right at once.</div>
+      <div class="rc-tags">
+        <span class="rc-tag">Insurance</span>
+        <span class="rc-tag">Medicare</span>
+        <span class="rc-tag">Turnaround</span>
+        <span class="rc-tag">DOJ Risk</span>
+      </div>
+      <div class="rc-footer">
+        <div>
+          <div class="rc-price">$282.63 &nbsp;·&nbsp; <span style="color:var(--red)">↓55% from ATH</span></div>
+          <div class="rc-bq">BQ <strong>18</strong>/30 &nbsp;·&nbsp; PEG 0.80</div>
+        </div>
+        <div class="rc-arrow">→</div>
+      </div>
+    </a>
+
+    <a href="BRBR_Analysis.html" class="report-card wait-card">
+      <div class="rc-top">
+        <div>
+          <div class="rc-ticker">BRBR</div>
+          <div class="rc-company">BellRing Brands · Nutrition · Missouri</div>
+        </div>
+        <div class="rc-verdict verdict-wait">Wait</div>
+      </div>
+      <div class="rc-desc">Premier Protein — real brand, 25% RTD market share, ROIC #2 of 64 peers. But revenue inflated by retailer stockpiling now reversing. Class action filed. Two clean quarters needed before buying.</div>
+      <div class="rc-tags">
+        <span class="rc-tag">Consumer</span>
+        <span class="rc-tag">Nutrition</span>
+        <span class="rc-tag">GLP-1 Tailwind</span>
+        <span class="rc-tag">Channel Risk</span>
+      </div>
+      <div class="rc-footer">
+        <div>
+          <div class="rc-price">$18.15 &nbsp;·&nbsp; <span style="color:var(--red)">↓77% from ATH</span></div>
+          <div class="rc-bq">BQ <strong>18</strong>/30 &nbsp;·&nbsp; Fwd P/E 8.32</div>
+        </div>
+        <div class="rc-arrow">→</div>
+      </div>
+    </a>
+
+    <a href="SAFE_Analysis.html" class="report-card bull-card">
+      <div class="rc-top">
+        <div>
+          <div class="rc-ticker">SAFE</div>
+          <div class="rc-company">Safehold · Ground Lease REIT · New York</div>
+        </div>
+        <div class="rc-verdict verdict-buy">Income Hold</div>
+      </div>
+      <div class="rc-desc">Only public ground lease REIT. Contractual CPI-linked rent escalations, 5.23% dividend, P/B 0.41x. The rate environment crushed the price — not the business. Dividend pays you while waiting for the re-rate.</div>
+      <div class="rc-tags">
+        <span class="rc-tag">REIT</span>
+        <span class="rc-tag">Real Estate</span>
+        <span class="rc-tag">Income</span>
+        <span class="rc-tag">Rate Sensitive</span>
+      </div>
+      <div class="rc-footer">
+        <div>
+          <div class="rc-price">$13.62 &nbsp;·&nbsp; <span style="color:var(--red)">↓75% from ATH</span></div>
+          <div class="rc-bq">BQ <strong>20</strong>/30 &nbsp;·&nbsp; Div 5.23%</div>
+        </div>
+        <div class="rc-arrow">→</div>
+      </div>
+    </a>
+
+    <!-- Placeholder cards -->
+    <div class="report-card" style="border-style:dashed;background:var(--subtle);cursor:default;">
+      <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:20px;">
+        <div style="font-size:28px;opacity:0.3;">📋</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;">COMING SOON</div>
+        <div style="font-size:13px;color:var(--muted);">Next report in progress</div>
+      </div>
+    </div>
+    <div class="report-card" style="border-style:dashed;background:var(--subtle);cursor:default;">
+      <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:20px;">
+        <div style="font-size:28px;opacity:0.3;">📋</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;">COMING SOON</div>
+        <div style="font-size:13px;color:var(--muted);">Next report in progress</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ARTICLES -->
+<section class="section section-alt" id="articles">
+  <div class="sec-header">
+    <div>
+      <div class="sec-title">Articles &amp; Explainers</div>
+      <div class="sec-sub">Concepts broken down simply — for investors at any level</div>
+    </div>
+    <a href="#" class="sec-link">All Articles →</a>
+  </div>
+  <div class="articles-grid fade-up">
+    <a href="#" class="article-card">
+      <div class="ac-num">01</div>
+      <div class="ac-body">
+        <div class="ac-tag">Fundamentals</div>
+        <div class="ac-title">What is a Business Quality Score — and why it matters more than P/E</div>
+        <div class="ac-excerpt">Most investors stop at the P/E ratio. Here's why revenue growth, margins, and cash flow quality tell a much richer story about a company's durability.</div>
+        <div class="ac-meta">5 min read &nbsp;·&nbsp; Beginner</div>
+      </div>
+    </a>
+    <a href="#" class="article-card">
+      <div class="ac-num">02</div>
+      <div class="ac-body">
+        <div class="ac-tag">Sector Deep Dive</div>
+        <div class="ac-title">GLP-1 drugs and the nutrition industry — who wins and who loses</div>
+        <div class="ac-excerpt">Wegovy and Ozempic are changing how people eat. We break down which nutrition companies benefit from the protein tailwind — and which ones are exposed.</div>
+        <div class="ac-meta">7 min read &nbsp;·&nbsp; Intermediate</div>
+      </div>
+    </a>
+    <a href="#" class="article-card">
+      <div class="ac-num">03</div>
+      <div class="ac-body">
+        <div class="ac-tag">Healthcare</div>
+        <div class="ac-title">Medical Cost Ratio explained — the number that brought down UNH</div>
+        <div class="ac-excerpt">MCR is the single most important number in health insurance. Here's what it means, what a normal range looks like, and why UNH's 89.9% is alarming.</div>
+        <div class="ac-meta">6 min read &nbsp;·&nbsp; Beginner</div>
+      </div>
+    </a>
+    <a href="#" class="article-card">
+      <div class="ac-num">04</div>
+      <div class="ac-body">
+        <div class="ac-tag">Real Estate</div>
+        <div class="ac-title">Ground leases for beginners — what Safehold actually owns (hint: just the land)</div>
+        <div class="ac-excerpt">Ground leases are one of real estate's oldest and least understood structures. We explain how SAFE makes money, why the land never depreciates, and what a re-rate looks like.</div>
+        <div class="ac-meta">8 min read &nbsp;·&nbsp; Beginner</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- STATS / CLIENTS SERVED -->
+<div class="stats-section">
+  <div class="stats-inner">
+    <div class="stats-left fade-up">
+      <div class="stats-eyebrow">Equity Research · By the Numbers</div>
+      <div class="stats-heading">Research that <em>real investors</em> can actually use</div>
+      <div class="stats-para">Every report is written for someone with no finance background. No formulas without explanation. No verdict without reasoning. If you can read a news article, you can understand our research.</div>
+    </div>
+    <div class="stats-right fade-up">
+      <div class="stat-box">
+        <div class="stat-num">4<span>+</span></div>
+        <div class="stat-lbl">Stocks Covered</div>
+        <div class="stat-sub">Healthcare · REIT · Consumer · Tech</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">30<span>+</span></div>
+        <div class="stat-lbl">Data Points Per Report</div>
+        <div class="stat-sub">Revenue · Margins · Valuation · Peers</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">1<span>on1</span></div>
+        <div class="stat-lbl">Personal Sessions</div>
+        <div class="stat-sub">Book a private call, get a plain-language deep dive</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">0</div>
+        <div class="stat-lbl">Paid Promotions</div>
+        <div class="stat-sub">100% independent — no sponsors, no conflicts</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECT / BOOKING -->
+<section class="connect-section" id="connect">
+  <div class="connect-inner">
+    <div class="conn-left fade-up">
+      <div class="conn-eyebrow">1-on-1 Sessions</div>
+      <div class="conn-title">Get a personal<br><em>stock deep-dive</em><br>in plain language.</div>
+      <div class="conn-para">Not sure what a company actually does? Confused by a report? Want a second opinion on a stock you're watching? Book a private session and we'll walk through it together — no jargon, no judgment.</div>
+      <div class="conn-features">
+        <div class="conn-feat">
+          <div class="cf-icon">📊</div>
+          <div class="cf-text">
+            <div class="cf-title">Company Deep-Dive</div>
+            <div class="cf-sub">Walk through any stock — business model, financials, risks and verdict</div>
+          </div>
+        </div>
+        <div class="conn-feat">
+          <div class="cf-icon">💬</div>
+          <div class="cf-text">
+            <div class="cf-title">Plain Language Only</div>
+            <div class="cf-sub">No finance degree needed. Every term explained as we go</div>
+          </div>
+        </div>
+        <div class="conn-feat">
+          <div class="cf-icon">🎯</div>
+          <div class="cf-text">
+            <div class="cf-title">Your Stock, Your Questions</div>
+            <div class="cf-sub">You pick the company — we do the work and present it to you live</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="conn-right fade-up">
+      <div class="booking-card">
+        <div class="bc-glow"></div>
+        <div id="bookingForm">
+          <div class="bc-title">Book a Free Intro Call</div>
+          <div class="bc-sub">30 minutes · No commitment · 100% free first session</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Your Name</label>
+              <input class="form-input" type="text" placeholder="First name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input class="form-input" type="email" placeholder="you@email.com">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stock you want to discuss</label>
+            <input class="form-input" type="text" placeholder="e.g. Apple, NVIDIA, any stock">
+          </div>
+          <div class="form-group">
+            <label class="form-label">What's your question?</label>
+            <textarea class="form-textarea" placeholder="e.g. Is this stock overvalued? What are the main risks? Should I hold or sell?"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your investing experience</label>
+            <select class="form-select">
+              <option value="">Select one</option>
+              <option>Complete beginner — just starting out</option>
+              <option>Some experience — bought a few stocks</option>
+              <option>Intermediate — follow markets regularly</option>
+              <option>Experienced — want a second opinion</option>
+            </select>
+          </div>
+          <button class="btn-book" onclick="submitBooking()">Request My Free Call →</button>
+          <div class="bc-note">Usually responds within 24 hours · Sessions via Google Meet or Zoom</div>
+        </div>
+        <div class="success-msg" id="successMsg">
+          <div class="success-icon">✅</div>
+          <div class="success-title">Request Sent!</div>
+          <div class="success-sub">We'll be in touch within 24 hours to confirm your session time. Check your inbox.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-logo">Easy<span>Equity</span></div>
+  <div class="ft-disc">For informational purposes only. Not financial advice. Always do your own research before investing.</div>
+  <div class="ft-links">
+    <a href="#news">News</a>
+    <a href="#reports">Reports</a>
+    <a href="#articles">Articles</a>
+    <a href="#connect">Contact</a>
+  </div>
+</footer>
+
+<script>
+/* ── TICKER DATA ─────────────────────────────────────────── */
+const ticks = [
+  {sym:'DOCS',price:'26.38',chg:'+0.42',pct:'+1.62%',up:true},
+  {sym:'UNH', price:'282.63',chg:'-4.21',pct:'-1.47%',up:false},
+  {sym:'BRBR',price:'18.15',chg:'+0.23',pct:'+1.28%',up:true},
+  {sym:'SAFE',price:'13.62',chg:'-0.11',pct:'-0.80%',up:false},
+  {sym:'AAPL',price:'213.49',chg:'+1.84',pct:'+0.87%',up:true},
+  {sym:'NVDA',price:'876.35',chg:'+12.4',pct:'+1.44%',up:true},
+  {sym:'SPY', price:'524.81',chg:'-2.10',pct:'-0.40%',up:false},
+  {sym:'QQQ', price:'448.62',chg:'+1.22',pct:'+0.27%',up:true},
+  {sym:'MSFT',price:'411.20',chg:'+3.50',pct:'+0.86%',up:true},
+  {sym:'AMZN',price:'186.90',chg:'-0.80',pct:'-0.43%',up:false},
+];
+
+function buildTicker(){
+  const inner = document.getElementById('tickerInner');
+  // duplicate for seamless loop
+  [...ticks,...ticks].forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'tick-item';
+    el.innerHTML = `<span class="tick-sym">${t.sym}</span>
+      <span>${t.price}</span>
+      <span class="${t.up?'tick-up':'tick-dn'}">${t.chg}</span>
+      <span class="tick-pct ${t.up?'tick-up':'tick-dn'}">(${t.pct})</span>`;
+    inner.appendChild(el);
+  });
+}
+
+/* ── SCROLL FADE-UP ───────────────────────────────────────── */
+function initScrollAnim(){
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});
+  },{threshold:0.12});
+  document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+}
+
+/* ── SMOOTH NAV HIGHLIGHT ─────────────────────────────────── */
+function initNavHighlight(){
+  const sections = ['news','reports','articles','connect'];
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll',()=>{
+    let current = '';
+    sections.forEach(id=>{
+      const el = document.getElementById(id);
+      if(el && window.scrollY >= el.offsetTop - 120) current = id;
+    });
+    links.forEach(a=>{
+      a.classList.toggle('active', a.getAttribute('href')==='#'+current);
+    });
+  });
+}
+
+/* ── BOOKING SUBMIT ───────────────────────────────────────── */
+function submitBooking(){
+  const form = document.getElementById('bookingForm');
+  const success = document.getElementById('successMsg');
+  // Simple validation
+  const inputs = form.querySelectorAll('input,select');
+  let ok = true;
+  inputs.forEach(i=>{if(!i.value.trim()){i.style.borderColor='rgba(239,68,68,0.6)';ok=false;}
+    else{i.style.borderColor='rgba(255,255,255,0.12)';}});
+  if(!ok) return;
+  form.style.display='none';
+  success.classList.add('show');
+}
+
+buildTicker();
+initScrollAnim();
+initNavHighlight();
+</script>
+</body>
+</html>

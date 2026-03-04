@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAFE – Safehold Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inconsolata:wght@300;400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f2ed;--surface:#faf8f4;--surface2:#ede8e0;
+  --border:#d4ccc0;--border2:#b8ad9e;
+  --stone:#6b5d4f;--stone2:#8a7a6a;--stone-dark:#3d3028;
+  --earth:#4a3728;--earth2:#6b4f3a;
+  --slate:#4a5568;--slate2:#2d3748;
+  --sand:#c4a882;--sand2:#e8dcc8;
+  --red:#9b2c2c;--green:#276749;--amber:#92600a;
+  --text:#2d2520;--muted:#8a7a6a;--subtle:#eae5dc;
+  --accent:#4a3728;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* HEADER — architectural / land aesthetic */
+.header{
+  background:var(--stone-dark);
+  padding:0 56px;
+  position:relative;overflow:hidden;
+}
+.header-texture{
+  position:absolute;inset:0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(255,255,255,0.015) 40px,rgba(255,255,255,0.015) 41px),
+                   repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,0.015) 60px,rgba(255,255,255,0.015) 61px);
+  pointer-events:none;
+}
+.header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--sand),var(--sand2),transparent);}
+.hinner{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;padding:44px 0 32px;}
+.ticker{font-family:'Cormorant Garamond',serif;font-size:68px;font-weight:300;color:#f5f0e8;letter-spacing:-1px;line-height:1;font-style:italic;}
+.co-name{font-family:'Inconsolata',monospace;font-size:11px;color:rgba(196,168,130,0.6);letter-spacing:3px;text-transform:uppercase;margin-top:8px;}
+.price-block{text-align:right;}
+.price-now{font-family:'Inconsolata',monospace;font-size:40px;color:#f5f0e8;}
+.price-sub{font-family:'Inconsolata',monospace;font-size:11px;color:rgba(196,168,130,0.5);margin-top:4px;}
+.header-pills{display:flex;gap:10px;padding:0 0 30px;flex-wrap:wrap;}
+.pill{background:rgba(196,168,130,0.1);border:1px solid rgba(196,168,130,0.2);border-radius:1px;padding:5px 14px;font-family:'Inconsolata',monospace;font-size:10px;color:rgba(196,168,130,0.6);letter-spacing:1px;cursor:default;transition:all .2s;}
+.pill:hover{background:rgba(196,168,130,0.2);border-color:rgba(196,168,130,0.4);color:#f5f0e8;}
+.pill strong{color:rgba(245,240,232,0.85);}
+
+/* INCOME BADGE */
+.income-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(39,103,73,0.2);border:1px solid rgba(39,103,73,0.35);border-radius:1px;padding:6px 14px;margin-top:10px;}
+.ib-dot{width:6px;height:6px;border-radius:50%;background:#68d391;}
+.ib-text{font-family:'Inconsolata',monospace;font-size:10px;color:#9ae6b4;letter-spacing:2px;text-transform:uppercase;}
+
+.verdict{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 56px;display:flex;gap:20px;align-items:flex-start;border-top:3px solid var(--sand);}
+.v-label{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:3px;color:var(--stone2);text-transform:uppercase;white-space:nowrap;padding-top:3px;}
+.v-text{font-family:'Jost',sans-serif;font-size:14px;line-height:1.8;color:var(--stone);}
+.v-text strong{color:var(--earth);}
+
+.tab-nav{display:flex;border-bottom:1px solid var(--border);padding:0 56px;background:var(--surface);position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(45,37,32,0.06);}
+.tab-btn{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:14px 20px;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;}
+.tab-btn:hover{color:var(--earth);}
+.tab-btn.active{color:var(--earth);border-bottom-color:var(--sand);}
+
+.tab-panel{display:none;padding:36px 56px;}
+.tab-panel.active{display:block;}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:24px;transition:box-shadow .2s,border-color .2s;}
+.card:hover{box-shadow:0 3px 16px rgba(45,37,32,0.07);border-color:var(--border2);}
+.full{grid-column:1/-1;}
+.ctitle{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.ctitle::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* BQ */
+.bq-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+.bq-item{text-align:center;cursor:default;}
+.bq-lbl{font-family:'Inconsolata',monospace;font-size:10px;color:var(--muted);margin-bottom:6px;}
+.bq-score{width:46px;height:46px;border-radius:1px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin:0 auto;transition:transform .2s;}
+.bq-s5{background:rgba(39,103,73,0.1);border:1.5px solid rgba(39,103,73,0.35);color:var(--green);}
+.bq-s4{background:rgba(74,55,40,0.08);border:1.5px solid rgba(74,55,40,0.3);color:var(--earth);}
+.bq-s3{background:rgba(146,96,10,0.08);border:1.5px solid rgba(146,96,10,0.3);color:var(--amber);}
+.bq-s2{background:rgba(155,44,44,0.08);border:1.5px solid rgba(155,44,44,0.3);color:var(--red);}
+.bq-item:hover .bq-score{transform:scale(1.12);}
+.bq-total{margin-top:16px;text-align:center;font-family:'Inconsolata',monospace;font-size:13px;color:var(--muted);padding-top:14px;border-top:1px solid var(--border);}
+.bq-total span{font-size:28px;color:var(--green);font-family:'Cormorant Garamond',serif;font-weight:600;}
+
+/* DIVIDEND FEATURE */
+.div-feature{background:var(--subtle);border:1px solid var(--border);border-radius:2px;padding:20px;text-align:center;}
+.div-pct{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--green);line-height:1;}
+.div-lbl{font-family:'Inconsolata',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:6px;}
+.div-sub{font-family:'Jost',sans-serif;font-size:12px;color:var(--stone2);margin-top:8px;line-height:1.5;}
+
+.spectrum{position:relative;background:linear-gradient(90deg,var(--red),var(--amber) 40%,var(--green));height:5px;border-radius:1px;margin:12px 0 36px;}
+.smark{position:absolute;top:-5px;transform:translateX(-50%);width:15px;height:15px;border-radius:1px;border:2px solid var(--bg);box-shadow:0 1px 4px rgba(0,0,0,0.15);cursor:default;transition:transform .2s;}
+.smark:hover{transform:translateX(-50%) scale(1.4);}
+.slbl{position:absolute;top:18px;transform:translateX(-50%);font-family:'Inconsolata',monospace;font-size:9px;color:var(--muted);white-space:nowrap;text-align:center;line-height:1.4;}
+.asplit{display:flex;gap:8px;margin-top:12px;}
+.sb{flex:1;text-align:center;background:var(--subtle);border:1px solid var(--border);border-radius:2px;padding:10px;transition:border-color .2s;}
+.sb:hover{border-color:var(--sand);}
+.snum{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;}
+.slb2{font-family:'Inconsolata',monospace;font-size:9px;color:var(--muted);margin-top:2px;}
+.erow{display:flex;gap:8px;margin-top:12px;}
+.ebox{flex:1;text-align:center;padding:8px;border-radius:1px;font-family:'Inconsolata',monospace;font-size:12px;font-weight:500;cursor:default;transition:transform .15s;}
+.ebox:hover{transform:translateY(-2px);}
+.eneg{background:rgba(155,44,44,0.08);border:1px solid rgba(155,44,44,0.2);color:var(--red);}
+.epos{background:rgba(39,103,73,0.08);border:1px solid rgba(39,103,73,0.2);color:var(--green);}
+.elbl{font-size:8px;color:var(--muted);margin-top:3px;display:block;}
+
+/* INCOME STREAM VISUAL */
+.income-bars{display:flex;align-items:flex-end;gap:10px;height:120px;}
+.ib-wrap{flex:1;display:flex;flex-direction:column;align-items:center;}
+.ib-bar{width:100%;border-radius:1px 1px 0 0;transform-origin:bottom;transform:scaleY(0);transition:transform .8s cubic-bezier(.22,1,.36,1);}
+.ib-bar.go{transform:scaleY(1);}
+.ib-pct{font-family:'Inconsolata',monospace;font-size:10px;color:var(--green);margin-bottom:3px;min-height:14px;}
+.ib-lbl{font-family:'Inconsolata',monospace;font-size:9px;color:var(--muted);margin-top:5px;text-align:center;}
+
+.rtbl{width:100%;border-collapse:collapse;}
+.rtbl th{font-family:'Inconsolata',monospace;font-size:10px;color:var(--muted);text-align:left;padding:0 0 10px;font-weight:400;letter-spacing:1px;}
+.rtbl th:not(:first-child){text-align:right;}
+.rtbl td{font-family:'Inconsolata',monospace;font-size:12px;color:var(--text);padding:9px 0;border-top:1px solid var(--border);transition:background .15s;}
+.rtbl td:not(:first-child){text-align:right;}
+.rtbl td.seg{color:var(--muted);font-size:11px;padding-left:14px;}
+.rtbl td.pos{color:var(--green);}
+.rtbl td.neg{color:var(--red);}
+.rtbl tr.hl td{color:var(--earth);font-weight:500;}
+.rtbl tr:hover td{background:var(--subtle);}
+
+.mrow{margin-bottom:16px;}
+.mhdr{display:flex;justify-content:space-between;margin-bottom:5px;}
+.mname{font-family:'Inconsolata',monospace;font-size:11px;color:var(--muted);}
+.mvals{font-family:'Inconsolata',monospace;font-size:10px;display:flex;gap:10px;}
+.btrack{background:var(--subtle);border-radius:1px;height:6px;position:relative;margin-bottom:4px;overflow:hidden;}
+.bfill{height:6px;border-radius:1px;width:0;transition:width 1s cubic-bezier(.22,1,.36,1);}
+
+.val-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.vi{background:var(--subtle);border:1px solid var(--border);border-radius:2px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:default;transition:all .2s;}
+.vi:hover{background:var(--sand2);border-color:var(--sand);}
+.vname{font-family:'Inconsolata',monospace;font-size:11px;color:var(--muted);}
+.vnum{font-family:'Inconsolata',monospace;font-size:16px;color:var(--text);text-align:right;}
+.vrank{font-family:'Inconsolata',monospace;font-size:10px;color:var(--earth);text-align:right;}
+
+.ev{border-bottom:1px solid var(--border);}
+.ev:last-child{border-bottom:none;}
+.evh{display:flex;gap:12px;padding:13px 0;align-items:center;cursor:pointer;user-select:none;border-radius:2px;transition:background .15s;}
+.evh:hover{background:var(--subtle);padding-left:6px;}
+.evdot{width:8px;height:8px;border-radius:1px;flex-shrink:0;}
+.evtrow{flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.evtitle{font-size:13px;color:var(--text);}
+.evchev{font-family:'Inconsolata',monospace;font-size:11px;color:var(--muted);margin-left:auto;transition:transform .25s;}
+.ev.open .evchev{transform:rotate(180deg);}
+.evbody{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.evbi{font-size:13px;line-height:1.7;color:var(--stone2);padding:0 0 13px 20px;}
+.evbi strong{color:var(--earth);}
+
+.tag{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:1px;padding:2px 7px;border-radius:1px;text-transform:uppercase;margin-right:6px;}
+.tr{background:rgba(155,44,44,0.08);color:var(--red);}
+.tu{background:rgba(39,103,73,0.08);color:var(--green);}
+.tw{background:rgba(146,96,10,0.08);color:var(--amber);}
+
+.ri,.ui{border-left:3px solid;padding:12px 14px;border-radius:0 2px 2px 0;font-size:13px;line-height:1.65;color:var(--stone2);margin-bottom:10px;transition:transform .15s;cursor:default;}
+.ri{border-color:var(--red);background:rgba(155,44,44,0.04);}
+.ui{border-color:var(--green);background:rgba(39,103,73,0.04);}
+.ri:hover,.ui:hover{transform:translateX(3px);}
+.ri strong{display:block;font-size:12px;margin-bottom:4px;color:var(--red);}
+.ui strong{display:block;font-size:12px;margin-bottom:4px;color:var(--green);}
+
+.bl{background:var(--stone-dark);border-radius:2px;padding:26px 28px;}
+.bll{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:3px;color:rgba(196,168,130,0.6);text-transform:uppercase;margin-bottom:12px;}
+.bl p{font-family:'Jost',sans-serif;font-size:14px;line-height:1.85;color:rgba(245,240,232,0.6);}
+.bl p strong{color:rgba(245,240,232,0.9);}
+
+.conv-wrap{text-align:center;padding:10px 0;}
+.conv-arc{width:160px;height:80px;margin:0 auto 12px;}
+.conv-arc svg{width:100%;height:100%;}
+.conv-val{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;font-style:italic;color:var(--green);display:block;margin-bottom:2px;}
+.conv-lbl{font-family:'Inconsolata',monospace;font-size:11px;color:var(--muted);}
+.watch{background:var(--subtle);border:1px solid var(--border);border-top:2px solid var(--sand);border-radius:2px;padding:16px 20px;margin-top:16px;text-align:center;}
+.wl{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+.wd{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--earth);}
+.ws{font-family:'Inconsolata',monospace;font-size:10px;color:var(--muted);margin-top:4px;}
+.ibox{margin-top:12px;font-family:'Inconsolata',monospace;font-size:11px;padding:10px 14px;border-radius:2px;}
+.iwarn{background:rgba(155,44,44,0.06);border:1px solid rgba(155,44,44,0.15);color:var(--red);}
+.inote{background:rgba(146,96,10,0.06);border:1px solid rgba(146,96,10,0.15);color:var(--amber);}
+.ipos{background:rgba(39,103,73,0.06);border:1px solid rgba(39,103,73,0.15);color:var(--green);}
+
+@media(max-width:768px){
+  .header,.verdict,.tab-panel{padding-left:20px;padding-right:20px;}
+  .tab-nav{padding:0 20px;overflow-x:auto;}
+  .grid{grid-template-columns:1fr;}.full{grid-column:1;}
+  .ticker{font-size:48px;}.price-now{font-size:28px;}
+  .bq-grid{grid-template-columns:repeat(3,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-texture"></div>
+  <div class="hinner">
+    <div>
+      <div class="ticker">SAFE</div>
+      <div class="co-name">Safehold Inc. · New York City · Est. 2017</div>
+      <div class="income-badge"><div class="ib-dot"></div><div class="ib-text">Ground Lease REIT · Dividend 5.23%</div></div>
+    </div>
+    <div class="price-block">
+      <div class="price-now">$13.62</div>
+      <div class="price-sub">IPO High <span style="color:rgba(196,168,130,0.8)">$55.10</span> &nbsp;·&nbsp; iStar merger distorted history</div>
+    </div>
+  </div>
+  <div class="header-pills">
+    <div class="pill">M/Cap <strong>$977M</strong></div>
+    <div class="pill">P/E <strong>8.68</strong> · Ind. <strong>28.58</strong></div>
+    <div class="pill">BQ <strong>20 / 30</strong></div>
+    <div class="pill">Portfolio <strong>Top 30 MSAs</strong></div>
+    <div class="pill">Div Yield <strong>5.23%</strong></div>
+    <div class="pill">Model <strong>Only Public Ground Lease REIT</strong></div>
+  </div>
+</div>
+
+<div class="verdict">
+  <div class="v-label">Verdict</div>
+  <div class="v-text">
+    Safehold is the <strong>only publicly traded ground lease REIT</strong> — a genuinely unique asset class that combines bond-like safety with real estate upside. Ground leases are essentially perpetual senior liens on land beneath major properties, with built-in CPI-linked rent escalations. The business quality score of 20/30 reflects a fundamentally solid, low-risk income generator. The challenge is entirely macro: <strong>rising interest rates compressed the valuation severely</strong>, and the 2023 iStar reverse merger distorted the stock price history. At P/E 8.68 vs industry 28.58, trading at 0.41x book, the dividend does most of the heavy lifting. <strong>Slow and patient — a long-duration income asset that needs rate relief to truly rerate.</strong>
+  </div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
+  <button class="tab-btn" onclick="switchTab('financials',this)">Financials</button>
+  <button class="tab-btn" onclick="switchTab('events',this)">Events</button>
+  <button class="tab-btn" onclick="switchTab('verdict',this)">Verdict</button>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-panel active" id="tab-overview">
+  <div class="grid">
+    <div class="card">
+      <div class="ctitle">Business Quality Score</div>
+      <div class="bq-grid">
+        <div class="bq-item" title="Revenue Growth"><div class="bq-lbl">RG</div><div class="bq-score bq-s3">3</div></div>
+        <div class="bq-item" title="Gross Margin — near 100% on ground leases"><div class="bq-lbl">GM</div><div class="bq-score bq-s5">5</div></div>
+        <div class="bq-item" title="Operating Cashflow"><div class="bq-lbl">OC</div><div class="bq-score bq-s3">3</div></div>
+        <div class="bq-item" title="Operating Margin"><div class="bq-lbl">OM</div><div class="bq-score bq-s4">4</div></div>
+        <div class="bq-item" title="Net Income"><div class="bq-lbl">NI</div><div class="bq-score bq-s3">3</div></div>
+        <div class="bq-item" title="Free Cash Flow — REIT structure limits FCF"><div class="bq-lbl">FCF</div><div class="bq-score bq-s2">2</div></div>
+      </div>
+      <div class="bq-total"><span>20</span> / 30 &nbsp;·&nbsp; GM 5/5 reflects near-zero cost of land income</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Dividend — The Core Return Driver</div>
+      <div class="div-feature">
+        <div class="div-pct">5.23%</div>
+        <div class="div-lbl">Current Dividend Yield</div>
+        <div class="div-sub" style="margin-top:10px;">Ground leases provide <strong>contractual rent escalations</strong> — either fixed % or CPI-linked, capped 3.0–3.5%. At $13.62 the dividend does most of the investment work while waiting for rate-driven re-rate.</div>
+      </div>
+      <div class="ipos" style="margin-top:12px;">At P/B 0.41 — trading at 59% discount to book value. Land doesn't depreciate.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Analyst Consensus · 11 Analysts</div>
+      <div style="position:relative;margin-bottom:44px;">
+        <div class="spectrum">
+          <div class="smark" style="left:0%;background:#9b2c2c;"><div class="slbl" style="left:0;transform:none;">$14<br>Low</div></div>
+          <div class="smark" style="left:43%;background:#92600a;"><div class="slbl">$20<br>Avg</div></div>
+          <div class="smark" style="left:100%;background:#276749;transform:translateX(-100%);"><div class="slbl" style="transform:translateX(-50%);">$28<br>High</div></div>
+        </div>
+      </div>
+      <div style="font-family:'Inconsolata',monospace;font-size:11px;color:var(--muted);margin-bottom:10px;">
+        Current <strong style="color:var(--red)">$13.62</strong> — <strong style="color:var(--amber)">below the analyst floor</strong> of $14
+      </div>
+      <div class="asplit">
+        <div class="sb"><div class="snum" style="color:var(--green)">6</div><div class="slb2">Buy / Outperform</div></div>
+        <div class="sb"><div class="snum" style="color:var(--red)">5</div><div class="slb2">Hold / Underperform</div></div>
+      </div>
+      <div style="font-family:'Inconsolata',monospace;font-size:10px;color:var(--muted);margin:12px 0 6px;">Earnings Surprise History</div>
+      <div class="erow">
+        <div class="ebox eneg">−<span class="elbl">Q1</span></div>
+        <div class="ebox epos">+<span class="elbl">Q2</span></div>
+        <div class="ebox eneg">−<span class="elbl">Q3</span></div>
+        <div class="ebox epos">+<span class="elbl">Q4</span></div>
+      </div>
+      <div style="font-family:'Inconsolata',monospace;font-size:10px;color:var(--muted);margin-top:12px;">RG Est &nbsp;<strong style="color:var(--text)">+4.48%</strong> FY2025 &nbsp;·&nbsp; <strong style="color:var(--text)">+4.92%</strong> FY2026</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Revenue Mix — Income Streams</div>
+      <div class="income-bars" id="incomeChart"></div>
+      <div style="font-family:'Inconsolata',monospace;font-size:10px;color:var(--muted);margin-top:10px;line-height:1.6;">Interest income from sales-type leases = primary revenue driver. Operating lease income provides secondary stable income. Both carry near-zero variable costs — hence GM score of 5/5.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FINANCIALS -->
+<div class="tab-panel" id="tab-financials">
+  <div class="grid">
+    <div class="card full">
+      <div class="ctitle">Revenue Breakdown — Quarterly</div>
+      <table class="rtbl">
+        <thead><tr><th>Revenue Stream</th><th>FY2024 Mix</th><th>YoY</th><th>Q1 2025 Mix</th><th>YoY</th><th>Q2 2025 Mix</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td>Total Revenue</td><td>—</td><td class="pos">+4%</td><td>—</td><td class="pos">+5%</td><td>—</td><td class="pos">+4%</td></tr>
+          <tr><td class="seg">Interest — Sales-type Leases</td><td>72%</td><td class="pos">+12%</td><td>72%</td><td class="pos">+11%</td><td>75%</td><td class="pos">+7%</td></tr>
+          <tr><td class="seg">Operating Lease Income</td><td>19%</td><td>flat</td><td>22%</td><td>+1%</td><td>18%</td><td class="neg">−1%</td></tr>
+          <tr><td class="seg">Interest — Related Party</td><td>3%</td><td class="pos">+28%</td><td>2%</td><td>—</td><td>3%</td><td class="pos">+17%</td></tr>
+          <tr><td class="seg">Other Income</td><td>6%</td><td class="neg">−44%</td><td>4%</td><td class="neg">−39%</td><td>4%</td><td class="neg">−34%</td></tr>
+          <tr><td>Net Margin</td><td>—</td><td>29.3% (prev negative)</td><td>—</td><td>29.9%</td><td>—</td><td>29.7%</td></tr>
+        </tbody>
+      </table>
+      <div class="ipos" style="margin-top:10px;">Revenue growth is consistent 4–5% — modest but contractually secured. Net margin returned to positive after years of losses (driven by iStar legacy costs now cleared).</div>
+    </div>
+    <div class="card" id="marginCard">
+      <div class="ctitle">Net Margin Recovery</div>
+      <div class="mrow">
+        <div class="mhdr"><div class="mname">Net Margin</div><div class="mvals"><span style="color:var(--green)">29.3% FY24</span><span style="color:var(--green)">29.9% Q1</span><span style="color:var(--green)">29.7% Q2</span><span style="color:var(--green)">30.4% Q3</span></div></div>
+        <div class="btrack"><div class="bfill" id="nm1" style="background:var(--green);opacity:.55"></div></div>
+        <div class="btrack"><div class="bfill" id="nm2" style="background:var(--green);opacity:.6"></div></div>
+        <div class="btrack"><div class="bfill" id="nm3" style="background:var(--green);opacity:.65"></div></div>
+        <div class="btrack"><div class="bfill" id="nm4" style="background:var(--green);opacity:.7"></div></div>
+      </div>
+      <div style="font-family:'Inconsolata',monospace;font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;">Net margin <strong style="color:var(--earth)">improving sequentially</strong> — from 29.3% to 30.4% over 4 periods. Previous years were negative due to iStar legacy write-downs. The underlying ground lease business has always been cash-generative.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Valuation vs. 17 REIT Peers</div>
+      <div class="val-grid">
+        <div class="vi" style="border-color:rgba(39,103,73,0.35)"><div class="vname">P/E</div><div><div class="vnum" style="color:var(--green)">8.56</div><div class="vrank">#1 / 17</div></div></div>
+        <div class="vi" style="border-color:rgba(39,103,73,0.35)"><div class="vname">Fwd P/E</div><div><div class="vnum" style="color:var(--green)">8.05</div><div class="vrank">#3 / 17</div></div></div>
+        <div class="vi" style="border-color:rgba(39,103,73,0.35)"><div class="vname">P/B</div><div><div class="vnum" style="color:var(--green)">0.41</div><div class="vrank">#4 / 17</div></div></div>
+        <div class="vi"><div class="vname">P/FCF</div><div><div class="vnum">10.20</div><div class="vrank">#5 / 17</div></div></div>
+        <div class="vi"><div class="vname">P/S</div><div><div class="vnum">2.53</div><div class="vrank">#8 / 17</div></div></div>
+        <div class="vi"><div class="vname">ROIC</div><div><div class="vnum">1.62%</div><div class="vrank">#6 / 17</div></div></div>
+        <div class="vi" style="border-color:rgba(39,103,73,0.35)"><div class="vname">Dividend</div><div><div class="vnum" style="color:var(--green)">5.23%</div><div class="vrank">#13 / 17</div></div></div>
+        <div class="vi"><div class="vname">Debt/Eq</div><div><div class="vnum" style="color:var(--amber)">1.92x</div><div class="vrank">#10 / 17</div></div></div>
+      </div>
+      <div class="inote" style="margin-top:10px;">P/E #1 and P/B at 0.41 — deeply discounted. Industry P/E of 28.58 vs SAFE's 8.56. Debt/Eq 1.92x is manageable for a REIT with long-duration contracted cash flows.</div>
+    </div>
+  </div>
+</div>
+
+<!-- EVENTS -->
+<div class="tab-panel" id="tab-events">
+  <div class="grid">
+    <div class="card full">
+      <div class="ctitle">Key Events — click to expand</div>
+      <div id="evList">
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--amber)"></div><div class="evtrow"><span class="tag tw">Context</span><span class="evtitle">iStar reverse merger 2023 — stock history is misleading</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">The "$551 IPO high" in data is iStar's stock price — not SAFE's. Safehold was created by iStar to build a modern ground lease REIT. iStar was the largest shareholder and external manager. In 2023, iStar merged into Safehold (reverse merger) — iStar's non-core assets were spun off into Star Holdings. <strong>Some iStar shareholders sold automatically</strong> due to mandate changes, creating artificial selling pressure that has nothing to do with SAFE's business performance. The current ~$13–14 price reflects SAFE on a standalone basis.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--red)"></div><div class="evtrow"><span class="tag tr">Rate Risk</span><span class="evtitle">Rising interest rates — the core valuation headwind</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">Ground leases are long-duration assets — sometimes 99 years. When interest rates rise sharply (as they did in 2022–2024), the present value of long-duration fixed income streams drops significantly. This is the primary reason SAFE's valuation compressed so severely — not business deterioration. <strong>The dividend yield of 5.23% becomes less attractive when risk-free rates are 4–5%.</strong> Rate relief is the single biggest re-rating catalyst.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--red)"></div><div class="evtrow"><span class="tag tr">Concentration</span><span class="evtitle">21% Manhattan exposure — NYC rent stabilisation risk</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">SAFE has 21% of its portfolio in Manhattan. NYC rent stabilisation legislation creates uncertainty around the value of residential properties on SAFE ground leases. However, debt maturities are well-staggered, and <strong>ground leases sit senior to any residential rent restrictions</strong> — the land payment comes before any rent stabilisation calculation. Risk is real but manageable.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--green)"></div><div class="evtrow"><span class="tag tu">Origination</span><span class="evtitle">$220M new originations in Q2 2025 — business still active</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">In Q2 2025, Safehold closed <strong>$220M in new originations</strong> (ground leases and leasehold loans), indicating still-healthy business development despite higher interest rates slowing industry-wide deal flow. The company also closed the acquisition of a ground lease beneath the Asher Adams hotel in Salt Lake City — a Marriott Autograph Collection property. New management (Michael Trachtenberg, Dec 2025) brings operational real estate expertise.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--green)"></div><div class="evtrow"><span class="tag tu">Unique</span><span class="evtitle">Only public ground lease REIT — structural moat by definition</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">Safehold is the <strong>first and only publicly traded company</strong> to hold a portfolio of ground leases at scale. Ground leases benefit from built-in growth via contractual base rent increases (fixed % or CPI, capped 3.0–3.5%) and residual rights to take ownership of buildings at no additional cost at lease end. The asset class sits between high-grade bonds and real estate equity — offering income stability with inflation linkage.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Key Risks</div>
+      <div class="ri"><strong>Interest Rate Sensitivity</strong>Long-duration asset class. If rates stay elevated, the stock continues to trade at deep discount to NAV. Primary re-rating catalyst is Fed rate cuts.</div>
+      <div class="ri"><strong>NYC Rent Stabilisation</strong>21% Manhattan exposure. Legislative risk to property values on SAFE's leased land, though ground lease payment ranks senior to rent restrictions.</div>
+      <div class="ri"><strong>Slower Originations</strong>Higher rates reduce new ground lease formation industry-wide. Deal flow in 2024–2025 is below the high-growth 2019–2021 period.</div>
+      <div class="ri"><strong>Debt Load for a REIT</strong>Debt/Eq of 1.92x is elevated. Long-dated contracted cash flows support this — but it limits balance sheet flexibility.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Upside Catalysts</div>
+      <div class="ui"><strong>Interest Rate Decline</strong>The single biggest re-rating catalyst. A 100bps rate cut meaningfully increases the present value of long-duration ground lease cash flows and compresses the yield gap vs risk-free rates.</div>
+      <div class="ui"><strong>P/B Re-rate to Book</strong>Trading at 0.41x book. Even a partial re-rate to 0.7x book would represent a 70% price increase, plus the dividend income collected during the wait.</div>
+      <div class="ui"><strong>CPI Escalators</strong>Ground leases with CPI-linked rent increases (capped 3–3.5%) provide inflation linkage. In a higher-for-longer inflation scenario, lease income grows contractually.</div>
+      <div class="ui"><strong>Category Education</strong>Ground leases remain poorly understood by most investors. As awareness grows of the asset class's unique risk/return profile, multiple expansion is possible independent of rates.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="tab-panel" id="tab-verdict">
+  <div class="grid">
+    <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div class="ctitle">Conviction Level</div>
+      <div class="conv-wrap">
+        <div class="conv-arc">
+          <svg viewBox="0 0 160 80">
+            <path d="M10,75 A70,70 0 0,1 150,75" fill="none" stroke="#d4ccc0" stroke-width="12" stroke-linecap="round"/>
+            <path id="convArc" d="M10,75 A70,70 0 0,1 150,75" fill="none" stroke="url(#cgs)" stroke-width="12" stroke-linecap="round" stroke-dasharray="220" stroke-dashoffset="220" style="transition:stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1)"/>
+            <defs><linearGradient id="cgs" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#9b2c2c"/><stop offset="50%" stop-color="#92600a"/><stop offset="100%" stop-color="#276749"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="conv-val">Income</span>
+        <div class="conv-lbl">Dividend-led return, patient hold</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Bull vs. Bear</div>
+      <div style="display:flex;gap:10px;">
+        <div style="flex:1;padding:14px;background:rgba(39,103,73,0.05);border:1px solid rgba(39,103,73,0.15);border-radius:2px;">
+          <div style="font-family:'Inconsolata',monospace;font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:10px;">BULL</div>
+          <ul style="list-style:none;font-size:12px;line-height:1.9;color:#4a6a58;">
+            <li>✓ Only public ground lease REIT</li>
+            <li>✓ P/B 0.41 — land doesn't depreciate</li>
+            <li>✓ 5.23% dividend — paid while waiting</li>
+            <li>✓ CPI-linked contractual rent growth</li>
+            <li>✓ Net margin improving each quarter</li>
+          </ul>
+        </div>
+        <div style="flex:1;padding:14px;background:rgba(155,44,44,0.05);border:1px solid rgba(155,44,44,0.12);border-radius:2px;">
+          <div style="font-family:'Inconsolata',monospace;font-size:9px;color:var(--red);letter-spacing:2px;margin-bottom:10px;">BEAR</div>
+          <ul style="list-style:none;font-size:12px;line-height:1.9;color:#6a4848;">
+            <li>✗ Rate-sensitive — recovery tied to Fed</li>
+            <li>✗ NYC rent stabilisation overhang</li>
+            <li>✗ Slower originations = slower growth</li>
+            <li>✗ Dividend yield vs risk-free gap is narrow</li>
+            <li>✗ Volatile price action expected near-term</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card full">
+      <div class="ctitle">What Changes the Thesis</div>
+      <div class="watch">
+        <div class="wl">Key External Catalyst</div>
+        <div class="wd">Federal Reserve Rate Cuts</div>
+        <div class="ws">Not a company-specific event — this is a macro re-rating story</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px;">
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:2px;padding:14px;text-align:center;">
+          <div style="font-family:'Inconsolata',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">WATCH</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">Fed cuts rates<br>100bps+ from peak</div>
+        </div>
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:2px;padding:14px;text-align:center;">
+          <div style="font-family:'Inconsolata',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">WATCH</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">Origination volume<br>re-accelerates above $300M/Q</div>
+        </div>
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:2px;padding:14px;text-align:center;">
+          <div style="font-family:'Inconsolata',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">COLLECT</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">5.23% dividend<br>while waiting</div>
+        </div>
+      </div>
+    </div>
+    <div class="card full bl">
+      <div class="bll">Bottom Line</div>
+      <p>Safehold is a genuinely unique asset — the <strong>only public ground lease REIT</strong>, holding senior liens on land beneath major US commercial properties in top-30 metropolitan areas. The business is not in trouble: net margins are improving sequentially, originations are still happening at $200M+ per quarter, and the contractual rent escalators mean income grows every year regardless of market conditions.<br><br>
+      The entire investment case comes down to one variable: <strong>interest rates</strong>. Ground leases are long-duration assets, and the 2022–2024 rate surge crushed the valuation from a premium to a severe discount. At 0.41x book and P/E #1 of 17 REIT peers, the discount is real. The 5.23% dividend means you are paid to wait. <strong>This is a slow, patient income investment — the dividend does most of the work, and meaningful price upside arrives when rates ease and SAFE re-rates as a long-duration income asset.</strong></p>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='financials')initMargins();
+  if(name==='overview')initIncome();
+  if(name==='verdict')initConv();
+}
+function toggleEv(el){
+  const body=el.querySelector('.evbody');
+  const isOpen=el.classList.contains('open');
+  document.querySelectorAll('.ev.open').forEach(o=>{o.classList.remove('open');o.querySelector('.evbody').style.maxHeight='0';});
+  if(!isOpen){el.classList.add('open');body.style.maxHeight=body.scrollHeight+'px';}
+}
+let mInit=false;
+function initMargins(){
+  if(mInit)return;mInit=true;
+  setTimeout(()=>{
+    document.getElementById('nm1').style.width='58.6%';
+    document.getElementById('nm2').style.width='59.8%';
+    document.getElementById('nm3').style.width='59.4%';
+    document.getElementById('nm4').style.width='60.8%';
+  },100);
+}
+let iInit=false;
+function initIncome(){
+  if(iInit)return;iInit=true;
+  const data=[
+    {lbl:'Sales-type\nLeases',pct:72,h:95,color:'rgba(74,55,40,0.7)'},
+    {lbl:'Operating\nLeases',pct:19,h:55,color:'rgba(74,55,40,0.4)'},
+    {lbl:'Related\nParty',pct:3,h:20,color:'rgba(146,96,10,0.5)'},
+    {lbl:'Other\nIncome',pct:6,h:30,color:'rgba(155,44,44,0.4)'},
+  ];
+  const el=document.getElementById('incomeChart');
+  el.innerHTML='';
+  data.forEach((d,i)=>{
+    const w=document.createElement('div');
+    w.className='ib-wrap';
+    w.innerHTML=`<div class="ib-pct">${d.pct}%</div>
+    <div class="ib-bar" style="height:${d.h}px;background:${d.color};border-radius:2px 2px 0 0;"></div>
+    <div class="ib-lbl">${d.lbl}</div>`;
+    el.appendChild(w);
+    setTimeout(()=>w.querySelector('.ib-bar').classList.add('go'),100*i);
+  });
+}
+let vInit=false;
+function initConv(){
+  if(vInit)return;vInit=true;
+  setTimeout(()=>{const a=document.getElementById('convArc');if(a)a.style.strokeDashoffset='88';},200);
+}
+window.addEventListener('load',()=>{initIncome();});
+</script>
+</body>
+</html>

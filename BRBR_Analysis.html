@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRBR – BellRing Brands Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0d0a06;--surface:#13100a;--border:#2a2218;
+    --red:#e74c3c;--green:#27ae60;--yellow:#f39c12;
+    --text:#ede8df;--muted:#7a6f5e;--subtle:#1a1610;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+  .header{background:linear-gradient(135deg,#0d0a06,#1c1408 60%,#0d0a06);border-bottom:1px solid var(--border);padding:36px 48px 28px;position:relative;overflow:hidden;}
+  .header::before{content:'';position:absolute;top:-80px;right:-80px;width:360px;height:360px;background:radial-gradient(circle,rgba(232,160,32,0.08),transparent 70%);pointer-events:none;}
+  .header-top{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+  .ticker{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;letter-spacing:-1px;color:#fff;}
+  .co-name{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:6px;}
+  .price-block{text-align:right;}
+  .price-now{font-family:'IBM Plex Mono',monospace;font-size:36px;font-weight:500;}
+  .price-sub{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin-top:4px;}
+  .header-meta{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;}
+  .pill{background:var(--subtle);border:1px solid var(--border);border-radius:3px;padding:6px 14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);cursor:default;transition:border-color .2s,color .2s;}
+  .pill:hover{border-color:var(--yellow);color:var(--text);}
+  .pill strong{color:var(--text);}
+
+  .verdict{background:linear-gradient(90deg,#130d03,#0f0b02);border-top:2px solid var(--yellow);border-bottom:1px solid var(--border);padding:18px 48px;display:flex;align-items:flex-start;gap:16px;}
+  .v-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--yellow);text-transform:uppercase;white-space:nowrap;padding-top:3px;}
+  .v-text{font-size:14px;line-height:1.75;color:#c8bfa8;}
+  .v-text strong{color:var(--yellow);}
+
+  .tab-nav{display:flex;border-bottom:1px solid var(--border);padding:0 48px;background:var(--surface);position:sticky;top:0;z-index:10;}
+  .tab-btn{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:14px 20px;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;}
+  .tab-btn:hover{color:var(--text);}
+  .tab-btn.active{color:var(--yellow);border-bottom-color:var(--yellow);}
+
+  .tab-panel{display:none;padding:32px 48px;}
+  .tab-panel.active{display:block;}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:24px;transition:border-color .2s;}
+  .card:hover{border-color:#3d3020;}
+  .full{grid-column:1/-1;}
+  .ctitle{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+  .ctitle::after{content:'';flex:1;height:1px;background:var(--border);}
+
+  /* BQ */
+  .bq-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+  .bq-item{text-align:center;cursor:default;}
+  .bq-lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:6px;}
+  .bq-score{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:500;margin:0 auto;background:rgba(39,174,96,.12);border:1.5px solid rgba(39,174,96,.4);color:var(--green);transition:transform .2s,box-shadow .2s;}
+  .bq-item:hover .bq-score{transform:scale(1.15);box-shadow:0 0 14px rgba(39,174,96,.3);}
+  .bq-total{margin-top:16px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--muted);padding-top:14px;border-top:1px solid var(--border);}
+  .bq-total span{font-size:24px;color:var(--green);}
+
+  /* CHART */
+  .chart-wrap{display:flex;align-items:flex-end;gap:12px;height:130px;padding-bottom:4px;}
+  .cg{flex:1;display:flex;flex-direction:column;align-items:center;}
+  .cg-growth{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--yellow);margin-bottom:3px;min-height:14px;}
+  .bar-col{display:flex;gap:3px;align-items:flex-end;width:100%;}
+  .bar-b{flex:1;border-radius:3px 3px 0 0;min-height:3px;transform-origin:bottom;transform:scaleY(0);transition:transform .7s cubic-bezier(.22,1,.36,1);cursor:pointer;position:relative;}
+  .bar-b.go{transform:scaleY(1);}
+  .bar-b:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1e1810;border:1px solid var(--border);border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text);padding:4px 8px;white-space:nowrap;z-index:30;pointer-events:none;}
+  .clbl{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:5px;}
+  .legend{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap;}
+  .li{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+  .ld{width:8px;height:8px;border-radius:50%;}
+
+  /* MARGIN BARS */
+  .mrow{margin-bottom:16px;}
+  .mhdr{display:flex;justify-content:space-between;margin-bottom:5px;}
+  .mname{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);}
+  .mvals{font-family:'IBM Plex Mono',monospace;font-size:10px;display:flex;gap:10px;}
+  .btrack{background:var(--subtle);border-radius:2px;height:7px;position:relative;margin-bottom:4px;overflow:hidden;}
+  .bfill{height:7px;border-radius:2px;width:0;transition:width 1s cubic-bezier(.22,1,.36,1);}
+
+  /* VAL */
+  .val-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .vi{background:var(--subtle);border:1px solid var(--border);border-radius:4px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:default;transition:border-color .2s,background .2s;}
+  .vi:hover{background:#221c12;border-color:var(--yellow);}
+  .vname{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);}
+  .vnum{font-family:'IBM Plex Mono',monospace;font-size:16px;color:var(--text);text-align:right;}
+  .vrank{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--yellow);text-align:right;}
+
+  /* ANALYST */
+  .spectrum{position:relative;background:linear-gradient(90deg,var(--red),var(--yellow) 40%,var(--green));height:8px;border-radius:4px;margin:12px 0 38px;}
+  .smark{position:absolute;top:-4px;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;border:2px solid var(--bg);cursor:default;transition:transform .2s;}
+  .smark:hover{transform:translateX(-50%) scale(1.4);}
+  .slbl{position:absolute;top:20px;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);white-space:nowrap;text-align:center;line-height:1.4;}
+  .asplit{display:flex;gap:8px;margin-top:12px;}
+  .sb{flex:1;text-align:center;background:var(--subtle);border:1px solid var(--border);border-radius:4px;padding:10px;transition:border-color .2s;}
+  .sb:hover{border-color:var(--yellow);}
+  .snum{font-family:'IBM Plex Mono',monospace;font-size:22px;}
+  .slb2{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;}
+  .erow{display:flex;gap:8px;margin-top:14px;}
+  .ebox{flex:1;text-align:center;padding:8px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;cursor:default;transition:transform .15s;}
+  .ebox:hover{transform:translateY(-2px);}
+  .eneg{background:rgba(231,76,60,.15);border:1px solid rgba(231,76,60,.3);color:var(--red);}
+  .epos{background:rgba(39,174,96,.12);border:1px solid rgba(39,174,96,.3);color:var(--green);}
+  .elbl{font-size:8px;color:var(--muted);margin-top:3px;display:block;}
+
+  /* EVENTS */
+  .ev{border-bottom:1px solid var(--border);overflow:hidden;}
+  .ev:last-child{border-bottom:none;}
+  .evh{display:flex;gap:12px;padding:13px 0;align-items:center;cursor:pointer;user-select:none;transition:background .15s;border-radius:3px;}
+  .evh:hover{background:rgba(255,255,255,.02);}
+  .evdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .evtrow{flex:1;display:flex;align-items:center;gap:8px;}
+  .evtitle{font-size:13px;color:var(--text);font-weight:500;}
+  .evchev{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin-left:auto;transition:transform .25s;}
+  .ev.open .evchev{transform:rotate(180deg);}
+  .evbody{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .evbody-in{font-size:13px;line-height:1.65;color:#a09080;padding:0 0 13px 20px;}
+  .evbody-in strong{color:var(--text);}
+
+  /* TAGS */
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 6px;border-radius:2px;text-transform:uppercase;margin-right:6px;vertical-align:middle;}
+  .tr{background:rgba(231,76,60,.15);color:var(--red);}
+  .tu{background:rgba(39,174,96,.12);color:var(--green);}
+  .tw{background:rgba(243,156,18,.1);color:var(--yellow);}
+
+  /* RISK/UPSIDE */
+  .ri,.ui{border-left:3px solid;padding:12px 14px;border-radius:0 4px 4px 0;font-size:13px;line-height:1.6;color:#a09080;margin-bottom:10px;transition:transform .15s,box-shadow .15s;cursor:default;}
+  .ri{border-color:var(--red);background:rgba(231,76,60,.04);}
+  .ui{border-color:var(--green);background:rgba(39,174,96,.04);}
+  .ri:hover{transform:translateX(3px);box-shadow:-3px 0 10px rgba(231,76,60,.15);}
+  .ui:hover{transform:translateX(3px);box-shadow:-3px 0 10px rgba(39,174,96,.12);}
+  .ri strong{display:block;font-size:12px;margin-bottom:4px;color:var(--red);}
+  .ui strong{display:block;font-size:12px;margin-bottom:4px;color:var(--green);}
+
+  /* REV TABLE */
+  .rtbl{width:100%;border-collapse:collapse;}
+  .rtbl th{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);text-align:left;padding:0 0 10px;font-weight:400;letter-spacing:1px;}
+  .rtbl th:not(:first-child){text-align:right;}
+  .rtbl td{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);padding:9px 0;border-top:1px solid var(--border);transition:background .15s;}
+  .rtbl td:not(:first-child){text-align:right;}
+  .rtbl td.seg{color:var(--muted);font-size:11px;padding-left:14px;}
+  .rtbl td.pos{color:var(--green);}
+  .rtbl td.neg{color:var(--red);}
+  .rtbl tr.hl td{color:#e8a020;}
+  .rtbl tr:hover td{background:rgba(255,255,255,.02);}
+
+  .ibox{margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);padding:10px 14px;border-radius:4px;}
+  .iwarn{background:rgba(231,76,60,.06);border:1px solid rgba(231,76,60,.15);}
+  .inote{background:rgba(243,156,18,.06);border:1px solid rgba(243,156,18,.2);}
+
+  /* CONVICTION */
+  .conv-wrap{text-align:center;padding:10px 0;}
+  .conv-arc{position:relative;width:160px;height:80px;margin:0 auto 12px;}
+  .conv-arc svg{width:100%;height:100%;}
+  .conv-val{font-family:'Playfair Display',serif;font-size:28px;color:var(--yellow);display:block;margin-bottom:2px;}
+  .conv-lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);}
+
+  .watch{background:rgba(232,160,32,.06);border:1px solid rgba(232,160,32,.25);border-radius:6px;padding:16px 20px;margin-top:16px;text-align:center;}
+  .wl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+  .wd{font-family:'Playfair Display',serif;font-size:22px;color:var(--yellow);}
+  .ws{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px;}
+
+  .bl{background:linear-gradient(90deg,#0f0c08,#0a0805);border:1px solid var(--border);border-left:3px solid var(--yellow);border-radius:0 6px 6px 0;padding:22px 28px;}
+  .bll{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--yellow);text-transform:uppercase;margin-bottom:12px;}
+  .bl p{font-size:14px;line-height:1.8;color:#c0b49a;}
+  .bl p strong{color:var(--text);}
+
+  @media(max-width:768px){
+    .header,.verdict,.tab-panel{padding-left:20px;padding-right:20px;}
+    .tab-nav{padding:0 20px;overflow-x:auto;}
+    .grid{grid-template-columns:1fr;}
+    .full{grid-column:1;}
+    .ticker{font-size:36px;}
+    .price-now{font-size:26px;}
+    .bq-grid{grid-template-columns:repeat(3,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="ticker">BRBR</div>
+      <div class="co-name">BellRing Brands, Inc. · Saint Louis, MO · IPO 2019</div>
+    </div>
+    <div class="price-block">
+      <div class="price-now">$18.15</div>
+      <div class="price-sub">All-time High <span style="color:var(--yellow)">$80.67</span> &nbsp;·&nbsp; Down <span style="color:var(--red)">77%</span> from peak</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="pill">M/Cap <strong>$2.149B</strong></div>
+    <div class="pill">P/E <strong>12.46</strong> · Ind. <strong>18.25</strong></div>
+    <div class="pill">FY End <strong>Sep 30</strong></div>
+    <div class="pill">Brands <strong>Premier Protein · Dymatize</strong></div>
+    <div class="pill">IPO CAGR <strong>18%</strong></div>
+    <div class="pill">FY2026 Guide <strong>+4% to +8%</strong></div>
+  </div>
+</div>
+
+<div class="verdict">
+  <div class="v-label">Verdict</div>
+  <div class="v-text">
+    BellRing's 18% CAGR since IPO was real — but the last two years were <strong>partly retailer stockpiling, not organic demand</strong>. That channel is destocking, core shakes revenue just went negative, a class action has been filed, and the long-term growth algorithm has been cut. The business is not broken — ROIC #2 of 64 peers, 25% RTD market share, genuine GLP-1 tailwind. But at Fwd P/E 8.32 the market is already pricing serious pain. <strong>Show-me story. Two clean quarters of consumer pull is the buy trigger.</strong>
+  </div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="switchTab('financials')">Financials</button>
+  <button class="tab-btn" onclick="switchTab('events')">Events</button>
+  <button class="tab-btn" onclick="switchTab('verdict')">Verdict</button>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-panel active" id="tab-overview">
+  <div class="grid">
+    <div class="card">
+      <div class="ctitle">Business Quality Score</div>
+      <div class="bq-grid">
+        <div class="bq-item" title="Revenue Growth"><div class="bq-lbl">RG</div><div class="bq-score">3</div></div>
+        <div class="bq-item" title="Gross Margin"><div class="bq-lbl">GM</div><div class="bq-score">3</div></div>
+        <div class="bq-item" title="Operating Cashflow"><div class="bq-lbl">OC</div><div class="bq-score">3</div></div>
+        <div class="bq-item" title="Operating Margin"><div class="bq-lbl">OM</div><div class="bq-score">3</div></div>
+        <div class="bq-item" title="Net Income"><div class="bq-lbl">NI</div><div class="bq-score">3</div></div>
+        <div class="bq-item" title="Free Cash Flow"><div class="bq-lbl">FCF</div><div class="bq-score">3</div></div>
+      </div>
+      <div class="bq-total"><span>18</span> / 30 &nbsp;·&nbsp; All categories max-scored</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Analyst Consensus · 15 Analysts</div>
+      <div style="position:relative;margin-bottom:44px;">
+        <div class="spectrum">
+          <div class="smark" style="left:0%;background:#e74c3c;"><div class="slbl" style="left:0;transform:none;">$23<br>Low</div></div>
+          <div class="smark" style="left:48%;background:#f39c12;"><div class="slbl">$31.43<br>Avg</div></div>
+          <div class="smark" style="left:100%;background:#27ae60;transform:translateX(-100%);"><div class="slbl" style="transform:translateX(-50%);">$40<br>High</div></div>
+        </div>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:10px;">
+        Current <strong style="color:var(--red)">$18.15</strong> — <strong style="color:var(--red)">21% below</strong> lowest analyst target of $23
+      </div>
+      <div class="asplit">
+        <div class="sb"><div class="snum" style="color:var(--green)">11</div><div class="slb2">Buy / Outperform</div></div>
+        <div class="sb"><div class="snum" style="color:var(--red)">4</div><div class="slb2">Hold / Underperform</div></div>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin:14px 0 6px;">Earnings Surprise History</div>
+      <div class="erow">
+        <div class="ebox eneg">−<span class="elbl">Q1</span></div>
+        <div class="ebox epos">+<span class="elbl">Q2</span></div>
+        <div class="ebox eneg">−<span class="elbl">Q3</span></div>
+        <div class="ebox epos" style="font-size:16px;">++<span class="elbl">Q4</span></div>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:12px;">
+        RG Est &nbsp;<strong style="color:var(--text)">+4.34%</strong> FY2026 &nbsp;·&nbsp; <strong style="color:var(--text)">+5.97%</strong> FY2027
+      </div>
+    </div>
+    <div class="card full">
+      <div class="ctitle">Net Sales Growth — hover bars for detail</div>
+      <div class="chart-wrap" id="revChart"></div>
+      <div class="legend">
+        <div class="li"><div class="ld" style="background:var(--green)"></div>Net Sales ($M)</div>
+        <div class="li"><div class="ld" style="background:var(--yellow)"></div>YoY Growth %</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINANCIALS -->
+<div class="tab-panel" id="tab-financials">
+  <div class="grid">
+    <div class="card full">
+      <div class="ctitle">Revenue Breakdown — hover rows for detail</div>
+      <table class="rtbl">
+        <thead>
+          <tr><th>Segment</th><th>FY2024 Mix</th><th>YoY</th><th>FY2025 Mix</th><th>YoY</th><th>Q1 FY2026 Mix</th><th>YoY</th></tr>
+        </thead>
+        <tbody>
+          <tr class="hl"><td>Total Revenue</td><td>$1,996M</td><td class="pos">+20%</td><td>$2,313M</td><td class="pos">+16%</td><td>—</td><td class="pos">+1%</td></tr>
+          <tr><td class="seg">Shakes &amp; Beverages</td><td>81%</td><td class="pos">+22%</td><td>82%</td><td class="pos">+17%</td><td>81%</td><td class="neg">−2%</td></tr>
+          <tr><td class="seg">Powders</td><td>16%</td><td class="pos">+13%</td><td>16%</td><td class="pos">+12%</td><td>17%</td><td class="pos">+13%</td></tr>
+          <tr><td class="seg">Other</td><td>3%</td><td>—</td><td>2%</td><td class="neg">−14%</td><td>2%</td><td class="pos">+5%</td></tr>
+        </tbody>
+      </table>
+      <div class="ibox iwarn">⚠ Shakes — 81% of revenue — flipped to −2% in Q1 FY2026. Powders (+13%) are too small to offset. The destocking is hitting the core engine directly.</div>
+    </div>
+    <div class="card" id="marginCard">
+      <div class="ctitle">Margin Compression</div>
+      <div class="mrow">
+        <div class="mhdr"><div class="mname">Gross Margin</div><div class="mvals"><span style="color:var(--green)">35.4% FY24</span><span style="color:var(--yellow)">33.2% FY25</span><span style="color:var(--red)">30.0% Q1'26</span></div></div>
+        <div class="btrack"><div class="bfill" id="gm1" style="background:var(--green);opacity:.6"></div></div>
+        <div class="btrack"><div class="bfill" id="gm2" style="background:var(--yellow);opacity:.65"></div></div>
+        <div class="btrack"><div class="bfill" id="gm3" style="background:var(--red);opacity:.75"></div></div>
+      </div>
+      <div class="mrow" style="margin-top:18px;">
+        <div class="mhdr"><div class="mname">Operating Margin</div><div class="mvals"><span style="color:var(--green)">19.4% FY24</span><span style="color:var(--yellow)">15.4% FY25</span><span style="color:var(--red)">14.5% Q1'26</span></div></div>
+        <div class="btrack"><div class="bfill" id="om1" style="background:var(--green);opacity:.6"></div></div>
+        <div class="btrack"><div class="bfill" id="om2" style="background:var(--yellow);opacity:.65"></div></div>
+        <div class="btrack"><div class="bfill" id="om3" style="background:var(--red);opacity:.75"></div></div>
+      </div>
+      <div class="legend" style="margin-top:8px;">
+        <div class="li"><div class="ld" style="background:var(--green)"></div>FY2024</div>
+        <div class="li"><div class="ld" style="background:var(--yellow)"></div>FY2025</div>
+        <div class="li"><div class="ld" style="background:var(--red)"></div>Q1 FY2026</div>
+      </div>
+      <div class="ibox inote" style="margin-top:14px;">Gross margin down 540bps in 18 months. Planned ad spend increase (4–5% of sales) adds further near-term headwind.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Valuation vs. 64 Peers — hover to highlight</div>
+      <div class="val-grid">
+        <div class="vi"><div class="vname">P/E</div><div><div class="vnum">12.46</div><div class="vrank">#12 / 64</div></div></div>
+        <div class="vi"><div class="vname">Fwd P/E</div><div><div class="vnum">8.32</div><div class="vrank">#7 / 64</div></div></div>
+        <div class="vi"><div class="vname">P/FCF</div><div><div class="vnum">8.62</div><div class="vrank">#10 / 64</div></div></div>
+        <div class="vi"><div class="vname">P/S</div><div><div class="vnum">0.92</div><div class="vrank">#36 / 64</div></div></div>
+        <div class="vi"><div class="vname">PEG</div><div><div class="vnum">2.39</div><div class="vrank">#16 / 64</div></div></div>
+        <div class="vi" style="border-color:rgba(39,174,96,.35)"><div class="vname">ROIC</div><div><div class="vnum" style="color:var(--green)">27.16%</div><div class="vrank" style="color:var(--green)">#2 / 64</div></div></div>
+        <div class="vi" style="border-color:rgba(39,174,96,.35)"><div class="vname">ROA</div><div><div class="vnum" style="color:var(--green)">18.81%</div><div class="vrank" style="color:var(--green)">#1 / 64</div></div></div>
+        <div class="vi"><div class="vname">Dividend</div><div><div class="vnum" style="color:var(--muted)">None</div><div class="vrank">—</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EVENTS -->
+<div class="tab-panel" id="tab-events">
+  <div class="grid">
+    <div class="card full">
+      <div class="ctitle">Key Events &amp; Catalysts — click any row to expand</div>
+      <div id="evList">
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--red)"></div><div class="evtrow"><span class="tag tr">Lawsuit</span><span class="evtitle">Securities class action filed Feb 25, 2026</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbody-in">Alleges BellRing's strong reported sales masked reality — results were materially attributable to <strong>temporary inventory stockpiling by key customers</strong>, not genuine end-consumer demand. CFO framed destocking as a "one-time event." Legal uncertainty, settlement costs, and management distraction are real and unquantifiable.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--red)"></div><div class="evtrow"><span class="tag tr">Algorithm Cut</span><span class="evtitle">Long-term growth target revised down — Nov 2025</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbody-in">Management cut the long-term net sales CAGR target from <strong>10–12% to 7–9%</strong>, and EBITDA margins to 18–20%. FY2026 guidance set at $2.41–$2.49B net sales (+4–8%), EBITDA $425–$455M. Q1 guided soft; recovery loaded into H2. Stock dropped 31% in premarket after Q3 FY2025 despite beating estimates — the market had already lost confidence.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--red)"></div><div class="evtrow"><span class="tag tr">Share Loss</span><span class="evtitle">Premier Protein RTD share: 30% → 25% in 6 months</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbody-in">Premier Protein reached a new RTD category high of <strong>30% in March 2025</strong> — the peak. By Q3 FY2025, share had declined to <strong>25%</strong>. A 500bps drop in under 6 months is significant for a brand that was seen as the dominant category leader. Still #1, but the direction is wrong.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--red)"></div><div class="evtrow"><span class="tag tr">Concentration</span><span class="evtitle">3 customers = 74.8% of total revenue</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbody-in"><strong>Walmart (incl. Sam's Club), Costco, and Amazon</strong> = 74.8% of BellRing's total revenue. Any delistings, shelf-space reductions, or pricing disputes at these three accounts would be devastating. No meaningful channel diversification exists.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--yellow)"></div><div class="evtrow"><span class="tag tw">Pattern Risk</span><span class="evtitle">FY2022 cash flow collapse — this has happened before</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbody-in">FY2022 operating cash flow collapsed from <strong>$226M to $21M</strong> — entirely due to retailer inventory build ahead of supply constraints. The same channel distortion is now playing out in reverse. This is a structural feature of BellRing's go-to-market model, not a one-time anomaly.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--green)"></div><div class="evtrow"><span class="tag tu">GLP-1 Tailwind</span><span class="evtitle">Protein demand structurally rising with GLP-1 adoption</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbody-in">Management positioning protein as <strong>complementary to GLP-1 drug adoption</strong>. As Wegovy and Ozempic become affordable and mainstream, preserving muscle mass during weight loss becomes a consumer priority. Premier Protein — cheap, accessible, already in Walmart/Costco — is well-placed to benefit if the narrative lands at scale.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--green)"></div><div class="evtrow"><span class="tag tu">Track Record</span><span class="evtitle">Net sales doubled FY2020–FY2024 — 18% IPO CAGR</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbody-in">Net sales grew from <strong>$988M (FY2020) to $1,996M (FY2024)</strong> — 18% CAGR since IPO, well ahead of the original 10–12% target. Adjusted EBITDA grew from $197M to $440M. The compound engine is real. The question is how much of the recent growth was genuine versus channel-inflated.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Key Risks</div>
+      <div class="ri"><strong>Destocking Deeper Than Guided</strong>Q1 FY2026 shakes already went negative (−2%). If destocking continues into Q2–Q3, the revenue reset is materially worse than +4–8% implies.</div>
+      <div class="ri"><strong>Securities Lawsuit Overhang</strong>Class action filed Feb 2026. Settlement costs and management distraction are real and unquantifiable.</div>
+      <div class="ri"><strong>Structural Margin Pressure</strong>Gross margin down 540bps over 18 months. Planned ad spend increase adds further near-term headwind.</div>
+      <div class="ri"><strong>Customer Concentration</strong>3 customers = 74.8% of revenue. No pricing power. Revenue that can reverse faster than it built.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Upside Catalysts</div>
+      <div class="ui"><strong>Genuine Demand Recovery</strong>If Q2/Q3 FY2026 show organic consumer pull — not channel refill — the destocking narrative ends and earnings reaccelerate. The single most important thing to watch.</div>
+      <div class="ui"><strong>GLP-1 Protein Tailwind</strong>As semaglutide and tirzepatide go mainstream, dietary protein demand structurally rises. Premier Protein is cheap, accessible, already in Walmart/Costco.</div>
+      <div class="ui"><strong>Dymatize International Growth</strong>Powders holding +12–13% consistently. Dymatize has international reach and a distinct fitness-science identity — underpenetrated vs. Premier Protein.</div>
+      <div class="ui"><strong>Valuation Floor Is Compelling</strong>Fwd P/E 8.32 (#7/64), P/FCF 8.62 (#10/64). ROA #1 and ROIC #2 in peer group. Stabilisation could drive a sharp re-rate.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="tab-panel" id="tab-verdict">
+  <div class="grid">
+    <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div class="ctitle">Conviction Level</div>
+      <div class="conv-wrap">
+        <div class="conv-arc">
+          <svg viewBox="0 0 160 80">
+            <path d="M10,75 A70,70 0 0,1 150,75" fill="none" stroke="#2a2218" stroke-width="12" stroke-linecap="round"/>
+            <path id="convArc" d="M10,75 A70,70 0 0,1 150,75" fill="none" stroke="url(#cg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="220" stroke-dashoffset="220" style="transition:stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1)"/>
+            <defs><linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#e74c3c"/><stop offset="50%" stop-color="#f39c12"/><stop offset="100%" stop-color="#27ae60"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="conv-val">WAIT</span>
+        <div class="conv-lbl">Needs 2 clean quarters first</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Bull vs. Bear</div>
+      <div style="display:flex;gap:10px;">
+        <div style="flex:1;padding:14px;background:rgba(39,174,96,.05);border:1px solid rgba(39,174,96,.2);border-radius:4px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:10px;">BULL</div>
+          <ul style="list-style:none;font-size:12px;line-height:1.9;color:#a0c8a0;">
+            <li>✓ Destocking is genuinely one-time</li>
+            <li>✓ GLP-1 drives structural protein demand</li>
+            <li>✓ Dymatize international accelerates</li>
+            <li>✓ Fwd P/E 8.32 = extreme value floor</li>
+            <li>✓ Lawsuit settles without major damage</li>
+          </ul>
+        </div>
+        <div style="flex:1;padding:14px;background:rgba(231,76,60,.05);border:1px solid rgba(231,76,60,.2);border-radius:4px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--red);letter-spacing:2px;margin-bottom:10px;">BEAR</div>
+          <ul style="list-style:none;font-size:12px;line-height:1.9;color:#c8a0a0;">
+            <li>✗ Destocking continues 2–3 more quarters</li>
+            <li>✗ RTD market share keeps sliding from 25%</li>
+            <li>✗ Lawsuit disrupts management execution</li>
+            <li>✗ 3-customer concentration creates fragility</li>
+            <li>✗ Margin compression becomes structural</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card full">
+      <div class="ctitle">What to Watch</div>
+      <div class="watch">
+        <div class="wl">Key Catalyst Date</div>
+        <div class="wd">Q2 FY2026 Earnings — ~May 2026</div>
+        <div class="ws">First real test of whether consumer pull is recovering organically</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;">
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:4px;padding:14px;text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">SIGNAL 1</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">Shakes YoY growth<br>turns positive</div>
+        </div>
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:4px;padding:14px;text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">SIGNAL 2</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">Gross margin<br>stabilises above 31%</div>
+        </div>
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:4px;padding:14px;text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">SIGNAL 3</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">Management confirms<br>retailers no longer destocking</div>
+        </div>
+      </div>
+    </div>
+    <div class="card full bl">
+      <div class="bll">Bottom Line</div>
+      <p>
+        BellRing's revenue growth story over the past two years was <strong>partly real, partly manufactured by channel behaviour</strong>. Premier Protein is a legitimate category leader — still at 25% RTD market share — but that share is sliding, and the "demand" that drove FY2024's 20% growth included meaningful retailer inventory hoarding that is now being reversed. Management acknowledged it too late, the class action is filed, and growth targets have been cut.
+        <br><br>
+        The bull case is straightforward: <strong>(1)</strong> destocking completes by H2 FY2026, <strong>(2)</strong> GLP-1 mainstreaming becomes a real incremental driver for protein consumption, and <strong>(3)</strong> Dymatize continues its international trajectory. At Fwd P/E 8.32 with ROIC #2 among 64 peers, you are not paying for growth — you are paying for stabilisation.
+        <br><br>
+        <strong>Not a short-term trade. Watch the Q2 FY2026 report (~May 2026) closely. Two clean quarters of genuine sell-through data is the buy trigger. Until then, cheap valuation and broken management credibility cancel each other out.</strong>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'financials') initMargins();
+  if (name === 'overview') initChart();
+  if (name === 'verdict') initConv();
+}
+
+function toggleEv(el) {
+  const body = el.querySelector('.evbody');
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.ev.open').forEach(o => {
+    o.classList.remove('open');
+    o.querySelector('.evbody').style.maxHeight = '0';
+  });
+  if (!isOpen) {
+    el.classList.add('open');
+    body.style.maxHeight = body.scrollHeight + 'px';
+  }
+}
+
+let marginsInited = false;
+function initMargins() {
+  if (marginsInited) return; marginsInited = true;
+  setTimeout(() => {
+    document.getElementById('gm1').style.width = '71%';
+    document.getElementById('gm2').style.width = '66%';
+    document.getElementById('gm3').style.width = '60%';
+    document.getElementById('om1').style.width = '65%';
+    document.getElementById('om2').style.width = '51%';
+    document.getElementById('om3').style.width = '48%';
+  }, 100);
+}
+
+let chartInited = false;
+function initChart() {
+  if (chartInited) return; chartInited = true;
+  const data = [
+    {y:'FY20',s:988,g:null},
+    {y:'FY21',s:1171,g:18.5},
+    {y:'FY22',s:1371,g:17.1},
+    {y:'FY23',s:1665,g:21.4},
+    {y:'FY24',s:1996,g:19.9},
+    {y:'FY25',s:2313,g:15.9},
+  ];
+  const el = document.getElementById('revChart');
+  const maxS = Math.max(...data.map(d=>d.s));
+  el.innerHTML = '';
+  data.forEach((d,i) => {
+    const bh = Math.round((d.s/maxS)*110);
+    const gh = d.g ? Math.round((d.g/25)*70) : 0;
+    const g = document.createElement('div');
+    g.className = 'cg';
+    g.innerHTML = `
+      <div class="cg-growth">${d.g?'+'+d.g.toFixed(1)+'%':''}</div>
+      <div class="bar-col">
+        <div class="bar-b" data-tip="${d.y}: $${d.s}M revenue" style="height:${bh}px;background:rgba(39,174,96,.5);border:1px solid rgba(39,174,96,.4);"></div>
+        ${d.g?`<div class="bar-b" data-tip="${d.y}: +${d.g.toFixed(1)}% YoY growth" style="height:${gh}px;background:rgba(243,156,18,.5);border:1px solid rgba(243,156,18,.4);"></div>`:''}
+      </div>
+      <div class="clbl">${d.y}</div>`;
+    el.appendChild(g);
+    setTimeout(()=>g.querySelectorAll('.bar-b').forEach(b=>b.classList.add('go')), 80*i);
+  });
+}
+
+let convInited = false;
+function initConv() {
+  if (convInited) return; convInited = true;
+  setTimeout(() => {
+    const arc = document.getElementById('convArc');
+    if (arc) arc.style.strokeDashoffset = '143';
+  }, 200);
+}
+
+window.addEventListener('load', () => { initChart(); });
+</script>
+</body>
+</html>

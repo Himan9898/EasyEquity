@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOCS – Doximity Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f6f8;--surface:#ffffff;--surface2:#eef2f7;
+  --border:#d6e0ea;--border2:#c2d0de;
+  --teal:#0b7285;--teal2:#0c8fa3;--teal-light:#e0f4f7;
+  --navy:#0a2540;--navy2:#163a5f;
+  --red:#c0392b;--green:#1a7a4a;--amber:#c07000;
+  --text:#0a2540;--muted:#607080;--subtle:#eef2f7;
+  --accent:#0b7285;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* HEADER */
+.header{
+  background:var(--navy);
+  padding:0 56px;
+  position:relative;overflow:hidden;
+}
+.header::before{
+  content:'';position:absolute;right:-100px;top:-100px;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(11,114,133,0.25) 0%,transparent 65%);
+  pointer-events:none;
+}
+.header::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--teal),var(--teal2),transparent);
+}
+.header-inner{display:flex;align-items:stretch;justify-content:space-between;gap:40px;padding:40px 0 36px;}
+.ticker-block{}
+.ticker{font-family:'DM Serif Display',serif;font-size:56px;color:#fff;letter-spacing:-2px;line-height:1;}
+.co-name{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:3px;text-transform:uppercase;margin-top:8px;}
+.price-block{text-align:right;display:flex;flex-direction:column;justify-content:flex-end;}
+.price-now{font-family:'DM Mono',monospace;font-size:40px;color:#fff;font-weight:500;}
+.price-sub{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.4);margin-top:5px;}
+.price-sub .hi{color:#52c4d6;}
+.price-sub .dn{color:#f08080;}
+.header-pills{display:flex;gap:10px;padding:0 0 28px;flex-wrap:wrap;}
+.pill{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:3px;padding:5px 14px;font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:0.5px;cursor:default;transition:all .2s;}
+.pill:hover{background:rgba(11,114,133,0.3);border-color:var(--teal2);color:#fff;}
+.pill strong{color:rgba(255,255,255,0.85);}
+
+/* VERDICT */
+.verdict{background:#fff;border-bottom:1px solid var(--border);padding:20px 56px;display:flex;gap:20px;align-items:flex-start;}
+.v-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--teal);text-transform:uppercase;white-space:nowrap;padding-top:3px;border-left:3px solid var(--teal);padding-left:10px;}
+.v-text{font-size:14px;line-height:1.75;color:#405060;}
+.v-text strong{color:var(--navy);}
+
+/* TABS */
+.tab-nav{display:flex;border-bottom:1px solid var(--border);padding:0 56px;background:#fff;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(10,37,64,0.06);}
+.tab-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:14px 20px;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;}
+.tab-btn:hover{color:var(--navy);}
+.tab-btn.active{color:var(--teal);border-bottom-color:var(--teal);}
+
+.tab-panel{display:none;padding:36px 56px;}
+.tab-panel.active{display:block;}
+
+/* CARDS */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px;transition:box-shadow .2s,border-color .2s;}
+.card:hover{box-shadow:0 4px 20px rgba(10,37,64,0.08);border-color:var(--border2);}
+.full{grid-column:1/-1;}
+.ctitle{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.ctitle::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* BQ */
+.bq-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+.bq-item{text-align:center;cursor:default;}
+.bq-lbl{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:6px;}
+.bq-score{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:18px;font-weight:500;margin:0 auto;transition:transform .2s,box-shadow .2s;}
+.bq-score.s5{background:rgba(11,114,133,0.1);border:2px solid rgba(11,114,133,0.4);color:var(--teal);}
+.bq-score.s4{background:rgba(26,122,74,0.1);border:2px solid rgba(26,122,74,0.35);color:var(--green);}
+.bq-score.s3{background:rgba(192,112,0,0.1);border:2px solid rgba(192,112,0,0.35);color:var(--amber);}
+.bq-item:hover .bq-score{transform:scale(1.12);box-shadow:0 4px 16px rgba(11,114,133,0.2);}
+.bq-total{margin-top:16px;text-align:center;font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);padding-top:14px;border-top:1px solid var(--border);}
+.bq-total span{font-size:26px;color:var(--teal);font-family:'DM Serif Display',serif;}
+
+/* SPECTRUM */
+.spectrum{position:relative;background:linear-gradient(90deg,var(--red),var(--amber) 40%,var(--green));height:6px;border-radius:3px;margin:14px 0 36px;}
+.smark{position:absolute;top:-5px;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);cursor:default;transition:transform .2s;}
+.smark:hover{transform:translateX(-50%) scale(1.4);}
+.slbl{position:absolute;top:20px;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);white-space:nowrap;text-align:center;line-height:1.5;}
+.asplit{display:flex;gap:8px;margin-top:12px;}
+.sb{flex:1;text-align:center;background:var(--subtle);border:1px solid var(--border);border-radius:6px;padding:10px;transition:border-color .2s;}
+.sb:hover{border-color:var(--teal);}
+.snum{font-family:'DM Mono',monospace;font-size:22px;}
+.slb2{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;}
+.erow{display:flex;gap:8px;margin-top:12px;}
+.ebox{flex:1;text-align:center;padding:8px;border-radius:5px;font-family:'DM Mono',monospace;font-size:12px;font-weight:500;cursor:default;transition:transform .15s;}
+.ebox:hover{transform:translateY(-2px);}
+.eneg{background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.25);color:var(--red);}
+.epos{background:rgba(26,122,74,0.08);border:1px solid rgba(26,122,74,0.25);color:var(--green);}
+.elbl{font-size:8px;color:var(--muted);margin-top:3px;display:block;}
+
+/* CHART */
+.chart-wrap{display:flex;align-items:flex-end;gap:14px;height:130px;}
+.cg{flex:1;display:flex;flex-direction:column;align-items:center;}
+.cg-g{font-family:'DM Mono',monospace;font-size:9px;color:var(--teal);margin-bottom:3px;min-height:14px;}
+.bar-col{display:flex;gap:3px;align-items:flex-end;width:100%;}
+.bar-b{flex:1;border-radius:3px 3px 0 0;min-height:3px;transform-origin:bottom;transform:scaleY(0);transition:transform .7s cubic-bezier(.22,1,.36,1);cursor:pointer;position:relative;}
+.bar-b.go{transform:scaleY(1);}
+.bar-b:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--navy);border-radius:4px;font-family:'DM Mono',monospace;font-size:10px;color:#fff;padding:4px 8px;white-space:nowrap;z-index:30;pointer-events:none;}
+.clbl{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:5px;}
+
+/* MARGIN BARS */
+.mrow{margin-bottom:16px;}
+.mhdr{display:flex;justify-content:space-between;margin-bottom:5px;}
+.mname{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);}
+.mvals{font-family:'DM Mono',monospace;font-size:10px;display:flex;gap:10px;}
+.btrack{background:var(--subtle);border-radius:2px;height:7px;position:relative;margin-bottom:4px;overflow:hidden;}
+.bfill{height:7px;border-radius:2px;width:0;transition:width 1s cubic-bezier(.22,1,.36,1);}
+
+/* VAL GRID */
+.val-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.vi{background:var(--subtle);border:1px solid var(--border);border-radius:6px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:default;transition:all .2s;}
+.vi:hover{background:#e0f4f7;border-color:var(--teal2);}
+.vname{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);}
+.vnum{font-family:'DM Mono',monospace;font-size:16px;color:var(--text);text-align:right;}
+.vrank{font-family:'DM Mono',monospace;font-size:10px;color:var(--teal);text-align:right;}
+
+/* TABLE */
+.rtbl{width:100%;border-collapse:collapse;}
+.rtbl th{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-align:left;padding:0 0 10px;font-weight:400;letter-spacing:1px;}
+.rtbl th:not(:first-child){text-align:right;}
+.rtbl td{font-family:'DM Mono',monospace;font-size:12px;color:var(--text);padding:9px 0;border-top:1px solid var(--border);transition:background .15s;}
+.rtbl td:not(:first-child){text-align:right;}
+.rtbl td.seg{color:var(--muted);font-size:11px;padding-left:14px;}
+.rtbl td.pos{color:var(--green);}
+.rtbl td.neg{color:var(--red);}
+.rtbl tr.hl td{color:var(--teal);font-weight:500;}
+.rtbl tr:hover td{background:var(--teal-light);}
+
+/* EVENTS */
+.ev{border-bottom:1px solid var(--border);}
+.ev:last-child{border-bottom:none;}
+.evh{display:flex;gap:12px;padding:13px 0;align-items:center;cursor:pointer;user-select:none;border-radius:4px;transition:background .15s;}
+.evh:hover{background:var(--subtle);padding-left:8px;}
+.evdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.evtrow{flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.evtitle{font-size:13px;color:var(--text);font-weight:500;}
+.evchev{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-left:auto;transition:transform .25s;}
+.ev.open .evchev{transform:rotate(180deg);}
+.evbody{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.evbi{font-size:13px;line-height:1.7;color:var(--muted);padding:0 0 13px 20px;}
+.evbi strong{color:var(--text);}
+
+/* TAGS */
+.tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 7px;border-radius:20px;text-transform:uppercase;margin-right:6px;}
+.tr{background:rgba(192,57,43,0.1);color:var(--red);}
+.tu{background:rgba(26,122,74,0.1);color:var(--green);}
+.tw{background:rgba(192,112,0,0.1);color:var(--amber);}
+
+/* RISK/UPSIDE */
+.ri,.ui{border-left:3px solid;padding:12px 16px;border-radius:0 6px 6px 0;font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px;transition:transform .15s;cursor:default;}
+.ri{border-color:var(--red);background:rgba(192,57,43,0.04);}
+.ui{border-color:var(--green);background:rgba(26,122,74,0.04);}
+.ri:hover{transform:translateX(3px);}
+.ui:hover{transform:translateX(3px);}
+.ri strong{display:block;font-size:12px;margin-bottom:4px;color:var(--red);}
+.ui strong{display:block;font-size:12px;margin-bottom:4px;color:var(--green);}
+
+/* VERDICT / BOTTOM LINE */
+.bl{background:var(--navy);border-radius:8px;padding:24px 28px;}
+.bll{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--teal2);text-transform:uppercase;margin-bottom:12px;}
+.bl p{font-size:14px;line-height:1.85;color:rgba(255,255,255,0.7);}
+.bl p strong{color:#fff;}
+
+/* CONVICTION */
+.conv-wrap{text-align:center;padding:10px 0;}
+.conv-arc{width:160px;height:80px;margin:0 auto 12px;}
+.conv-arc svg{width:100%;height:100%;}
+.conv-val{font-family:'DM Serif Display',serif;font-size:28px;color:var(--teal);display:block;margin-bottom:2px;}
+.conv-lbl{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);}
+.watch{background:var(--teal-light);border:1px solid rgba(11,114,133,0.3);border-radius:8px;padding:16px 20px;margin-top:16px;text-align:center;}
+.wl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--teal);text-transform:uppercase;margin-bottom:6px;}
+.wd{font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy);}
+.ws{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px;}
+.ibox{margin-top:12px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);padding:10px 14px;border-radius:5px;}
+.iwarn{background:rgba(192,57,43,0.06);border:1px solid rgba(192,57,43,0.15);}
+.inote{background:rgba(192,112,0,0.06);border:1px solid rgba(192,112,0,0.2);}
+.ipos{background:rgba(26,122,74,0.06);border:1px solid rgba(26,122,74,0.2);}
+.legend{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap;}
+.li{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.ld{width:8px;height:8px;border-radius:50%;}
+
+@media(max-width:768px){
+  .header,.verdict,.tab-panel{padding-left:20px;padding-right:20px;}
+  .tab-nav{padding:0 20px;overflow-x:auto;}
+  .grid{grid-template-columns:1fr;}.full{grid-column:1;}
+  .ticker{font-size:38px;}.price-now{font-size:28px;}
+  .bq-grid{grid-template-columns:repeat(3,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="ticker">DOCS</div>
+      <div class="co-name">Doximity, Inc. · San Francisco, California · Est. 2010</div>
+    </div>
+    <div class="price-block">
+      <div class="price-now">$26.38</div>
+      <div class="price-sub">All-time High <span class="hi">$107.70</span> &nbsp;·&nbsp; Down <span class="dn">75%</span> from peak</div>
+    </div>
+  </div>
+  <div class="header-pills">
+    <div class="pill">M/Cap <strong>$5.004B</strong></div>
+    <div class="pill">P/E <strong>22.15</strong> · Ind. <strong>53.94</strong></div>
+    <div class="pill">BQ <strong>23 / 30</strong></div>
+    <div class="pill">Members <strong>2M+ Physicians</strong></div>
+    <div class="pill">FY End <strong>Mar 31</strong></div>
+    <div class="pill">Revenue Mix <strong>95% Subscription</strong></div>
+  </div>
+</div>
+
+<div class="verdict">
+  <div class="v-label">Verdict</div>
+  <div class="v-text">
+    Doximity is the <strong>LinkedIn of medicine</strong> — 80%+ of US physicians on one platform, 117% revenue retention, ROIC #1 of 47 peers, and an AI layer being quietly rolled out across 100+ health systems. The business quality is exceptional. The problem is near-term: <strong>pharma clients are freezing budgets</strong> as 16 of the top 20 companies signed MFN agreements with Trump's administration, causing delayed bookings. Q4 guidance of only +4% growth sent the stock down sharply. At P/E 22 vs industry 54, it trades at a steep discount for a near-monopoly platform. <strong>Phased accumulation makes sense — the moat is durable, the headwind is cyclical.</strong>
+  </div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
+  <button class="tab-btn" onclick="switchTab('financials',this)">Financials</button>
+  <button class="tab-btn" onclick="switchTab('events',this)">Events</button>
+  <button class="tab-btn" onclick="switchTab('verdict',this)">Verdict</button>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-panel active" id="tab-overview">
+  <div class="grid">
+    <div class="card">
+      <div class="ctitle">Business Quality Score</div>
+      <div class="bq-grid">
+        <div class="bq-item" title="Revenue Growth"><div class="bq-lbl">RG</div><div class="bq-score s3">3</div></div>
+        <div class="bq-item" title="Gross Margin"><div class="bq-lbl">GM</div><div class="bq-score s4">4</div></div>
+        <div class="bq-item" title="Operating Cashflow"><div class="bq-lbl">OC</div><div class="bq-score s4">4</div></div>
+        <div class="bq-item" title="Operating Margin"><div class="bq-lbl">OM</div><div class="bq-score s4">4</div></div>
+        <div class="bq-item" title="Net Income"><div class="bq-lbl">NI</div><div class="bq-score s4">4</div></div>
+        <div class="bq-item" title="Free Cash Flow"><div class="bq-lbl">FCF</div><div class="bq-score s4">4</div></div>
+      </div>
+      <div class="bq-total"><span>23</span> / 30 &nbsp;·&nbsp; Only RG scores below 4</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Analyst Consensus · 21 Analysts</div>
+      <div style="position:relative;margin-bottom:44px;">
+        <div class="spectrum">
+          <div class="smark" style="left:0%;background:#c0392b;"><div class="slbl" style="left:0;transform:none;">$25<br>Low</div></div>
+          <div class="smark" style="left:48%;background:#c07000;"><div class="slbl">$40.19<br>Avg</div></div>
+          <div class="smark" style="left:100%;background:#1a7a4a;transform:translateX(-100%);"><div class="slbl" style="transform:translateX(-50%);">$56<br>High</div></div>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:10px;">
+        Current <strong style="color:var(--red)">$26.38</strong> — <strong style="color:var(--amber)">34% below</strong> analyst average target
+      </div>
+      <div class="asplit">
+        <div class="sb"><div class="snum" style="color:var(--green)">16</div><div class="slb2">Buy / Outperform</div></div>
+        <div class="sb"><div class="snum" style="color:var(--red)">5</div><div class="slb2">Hold / Underperform</div></div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin:12px 0 6px;">Earnings Surprise History</div>
+      <div class="erow">
+        <div class="ebox epos" style="font-size:15px;">++<span class="elbl">Q1</span></div>
+        <div class="ebox epos" style="font-size:15px;">++<span class="elbl">Q2</span></div>
+        <div class="ebox epos" style="font-size:15px;">++<span class="elbl">Q3</span></div>
+        <div class="ebox epos">+<span class="elbl">Q4</span></div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:12px;">RG Est &nbsp;<strong style="color:var(--text)">+8.88%</strong> FY2026 &nbsp;·&nbsp; <strong style="color:var(--text)">+5.13%</strong> FY2027</div>
+    </div>
+    <div class="card full">
+      <div class="ctitle">Annual Revenue Growth — hover for detail</div>
+      <div class="chart-wrap" id="revChart"></div>
+      <div class="legend">
+        <div class="li"><div class="ld" style="background:var(--teal)"></div>Revenue Growth</div>
+        <div class="li"><div class="ld" style="background:rgba(11,114,133,0.3)"></div>Operating Margin</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINANCIALS -->
+<div class="tab-panel" id="tab-financials">
+  <div class="grid">
+    <div class="card full">
+      <div class="ctitle">Revenue — Quarterly Breakdown (FY ending Mar 31)</div>
+      <table class="rtbl">
+        <thead><tr><th>Period</th><th>Rev YoY</th><th>Subscription Mix</th><th>Sub YoY</th><th>Op Margin</th><th>Net Margin</th><th>OCF Margin</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td>FY2025 (Mar 31, 2025)</td><td class="pos">+20%</td><td>95%</td><td class="pos">+21%</td><td class="pos">40%</td><td class="pos">39%</td><td class="pos">48%</td></tr>
+          <tr><td class="seg">Q1 FY2026 (Jun 2025)</td><td class="pos">+15%</td><td>95%</td><td class="pos">+15%</td><td>37%</td><td class="pos">+36%</td><td class="pos">42%</td></tr>
+          <tr><td class="seg">Q2 FY2026 (Sep 2025)</td><td class="pos">+23%</td><td>95%</td><td class="pos">+23%</td><td>38%</td><td class="pos">+37%</td><td>—</td></tr>
+          <tr><td class="seg">Q3 FY2026 (Dec 2025)</td><td class="pos">+9%</td><td>95%</td><td class="pos">+8%</td><td>39%</td><td>33%</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="ibox iwarn" style="margin-top:12px;">⚠ Q3 revenue growth slowed sharply to +9% and operating income fell 17% YoY — pharma budget delays hitting bookings. Q4 guided at +4% growth only.</div>
+    </div>
+    <div class="card" id="marginCard">
+      <div class="ctitle">Margin Trend</div>
+      <div class="mrow">
+        <div class="mhdr"><div class="mname">Operating Margin</div><div class="mvals"><span style="color:var(--green)">40% FY25</span><span style="color:var(--amber)">37% Q1</span><span style="color:var(--amber)">38% Q2</span><span style="color:var(--red)">39% Q3*</span></div></div>
+        <div class="btrack"><div class="bfill" id="om1" style="background:var(--green);opacity:.7"></div></div>
+        <div class="btrack"><div class="bfill" id="om2" style="background:var(--amber);opacity:.7"></div></div>
+        <div class="btrack"><div class="bfill" id="om3" style="background:var(--amber);opacity:.7"></div></div>
+        <div class="btrack"><div class="bfill" id="om4" style="background:var(--red);opacity:.7"></div></div>
+      </div>
+      <div class="mrow" style="margin-top:18px;">
+        <div class="mhdr"><div class="mname">Net Margin</div><div class="mvals"><span style="color:var(--green)">39% FY25</span><span style="color:var(--green)">36% Q1</span><span style="color:var(--green)">37% Q2</span><span style="color:var(--amber)">33% Q3</span></div></div>
+        <div class="btrack"><div class="bfill" id="nm1" style="background:var(--green);opacity:.65"></div></div>
+        <div class="btrack"><div class="bfill" id="nm2" style="background:var(--green);opacity:.6"></div></div>
+        <div class="btrack"><div class="bfill" id="nm3" style="background:var(--green);opacity:.6"></div></div>
+        <div class="btrack"><div class="bfill" id="nm4" style="background:var(--amber);opacity:.7"></div></div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px;">* Op. Income fell 17% YoY in Q3 despite revenue growth</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Valuation vs. 47 Peers</div>
+      <div class="val-grid">
+        <div class="vi"><div class="vname">P/E</div><div><div class="vnum">21.01</div><div class="vrank">#2 / 47</div></div></div>
+        <div class="vi"><div class="vname">Fwd P/E</div><div><div class="vnum">15.39</div><div class="vrank">#10 / 47</div></div></div>
+        <div class="vi"><div class="vname">P/FCF</div><div><div class="vnum">15.04</div><div class="vrank">#12 / 47</div></div></div>
+        <div class="vi"><div class="vname">P/S</div><div><div class="vnum">7.25</div><div class="vrank">#39 / 47</div></div></div>
+        <div class="vi"><div class="vname">PEG</div><div><div class="vnum">1.80</div><div class="vrank">#15 / 47</div></div></div>
+        <div class="vi" style="border-color:rgba(11,114,133,0.4)"><div class="vname">ROIC</div><div><div class="vnum" style="color:var(--teal)">24.23%</div><div class="vrank">#1 / 47</div></div></div>
+        <div class="vi" style="border-color:rgba(11,114,133,0.4)"><div class="vname">ROA</div><div><div class="vnum" style="color:var(--teal)">20.56%</div><div class="vrank">#1 / 47</div></div></div>
+        <div class="vi" style="border-color:rgba(11,114,133,0.4)"><div class="vname">ROE</div><div><div class="vnum" style="color:var(--teal)">23.82%</div><div class="vrank">#2 / 47</div></div></div>
+      </div>
+      <div class="ibox ipos" style="margin-top:12px;">P/E 22 vs industry 54 — trades at 59% discount to sector despite #1 ROIC and ROA rankings.</div>
+    </div>
+  </div>
+</div>
+
+<!-- EVENTS -->
+<div class="tab-panel" id="tab-events">
+  <div class="grid">
+    <div class="card full">
+      <div class="ctitle">Key Events — click to expand</div>
+      <div id="evList">
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--red)"></div><div class="evtrow"><span class="tag tr">Headwind</span><span class="evtitle">Pharma MFN agreements freezing marketing budgets</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">16 of the 20 largest pharma companies signed <strong>Most-Favored-Nation pricing agreements</strong>, resulting in delayed bookings with Doximity as they waited for regulatory clarity. Pharma marketing spend — Doximity's primary revenue source — is being deferred, not cancelled. Management did not include AI revenue in guidance, making near-term numbers look worse than the underlying trend.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--red)"></div><div class="evtrow"><span class="tag tr">Guidance</span><span class="evtitle">Q4 guided at only +4% growth — stock dropped sharply</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">Despite Q3 sales and EPS exceeding expectations, management guided Q4 revenue growth at just <strong>4%</strong>. Full-year FY2026 revenue guidance narrowed to <strong>$642.5M–$643.5M</strong> (vs prior $640M–$646M). The market reacted negatively to the soft forward guidance, pricing in continued pharma budget pressure into H2.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--green)"></div><div class="evtrow"><span class="tag tu">AI</span><span class="evtitle">100+ top health systems using Doximity AI — not yet in guidance</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">Over <strong>100 of the top US health systems</strong> started using Doximity's AI products, including over 300,000 prescribers in Q3. Management confirmed the AI adoption rates are promising but deliberately excluded any AI revenue from its forward guidance. This creates a scenario where the actual earnings could materially beat guidance if AI monetisation starts in FY2027.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--green)"></div><div class="evtrow"><span class="tag tu">Moat</span><span class="evtitle">117% revenue retention — verified user base as competitive moat</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">Doximity achieves <strong>117% net revenue retention</strong>, meaning existing customers expand their spending year over year. The platform has <strong>2M+ registered members</strong> — over 80% of US physicians, 60%+ of nurse practitioners, and 90%+ of graduating medical students. This verified professional network is extremely difficult to replicate and acts as a structural moat. Pharma penetration: 52% of mega-brands (&gt;$100M) and only 11% of mid-tier brands — significant headroom.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--teal)"></div><div class="evtrow"><span class="tag tw">Capital</span><span class="evtitle">$500M new share repurchase program authorised</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">Doximity authorised a new <strong>$500M share repurchase program</strong> after completing a prior $417M buyback. With no long-term debt (LTDebt/Eq 0.01, #14/47) and strong free cash flow generation, the company is returning capital to shareholders aggressively. EPS beat consensus ($0.46 vs $0.45 expected) despite the revenue slowdown — indicating strong cost discipline.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Key Risks</div>
+      <div class="ri"><strong>Pharma Budget Dependency</strong>95% subscription revenue is primarily from pharma marketing spend. Any sustained reduction in pharma digital marketing budgets directly impacts top-line growth with limited ability to diversify quickly.</div>
+      <div class="ri"><strong>Growth Visibility Broken</strong>Two consecutive quarters of guidance cuts and pharma booking delays have broken near-term predictability. The Q4 +4% guide vs Q2's +23% shows the variance is high.</div>
+      <div class="ri"><strong>AI Revenue Not Yet Monetised</strong>Heavy AI investment is currently a financial headwind. Management has excluded AI revenue from all guidance — creating uncertainty on when/whether it converts to earnings.</div>
+      <div class="ri"><strong>Valuation Still Elevated on P/S</strong>P/S of 7.25 ranks #39/47 — not cheap on a sales basis despite the decline. If growth stalls, multiple compression could continue.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Upside Catalysts</div>
+      <div class="ui"><strong>Pharma Budget Recovery</strong>MFN uncertainty is regulatory, not structural. Once clarity arrives, deferred pharma bookings could return rapidly — creating a catch-up quarter.</div>
+      <div class="ui"><strong>AI Monetisation (FY2027+)</strong>100+ health systems using AI products with 300K+ prescribers. If even partial monetisation begins, revenue could beat guidance materially — and management has set a low bar.</div>
+      <div class="ui"><strong>Mid-Tier Pharma Penetration</strong>Only 11% penetration in mid-tier pharma brands vs 52% in mega-brands. Significant white space in a captive ecosystem with no real competitor.</div>
+      <div class="ui"><strong>Deep Discount to Industry</strong>P/E 22 vs sector 54. ROIC and ROA both #1 of 47 peers. If growth normalises above 10%, multiple re-rate could be significant.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="tab-panel" id="tab-verdict">
+  <div class="grid">
+    <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div class="ctitle">Conviction Level</div>
+      <div class="conv-wrap">
+        <div class="conv-arc">
+          <svg viewBox="0 0 160 80">
+            <path d="M10,75 A70,70 0 0,1 150,75" fill="none" stroke="#d6e0ea" stroke-width="12" stroke-linecap="round"/>
+            <path id="convArc" d="M10,75 A70,70 0 0,1 150,75" fill="none" stroke="url(#cg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="220" stroke-dashoffset="220" style="transition:stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1)"/>
+            <defs><linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#c0392b"/><stop offset="50%" stop-color="#c07000"/><stop offset="100%" stop-color="#0b7285"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="conv-val">PHASED</span>
+        <div class="conv-lbl">Disciplined accumulation approach</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Bull vs. Bear</div>
+      <div style="display:flex;gap:10px;">
+        <div style="flex:1;padding:14px;background:rgba(26,122,74,0.05);border:1px solid rgba(26,122,74,0.2);border-radius:6px;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:10px;">BULL</div>
+          <ul style="list-style:none;font-size:12px;line-height:1.9;color:#406050;">
+            <li>✓ Pharma headwind is cyclical, not structural</li>
+            <li>✓ AI layer monetises in FY2027+</li>
+            <li>✓ 117% revenue retention — customers expand</li>
+            <li>✓ #1 ROIC &amp; ROA of 47 peers</li>
+            <li>✓ $500M buyback signals confidence</li>
+          </ul>
+        </div>
+        <div style="flex:1;padding:14px;background:rgba(192,57,43,0.05);border:1px solid rgba(192,57,43,0.15);border-radius:6px;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--red);letter-spacing:2px;margin-bottom:10px;">BEAR</div>
+          <ul style="list-style:none;font-size:12px;line-height:1.9;color:#604040;">
+            <li>✗ Q4 guide only +4% — growth stalling</li>
+            <li>✗ AI spend is current earnings headwind</li>
+            <li>✗ Single revenue stream (pharma marketing)</li>
+            <li>✗ P/S 7.25 not cheap if growth stays low</li>
+            <li>✗ MFN policy uncertainty could last 12–18M</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card full">
+      <div class="ctitle">Key Signals to Watch</div>
+      <div class="watch">
+        <div class="wl">Next Catalyst</div>
+        <div class="wd">Q4 FY2026 Earnings — March/April 2026</div>
+        <div class="ws">Watch for pharma booking recovery and first mention of AI revenue contribution</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px;">
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">SIGNAL 1</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">Revenue growth re-accelerates<br>above 12% in FY2027</div>
+        </div>
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">SIGNAL 2</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">AI revenue included in<br>forward guidance</div>
+        </div>
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">SIGNAL 3</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">Pharma clients confirm<br>budget normalisation</div>
+        </div>
+      </div>
+    </div>
+    <div class="card full bl">
+      <div class="bll">Bottom Line</div>
+      <p>Doximity is one of the cleanest platform businesses in healthcare — a verified, sticky, near-monopoly professional network that pharma companies must use to reach physicians. The <strong>117% revenue retention and #1 ROIC/ROA rankings</strong> reflect a genuinely exceptional business. The problem is not the business — it's the timing. Pharma clients froze discretionary marketing spend amid MFN policy uncertainty, and the AI investment is a current cost without yet being a current revenue line.<br><br>
+      At P/E 22 vs the industry's 54, the market has already priced in the soft patch. <strong>A phased, disciplined accumulation strategy makes sense here</strong> — the moat is durable, the headwind is regulatory and temporary, and the AI optionality is not in any valuation model yet. Not a trade. A 2–3 year hold for the thesis to fully materialise.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='financials')initMargins();
+  if(name==='overview')initChart();
+  if(name==='verdict')initConv();
+}
+function toggleEv(el){
+  const body=el.querySelector('.evbody');
+  const isOpen=el.classList.contains('open');
+  document.querySelectorAll('.ev.open').forEach(o=>{o.classList.remove('open');o.querySelector('.evbody').style.maxHeight='0';});
+  if(!isOpen){el.classList.add('open');body.style.maxHeight=body.scrollHeight+'px';}
+}
+let mInit=false;
+function initMargins(){
+  if(mInit)return;mInit=true;
+  setTimeout(()=>{
+    document.getElementById('om1').style.width='80%';
+    document.getElementById('om2').style.width='74%';
+    document.getElementById('om3').style.width='76%';
+    document.getElementById('om4').style.width='78%';
+    document.getElementById('nm1').style.width='78%';
+    document.getElementById('nm2').style.width='72%';
+    document.getElementById('nm3').style.width='74%';
+    document.getElementById('nm4').style.width='66%';
+  },100);
+}
+let cInit=false;
+function initChart(){
+  if(cInit)return;cInit=true;
+  const data=[
+    {y:'FY22',g:null,m:null},
+    {y:'FY23',g:18,m:38},
+    {y:'FY24',g:27,m:40},
+    {y:'Q1\'26',g:15,m:37},
+    {y:'Q2\'26',g:23,m:38},
+    {y:'Q3\'26',g:9,m:39},
+  ];
+  const el=document.getElementById('revChart');
+  const maxG=27;
+  el.innerHTML='';
+  data.forEach((d,i)=>{
+    const gh=d.g?Math.round((d.g/maxG)*100):0;
+    const mh=d.m?Math.round((d.m/50)*80):0;
+    const g=document.createElement('div');
+    g.className='cg';
+    g.innerHTML=`
+      <div class="cg-g">${d.g?'+'+d.g+'%':''}</div>
+      <div class="bar-col">
+        ${d.g?`<div class="bar-b" data-tip="${d.y}: +${d.g}% revenue growth" style="height:${gh}px;background:var(--teal);border-radius:3px 3px 0 0;"></div>`:''}
+        ${d.m?`<div class="bar-b" data-tip="${d.y}: ${d.m}% operating margin" style="height:${mh}px;background:rgba(11,114,133,0.25);border:1px solid rgba(11,114,133,0.3);border-radius:3px 3px 0 0;"></div>`:''}
+      </div>
+      <div class="clbl">${d.y}</div>`;
+    el.appendChild(g);
+    setTimeout(()=>g.querySelectorAll('.bar-b').forEach(b=>b.classList.add('go')),80*i);
+  });
+}
+let vInit=false;
+function initConv(){
+  if(vInit)return;vInit=true;
+  setTimeout(()=>{const a=document.getElementById('convArc');if(a)a.style.strokeDashoffset='110';},200);
+}
+window.addEventListener('load',()=>{initChart();});
+</script>
+</body>
+</html>

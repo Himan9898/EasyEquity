@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRBR – BellRing Brands Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0a06;
+    --surface: #13100a;
+    --border: #2a2218;
+    --accent: #e8a020;
+    --red: #e74c3c;
+    --green: #27ae60;
+    --yellow: #f39c12;
+    --text: #ede8df;
+    --muted: #7a6f5e;
+    --subtle: #1a1610;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  .header {
+    background: linear-gradient(135deg, #0d0a06 0%, #1a1205 60%, #0d0a06 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 48px 28px;
+    position: relative; overflow: hidden;
+  }
+  .header::before {
+    content: ''; position: absolute; top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(232,160,32,0.07) 0%, transparent 70%);
+  }
+  .header-top { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker { font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 900; letter-spacing: -1px; color: #fff; }
+  .company-name { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 6px; }
+  .price-block { text-align: right; }
+  .price-current { font-family: 'IBM Plex Mono', monospace; font-size: 36px; font-weight: 500; color: var(--text); }
+  .price-sub { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .price-sub span { color: var(--yellow); }
+  .header-meta { display: flex; gap: 14px; margin-top: 20px; flex-wrap: wrap; }
+  .meta-pill { background: var(--subtle); border: 1px solid var(--border); border-radius: 3px; padding: 6px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+  .meta-pill strong { color: var(--text); }
+
+  .verdict {
+    background: linear-gradient(90deg, #130d03 0%, #0f0b02 100%);
+    border-top: 2px solid var(--yellow); border-bottom: 1px solid var(--border);
+    padding: 20px 48px; display: flex; align-items: flex-start; gap: 16px;
+  }
+  .verdict-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--yellow); text-transform: uppercase; white-space: nowrap; padding-top: 3px; }
+  .verdict-text { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; line-height: 1.75; color: #c8bfa8; }
+  .verdict-text strong { color: var(--yellow); }
+
+  .main { padding: 32px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 24px; }
+  .card.full { grid-column: 1 / -1; }
+  .card-title {
+    font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+  }
+  .card-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .bq-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .bq-item { text-align: center; }
+  .bq-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+  .bq-score { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 500; margin: 0 auto; background: rgba(39,174,96,0.12); border: 1.5px solid rgba(39,174,96,0.4); color: var(--green); }
+  .bq-total { margin-top: 16px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--muted); padding-top: 14px; border-top: 1px solid var(--border); }
+  .bq-total span { font-size: 24px; color: var(--green); }
+
+  .rev-table { width: 100%; border-collapse: collapse; }
+  .rev-table th { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); text-align: left; padding: 0 0 10px; font-weight: 400; letter-spacing: 1px; }
+  .rev-table th:not(:first-child) { text-align: right; }
+  .rev-table td { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text); padding: 8px 0; border-top: 1px solid var(--border); }
+  .rev-table td:not(:first-child) { text-align: right; }
+  .rev-table td.seg { color: var(--muted); font-size: 11px; padding-left: 14px; }
+  .rev-table td.pos { color: var(--green); }
+  .rev-table td.neg { color: var(--red); }
+  .rev-table tr.hl td { color: var(--accent); }
+
+  .margin-row { margin-bottom: 16px; }
+  .margin-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .margin-name { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+  .margin-vals { font-family: 'IBM Plex Mono', monospace; font-size: 10px; display: flex; gap: 10px; }
+  .bar-track { background: var(--subtle); border-radius: 2px; height: 6px; position: relative; margin-bottom: 3px; }
+  .bar-fill { height: 6px; border-radius: 2px; position: absolute; left: 0; }
+
+  .val-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .val-item { background: var(--subtle); border: 1px solid var(--border); border-radius: 4px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .val-name { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+  .val-num { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: var(--text); text-align: right; }
+  .val-rank { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--yellow); text-align: right; }
+
+  .analyst-spectrum { position: relative; background: linear-gradient(90deg, var(--red) 0%, var(--yellow) 40%, var(--green) 100%); height: 8px; border-radius: 4px; margin: 12px 0 36px; }
+  .spec-marker { position: absolute; top: -4px; transform: translateX(-50%); width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--bg); }
+  .spec-label { position: absolute; top: 20px; transform: translateX(-50%); font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--muted); white-space: nowrap; text-align: center; line-height: 1.4; }
+  .analyst-split { display: flex; gap: 8px; margin-top: 12px; }
+  .split-block { flex: 1; text-align: center; background: var(--subtle); border: 1px solid var(--border); border-radius: 4px; padding: 10px; }
+  .split-num { font-family: 'IBM Plex Mono', monospace; font-size: 22px; }
+  .split-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--muted); margin-top: 2px; }
+  .earnings-row { display: flex; gap: 8px; margin-top: 14px; }
+  .es-box { flex: 1; text-align: center; padding: 8px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; }
+  .es-box.neg { background: rgba(231,76,60,0.15); border: 1px solid rgba(231,76,60,0.3); color: var(--red); }
+  .es-box.pos { background: rgba(39,174,96,0.12); border: 1px solid rgba(39,174,96,0.3); color: var(--green); }
+  .es-label { font-size: 8px; color: var(--muted); margin-top: 3px; display: block; }
+
+  .info-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .info-item:last-child { border-bottom: none; }
+  .info-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .info-text { font-size: 13px; line-height: 1.65; color: #b0a898; }
+  .info-text strong { color: var(--text); }
+  .tag { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1px; padding: 2px 6px; border-radius: 2px; text-transform: uppercase; margin-right: 6px; vertical-align: middle; }
+  .tag-risk { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-up { background: rgba(39,174,96,0.12); color: var(--green); }
+  .tag-neutral { background: rgba(243,156,18,0.1); color: var(--yellow); }
+
+  .risk-item, .upside-item { border-left: 3px solid; padding: 12px 14px; border-radius: 0 4px 4px 0; font-size: 13px; line-height: 1.6; color: #a09080; margin-bottom: 10px; }
+  .risk-item { border-color: var(--red); background: rgba(231,76,60,0.04); }
+  .upside-item { border-color: var(--green); background: rgba(39,174,96,0.04); }
+  .risk-item strong { display: block; font-size: 12px; margin-bottom: 4px; color: var(--red); }
+  .upside-item strong { display: block; font-size: 12px; margin-bottom: 4px; color: var(--green); }
+
+  .footer-note { grid-column: 1 / -1; background: linear-gradient(90deg, #0f0c08, #0a0805); border: 1px solid var(--border); border-left: 3px solid var(--yellow); border-radius: 0 6px 6px 0; padding: 20px 28px; }
+  .fn-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--yellow); text-transform: uppercase; margin-bottom: 10px; }
+  .footer-note p { font-size: 14px; line-height: 1.8; color: #c0b49a; }
+  .footer-note p strong { color: var(--text); }
+
+  @media (max-width: 768px) {
+    .main { grid-template-columns: 1fr; padding: 20px; }
+    .card.full, .footer-note { grid-column: 1; }
+    .header, .verdict { padding: 20px; }
+    .ticker { font-size: 36px; }
+    .price-current { font-size: 26px; }
+    .bq-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="ticker">BRBR</div>
+      <div class="company-name">BellRing Brands, Inc. · Saint Louis, Missouri · Est. 2019</div>
+    </div>
+    <div class="price-block">
+      <div class="price-current">$18.15</div>
+      <div class="price-sub">All-time High <span>$80.67</span> &nbsp;·&nbsp; Down <span style="color:var(--red)">77%</span></div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="meta-pill">M/Cap <strong>$2.149B</strong></div>
+    <div class="meta-pill">P/E <strong>12.46</strong> · Industry <strong>18.25</strong></div>
+    <div class="meta-pill">FY End <strong>Sep 30</strong></div>
+    <div class="meta-pill">Brands <strong>Premier Protein · Dymatize</strong></div>
+    <div class="meta-pill">Since IPO CAGR <strong>18%</strong></div>
+    <div class="meta-pill">FY2026 Guide <strong>+4% to +8%</strong></div>
+  </div>
+</div>
+
+<div class="verdict">
+  <div class="verdict-label">Verdict</div>
+  <div class="verdict-text">
+    BellRing's decade of 18% CAGR was real — but the last two years were <strong>partly retailer stockpiling, not organic demand</strong>. That channel is now destocking, core shakes revenue just went negative, a securities class action has been filed, Premier Protein's RTD share slid 500bps in a year, and management quietly cut its long-term growth algorithm. The business is not broken — ROIC of 27% (#2/64 peers), a real brand at 25% RTD market share, and a genuine GLP-1 tailwind are all intact. But at Fwd P/E 8.32, the market is already pricing in serious pain. <strong>This is a show-me story. Two clean quarters of genuine consumer pull — not channel fill — is the buy trigger. Until then, every rally is suspect.</strong>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- BQ SCORE -->
+  <div class="card">
+    <div class="card-title">Business Quality Score</div>
+    <div class="bq-grid">
+      <div class="bq-item"><div class="bq-label">RG</div><div class="bq-score">3</div></div>
+      <div class="bq-item"><div class="bq-label">GM</div><div class="bq-score">3</div></div>
+      <div class="bq-item"><div class="bq-label">OC</div><div class="bq-score">3</div></div>
+      <div class="bq-item"><div class="bq-label">OM</div><div class="bq-score">3</div></div>
+      <div class="bq-item"><div class="bq-label">NI</div><div class="bq-score">3</div></div>
+      <div class="bq-item"><div class="bq-label">FCF</div><div class="bq-score">3</div></div>
+    </div>
+    <div class="bq-total"><span>18</span> / 30 &nbsp;·&nbsp; All categories max scored</div>
+  </div>
+
+  <!-- ANALYST CONSENSUS -->
+  <div class="card">
+    <div class="card-title">Analyst Consensus · 15 Analysts</div>
+    <div style="position:relative; margin-bottom: 44px;">
+      <div class="analyst-spectrum">
+        <div class="spec-marker" style="left:0%; background:#e74c3c;">
+          <div class="spec-label" style="left:0; transform:none;">$23<br>Low</div>
+        </div>
+        <div class="spec-marker" style="left:50%; background:#f39c12;">
+          <div class="spec-label">$31.43<br>Avg</div>
+        </div>
+        <div class="spec-marker" style="left:100%; background:#27ae60; transform:translateX(-100%);">
+          <div class="spec-label" style="transform:translateX(-50%);">$40<br>High</div>
+        </div>
+      </div>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); margin-bottom:10px;">
+      Current <strong style="color:var(--red)">$18.15</strong> — trades <strong style="color:var(--yellow)">42% below</strong> the low analyst target of $23
+    </div>
+    <div class="analyst-split">
+      <div class="split-block"><div class="split-num" style="color:var(--green);">11</div><div class="split-label">Buy / Outperform</div></div>
+      <div class="split-block"><div class="split-num" style="color:var(--red);">4</div><div class="split-label">Hold / Underperform</div></div>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted); margin: 14px 0 6px;">Earnings Surprise History</div>
+    <div class="earnings-row">
+      <div class="es-box neg">− <span class="es-label">Q1</span></div>
+      <div class="es-box pos">+ <span class="es-label">Q2</span></div>
+      <div class="es-box neg">− <span class="es-label">Q3</span></div>
+      <div class="es-box pos" style="font-size:16px;">++ <span class="es-label">Q4</span></div>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted); margin-top:12px;">
+      RG Est &nbsp;<strong style="color:var(--text)">+4.34%</strong> FY2026 &nbsp;·&nbsp; <strong style="color:var(--text)">+5.97%</strong> FY2027
+    </div>
+  </div>
+
+  <!-- REVENUE TABLE -->
+  <div class="card full">
+    <div class="card-title">Revenue Breakdown — Net Sales Mix & Growth</div>
+    <table class="rev-table">
+      <thead>
+        <tr>
+          <th>Segment</th>
+          <th>FY2024 Mix</th><th>YoY</th>
+          <th>FY2025 Mix</th><th>YoY</th>
+          <th>Q1 FY2026 Mix</th><th>YoY</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hl">
+          <td>Total Revenue</td>
+          <td>$1,996M</td><td class="pos">+20%</td>
+          <td>$2,313M</td><td class="pos">+16%</td>
+          <td>—</td><td class="pos">+1%</td>
+        </tr>
+        <tr>
+          <td class="seg">Shakes &amp; Beverages</td>
+          <td>81%</td><td class="pos">+22%</td>
+          <td>82%</td><td class="pos">+17%</td>
+          <td>81%</td><td class="neg">−2%</td>
+        </tr>
+        <tr>
+          <td class="seg">Powders</td>
+          <td>16%</td><td class="pos">+13%</td>
+          <td>16%</td><td class="pos">+12%</td>
+          <td>17%</td><td class="pos">+13%</td>
+        </tr>
+        <tr>
+          <td class="seg">Other</td>
+          <td>3%</td><td>—</td>
+          <td>2%</td><td class="neg">−14%</td>
+          <td>2%</td><td class="pos">+5%</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); padding:10px 14px; background:rgba(231,76,60,0.06); border:1px solid rgba(231,76,60,0.15); border-radius:4px;">
+      ⚠ Shakes — 81% of revenue — flipped to −2% in Q1 FY2026. Powders (+13%) holding steady but too small to offset. The destocking is hitting the core engine directly.
+    </div>
+  </div>
+
+  <!-- MARGIN COMPRESSION -->
+  <div class="card">
+    <div class="card-title">Margin Compression — 3-Period Trend</div>
+    <div class="margin-row">
+      <div class="margin-header">
+        <div class="margin-name">Gross Margin</div>
+        <div class="margin-vals">
+          <span style="color:var(--green)">35.4% FY24</span>
+          <span style="color:var(--yellow)">33.2% FY25</span>
+          <span style="color:var(--red)">30.0% Q1'26</span>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:71%; background:var(--green); opacity:0.55;"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:66%; background:var(--yellow); opacity:0.6;"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:60%; background:var(--red); opacity:0.7;"></div></div>
+    </div>
+    <div class="margin-row" style="margin-top:18px;">
+      <div class="margin-header">
+        <div class="margin-name">Operating Margin</div>
+        <div class="margin-vals">
+          <span style="color:var(--green)">19.4% FY24</span>
+          <span style="color:var(--yellow)">15.4% FY25</span>
+          <span style="color:var(--red)">14.5% Q1'26</span>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:64%; background:var(--green); opacity:0.55;"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:51%; background:var(--yellow); opacity:0.6;"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:48%; background:var(--red); opacity:0.7;"></div></div>
+    </div>
+    <div style="display:flex; gap:14px; margin-top:8px;">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted);"><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--green); margin-right:4px;"></span>FY2024</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted);"><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--yellow); margin-right:4px;"></span>FY2025</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted);"><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--red); margin-right:4px;"></span>Q1 FY2026</div>
+    </div>
+    <div style="margin-top:14px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); padding:10px 14px; background:rgba(243,156,18,0.06); border:1px solid rgba(243,156,18,0.2); border-radius:4px;">
+      Gross margin down 540bps across 18 months. Increased ad spend (4–5% of sales) will weigh further before any recovery.
+    </div>
+  </div>
+
+  <!-- VALUATION -->
+  <div class="card">
+    <div class="card-title">Valuation vs. 64 Peers</div>
+    <div class="val-grid">
+      <div class="val-item">
+        <div class="val-name">P/E</div>
+        <div><div class="val-num">12.46</div><div class="val-rank">#12 / 64</div></div>
+      </div>
+      <div class="val-item">
+        <div class="val-name">Fwd P/E</div>
+        <div><div class="val-num">8.32</div><div class="val-rank">#7 / 64</div></div>
+      </div>
+      <div class="val-item">
+        <div class="val-name">P/FCF</div>
+        <div><div class="val-num">8.62</div><div class="val-rank">#10 / 64</div></div>
+      </div>
+      <div class="val-item">
+        <div class="val-name">P/S</div>
+        <div><div class="val-num">0.92</div><div class="val-rank">#36 / 64</div></div>
+      </div>
+      <div class="val-item">
+        <div class="val-name">PEG</div>
+        <div><div class="val-num">2.39</div><div class="val-rank">#16 / 64</div></div>
+      </div>
+      <div class="val-item" style="border-color:rgba(39,174,96,0.35);">
+        <div class="val-name">ROIC</div>
+        <div><div class="val-num" style="color:var(--green)">27.16%</div><div class="val-rank" style="color:var(--green)">#2 / 64</div></div>
+      </div>
+      <div class="val-item" style="border-color:rgba(39,174,96,0.35);">
+        <div class="val-name">ROA</div>
+        <div><div class="val-num" style="color:var(--green)">18.81%</div><div class="val-rank" style="color:var(--green)">#1 / 64</div></div>
+      </div>
+      <div class="val-item">
+        <div class="val-name">Dividend</div>
+        <div><div class="val-num" style="color:var(--muted)">None</div><div class="val-rank">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY EVENTS -->
+  <div class="card full">
+    <div class="card-title">Key Events &amp; Catalysts</div>
+    <div>
+      <div class="info-item">
+        <div class="info-dot" style="background:var(--red);"></div>
+        <div class="info-text"><span class="tag tag-risk">Lawsuit</span><strong>Securities class action filed Feb 25, 2026.</strong> Alleges that BellRing's strong reported sales masked the reality — results were materially attributable to temporary inventory stockpiling by key customers, not genuine end-consumer demand. CFO framed destocking as a "one-time event."</div>
+      </div>
+      <div class="info-item">
+        <div class="info-dot" style="background:var(--red);"></div>
+        <div class="info-text"><span class="tag tag-risk">Algorithm Cut</span><strong>Long-term growth target revised down from 10–12% to 7–9%</strong> net sales CAGR at Q4 FY2025 (Nov 18, 2025). EBITDA margin target reset to 18–20%. FY2026 guidance: $2.41–$2.49B net sales (+4–8%), EBITDA $425–$455M. Q1 expected soft; recovery loaded into H2.</div>
+      </div>
+      <div class="info-item">
+        <div class="info-dot" style="background:var(--red);"></div>
+        <div class="info-text"><span class="tag tag-risk">Share Loss</span><strong>Premier Protein RTD market share fell from 30% peak (March 2025) to 25% by Q3 FY2025</strong> — a 500bps slide in under 6 months. The brand is still #1 in RTD protein, but the direction is wrong.</div>
+      </div>
+      <div class="info-item">
+        <div class="info-dot" style="background:var(--red);"></div>
+        <div class="info-text"><span class="tag tag-risk">Concentration</span><strong>Walmart (incl. Sam's Club), Costco, and Amazon = 74.8% of total revenue.</strong> Extreme concentration. Any shelf-space reduction or pricing dispute at these three accounts would be devastating. No meaningful diversification exists.</div>
+      </div>
+      <div class="info-item">
+        <div class="info-dot" style="background:var(--yellow);"></div>
+        <div class="info-text"><span class="tag tag-neutral">Pattern Risk</span><strong>FY2022 operating cash flow collapsed from $226M to $21M</strong> — entirely due to supply chain disruptions and retailer inventory build. Same dynamic is now playing out in reverse. Channel-driven demand distortion is a recurring feature of BellRing's business model, not a one-time anomaly.</div>
+      </div>
+      <div class="info-item">
+        <div class="info-dot" style="background:var(--green);"></div>
+        <div class="info-text"><span class="tag tag-up">GLP-1 Tailwind</span><strong>Management is positioning protein nutrition as complementary to GLP-1 drug adoption.</strong> As Wegovy/Ozempic become affordable and mainstream, preserving muscle mass while on GLP-1s becomes a consumer priority. Premier Protein is well-positioned to capture this — if the narrative lands with consumers.</div>
+      </div>
+      <div class="info-item">
+        <div class="info-dot" style="background:var(--green);"></div>
+        <div class="info-text"><span class="tag tag-up">Track Record</span><strong>Net sales nearly doubled from $988M (FY2020) to $1,996M (FY2024) — 18% CAGR since IPO,</strong> well ahead of the original 10–12% target. Adjusted EBITDA grew from $197M to $440M. The underlying brand compound engine is real, even if recent revenue has channel noise in it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RISKS -->
+  <div class="card">
+    <div class="card-title">Key Risks</div>
+    <div class="risk-item"><strong>Destocking Deeper Than Guided</strong>Q1 FY2026 shakes already went negative (−2%). CFO's "one-time" framing is untested. If destocking continues into Q2–Q3, the revenue reset is materially worse than the +4–8% FY guide implies.</div>
+    <div class="risk-item"><strong>Securities Lawsuit Overhang</strong>Class action filed Feb 2026 alleging misleading revenue disclosures. Settlement costs, legal fees, and management distraction are real — and unquantifiable.</div>
+    <div class="risk-item"><strong>Structural Margin Pressure</strong>Gross margin down 540bps over 18 months. Planned increase in promotional spend (4–5% of sales) adds further near-term headwind before any recovery materialises.</div>
+    <div class="risk-item"><strong>Customer Concentration</strong>3 customers = 74.8% of revenue. No pricing power. Relationship-dependent revenue that can reverse faster than it built.</div>
+  </div>
+
+  <!-- UPSIDE -->
+  <div class="card">
+    <div class="card-title">Upside Catalysts</div>
+    <div class="upside-item"><strong>Genuine Demand Recovery (The Key Signal)</strong>If Q2/Q3 FY2026 show organic consumer pull — not channel refill — the destocking narrative ends and earnings reaccelerate toward guidance. This is the single most important thing to watch.</div>
+    <div class="upside-item"><strong>GLP-1 Protein Tailwind</strong>As semaglutide and tirzepatide go mainstream, dietary protein demand structurally rises. Premier Protein is cheap, accessible, and already in Walmart/Costco — ideally positioned.</div>
+    <div class="upside-item"><strong>Dymatize International Growth</strong>Powders holding +12–13% growth consistently. Dymatize has international distribution and a distinct fitness-science brand identity — significantly underpenetrated relative to Premier Protein.</div>
+    <div class="upside-item"><strong>Valuation Floor Is Compelling</strong>Fwd P/E 8.32 (#7/64) and P/FCF 8.62 (#10/64). ROA #1 and ROIC #2 in peer group. The market has already priced in a lot of pain. If the fundamentals stabilise, the multiple re-rate could be sharp.</div>
+  </div>
+
+  <!-- BOTTOM LINE -->
+  <div class="footer-note">
+    <div class="fn-label">Bottom Line</div>
+    <p>
+      BellRing's revenue growth story over the past two years was <strong>partly real, partly manufactured by channel behaviour</strong>. Premier Protein is a legitimate category leader — still at 25% RTD market share — but that share is sliding, and the "demand" that drove FY2024's 20% growth included meaningful retailer inventory hoarding that is now being reversed. Management acknowledged it too late, the class action is already filed, and growth targets have been cut.
+      <br><br>
+      The bull case is not complicated: <strong>(1)</strong> destocking completes by H2 FY2026, <strong>(2)</strong> GLP-1 mainstreaming becomes a real incremental driver for protein consumption, and <strong>(3)</strong> Dymatize continues its international trajectory. At Fwd P/E 8.32 with ROIC #2 among 64 peers, you are not paying for growth — you are paying for stabilisation. 
+      <br><br>
+      <strong>Not a short-term trade. Watch Q2 FY2026 (May 2026 report) closely — that is the first real test of whether consumer demand is recovering organically or the channel is still normalising. Two clean quarters of genuine sell-through data is the buy trigger.</strong>
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

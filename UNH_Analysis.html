@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNH – UnitedHealth Group Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Serif+4:wght@300;400;600&family=Source+Code+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c1220;--surface:#111827;--surface2:#1a2435;
+  --border:#1e2d45;--border2:#2a3f5f;
+  --navy:#0c1220;--blue:#1a3a6e;
+  --red:#dc2626;--red2:#ef4444;--red-dim:rgba(220,38,38,0.15);
+  --orange:#d97706;--orange-dim:rgba(217,119,6,0.12);
+  --green:#059669;--green-dim:rgba(5,150,105,0.1);
+  --text:#e2e8f0;--muted:#64748b;--subtle:#162032;
+  --accent:#3b82f6;--accent-dim:rgba(59,130,246,0.1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Serif 4',serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+.header{
+  background:linear-gradient(160deg,#0c1220 0%,#0f1e38 50%,#0c1220 100%);
+  padding:0 52px;border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--orange),transparent);}
+.hgrid{display:grid;grid-template-columns:1fr auto;align-items:end;padding:44px 0 32px;gap:32px;}
+.ticker{font-family:'Bebas Neue',sans-serif;font-size:72px;color:#fff;letter-spacing:4px;line-height:1;}
+.co-name{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:6px;}
+.warning-badge{display:inline-block;background:var(--red-dim);border:1px solid rgba(220,38,38,0.4);color:var(--red2);font-family:'Source Code Pro',monospace;font-size:9px;letter-spacing:2px;padding:4px 10px;border-radius:2px;text-transform:uppercase;margin-top:8px;}
+.price-block{text-align:right;}
+.price-now{font-family:'Source Code Pro',monospace;font-size:42px;color:#fff;}
+.price-sub{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);margin-top:5px;}
+.header-pills{display:flex;gap:10px;padding:0 0 30px;flex-wrap:wrap;}
+.pill{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:2px;padding:5px 14px;font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);cursor:default;transition:all .2s;}
+.pill:hover{border-color:var(--accent);color:var(--text);}
+.pill strong{color:var(--text);}
+
+.verdict{background:var(--red-dim);border-top:2px solid var(--red);border-bottom:1px solid var(--border);padding:18px 52px;display:flex;gap:18px;align-items:flex-start;}
+.v-label{font-family:'Source Code Pro',monospace;font-size:9px;letter-spacing:3px;color:var(--red2);text-transform:uppercase;white-space:nowrap;padding-top:3px;}
+.v-text{font-family:'Source Serif 4',serif;font-size:14px;line-height:1.75;color:#a0b0c0;}
+.v-text strong{color:var(--text);}
+
+.tab-nav{display:flex;border-bottom:1px solid var(--border);padding:0 52px;background:var(--surface);position:sticky;top:0;z-index:10;}
+.tab-btn{font-family:'Source Code Pro',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:14px 18px;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--red2);border-bottom-color:var(--red2);}
+
+.tab-panel{display:none;padding:32px 52px;}
+.tab-panel.active{display:block;}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:22px;transition:border-color .2s;}
+.card:hover{border-color:var(--border2);}
+.full{grid-column:1/-1;}
+.ctitle{font-family:'Source Code Pro',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.ctitle::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ALERT BOX */
+.alert{background:var(--red-dim);border:1px solid rgba(220,38,38,0.3);border-left:4px solid var(--red);border-radius:2px;padding:14px 16px;margin-bottom:14px;}
+.alert-title{font-family:'Source Code Pro',monospace;font-size:10px;letter-spacing:2px;color:var(--red2);text-transform:uppercase;margin-bottom:6px;}
+.alert p{font-size:13px;line-height:1.65;color:#b0a8a0;}
+.alert p strong{color:var(--text);}
+
+/* MCR GAUGE */
+.mcr-wrap{text-align:center;padding:10px 0;}
+.mcr-val{font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:1;}
+.mcr-sub{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);margin-top:4px;}
+.mcr-track{background:var(--subtle);border-radius:3px;height:10px;margin:14px 0 6px;overflow:hidden;}
+.mcr-fill{height:10px;border-radius:3px;width:0;transition:width 1.2s cubic-bezier(.22,1,.36,1);}
+
+.bq-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+.bq-item{text-align:center;cursor:default;}
+.bq-lbl{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);margin-bottom:6px;}
+.bq-score{width:44px;height:44px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-family:'Source Code Pro',monospace;font-size:18px;font-weight:500;margin:0 auto;background:rgba(59,130,246,0.1);border:1.5px solid rgba(59,130,246,0.3);color:var(--accent);transition:transform .2s;}
+.bq-item:hover .bq-score{transform:scale(1.1);}
+.bq-total{margin-top:14px;text-align:center;font-family:'Source Code Pro',monospace;font-size:13px;color:var(--muted);padding-top:14px;border-top:1px solid var(--border);}
+.bq-total span{font-size:22px;color:var(--orange);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;}
+
+.spectrum{position:relative;background:linear-gradient(90deg,var(--red),var(--orange) 40%,var(--green));height:7px;border-radius:2px;margin:12px 0 38px;}
+.smark{position:absolute;top:-4px;transform:translateX(-50%);width:15px;height:15px;border-radius:2px;border:2px solid var(--bg);cursor:default;transition:transform .2s;}
+.smark:hover{transform:translateX(-50%) scale(1.3);}
+.slbl{position:absolute;top:19px;transform:translateX(-50%);font-family:'Source Code Pro',monospace;font-size:9px;color:var(--muted);white-space:nowrap;text-align:center;line-height:1.4;}
+.asplit{display:flex;gap:8px;margin-top:12px;}
+.sb{flex:1;text-align:center;background:var(--subtle);border:1px solid var(--border);border-radius:2px;padding:10px;transition:border-color .2s;}
+.sb:hover{border-color:var(--accent);}
+.snum{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;}
+.slb2{font-family:'Source Code Pro',monospace;font-size:9px;color:var(--muted);margin-top:2px;}
+.erow{display:flex;gap:6px;margin-top:12px;}
+.ebox{flex:1;text-align:center;padding:8px;border-radius:2px;font-family:'Source Code Pro',monospace;font-size:12px;font-weight:500;cursor:default;transition:transform .15s;}
+.ebox:hover{transform:translateY(-2px);}
+.eneg{background:var(--red-dim);border:1px solid rgba(220,38,38,0.3);color:var(--red2);}
+.epos{background:var(--green-dim);border:1px solid rgba(5,150,105,0.3);color:var(--green);}
+.elbl{font-size:8px;color:var(--muted);margin-top:3px;display:block;}
+
+.rtbl{width:100%;border-collapse:collapse;}
+.rtbl th{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);text-align:left;padding:0 0 10px;font-weight:400;letter-spacing:1px;}
+.rtbl th:not(:first-child){text-align:right;}
+.rtbl td{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--text);padding:9px 0;border-top:1px solid var(--border);transition:background .15s;}
+.rtbl td:not(:first-child){text-align:right;}
+.rtbl td.seg{color:var(--muted);font-size:10px;padding-left:14px;}
+.rtbl td.pos{color:var(--green);}
+.rtbl td.neg{color:var(--red2);}
+.rtbl td.warn{color:var(--orange);}
+.rtbl tr.hl td{color:var(--accent);}
+.rtbl tr:hover td{background:rgba(255,255,255,0.02);}
+
+.mrow{margin-bottom:16px;}
+.mhdr{display:flex;justify-content:space-between;margin-bottom:5px;}
+.mname{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);}
+.mvals{font-family:'Source Code Pro',monospace;font-size:10px;display:flex;gap:10px;}
+.btrack{background:var(--subtle);border-radius:2px;height:7px;position:relative;margin-bottom:4px;overflow:hidden;}
+.bfill{height:7px;border-radius:2px;width:0;transition:width 1s cubic-bezier(.22,1,.36,1);}
+
+.val-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.vi{background:var(--subtle);border:1px solid var(--border);border-radius:3px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:default;transition:all .2s;}
+.vi:hover{background:rgba(59,130,246,0.05);border-color:var(--accent);}
+.vname{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);}
+.vnum{font-family:'Source Code Pro',monospace;font-size:16px;color:var(--text);text-align:right;}
+.vrank{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--accent);text-align:right;}
+
+.ev{border-bottom:1px solid var(--border);}
+.ev:last-child{border-bottom:none;}
+.evh{display:flex;gap:12px;padding:13px 0;align-items:center;cursor:pointer;user-select:none;transition:background .15s;}
+.evh:hover{background:rgba(255,255,255,0.02);}
+.evdot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+.evtrow{flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.evtitle{font-size:13px;color:var(--text);font-weight:400;}
+.evchev{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);margin-left:auto;transition:transform .25s;}
+.ev.open .evchev{transform:rotate(180deg);}
+.evbody{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.evbi{font-size:13px;line-height:1.7;color:#7a8898;padding:0 0 13px 20px;}
+.evbi strong{color:var(--text);}
+
+.tag{font-family:'Source Code Pro',monospace;font-size:9px;letter-spacing:1px;padding:2px 7px;border-radius:2px;text-transform:uppercase;margin-right:6px;}
+.tr{background:var(--red-dim);color:var(--red2);}
+.tu{background:var(--green-dim);color:var(--green);}
+.tw{background:var(--orange-dim);color:var(--orange);}
+.ta{background:var(--accent-dim);color:var(--accent);}
+
+.ri,.ui{border-left:3px solid;padding:12px 14px;border-radius:0 3px 3px 0;font-size:13px;line-height:1.65;color:#7a8898;margin-bottom:10px;transition:transform .15s;cursor:default;}
+.ri{border-color:var(--red);background:var(--red-dim);}
+.ui{border-color:var(--green);background:var(--green-dim);}
+.ri:hover,.ui:hover{transform:translateX(3px);}
+.ri strong{display:block;font-size:12px;margin-bottom:4px;color:var(--red2);}
+.ui strong{display:block;font-size:12px;margin-bottom:4px;color:var(--green);}
+
+.bl{background:var(--surface2);border:1px solid var(--border);border-top:3px solid var(--red);border-radius:3px;padding:24px 28px;}
+.bll{font-family:'Source Code Pro',monospace;font-size:9px;letter-spacing:3px;color:var(--red2);text-transform:uppercase;margin-bottom:12px;}
+.bl p{font-size:14px;line-height:1.85;color:#8090a0;}
+.bl p strong{color:var(--text);}
+
+.conv-wrap{text-align:center;padding:10px 0;}
+.conv-arc{width:160px;height:80px;margin:0 auto 12px;}
+.conv-arc svg{width:100%;height:100%;}
+.conv-val{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;color:var(--orange);display:block;margin-bottom:2px;}
+.conv-lbl{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);}
+.watch{background:var(--orange-dim);border:1px solid rgba(217,119,6,0.3);border-radius:3px;padding:16px 20px;margin-top:16px;text-align:center;}
+.wl{font-family:'Source Code Pro',monospace;font-size:9px;letter-spacing:2px;color:var(--orange);text-transform:uppercase;margin-bottom:6px;}
+.wd{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--text);}
+.ws{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);margin-top:4px;}
+.ibox{margin-top:12px;font-family:'Source Code Pro',monospace;font-size:11px;padding:10px 14px;border-radius:2px;}
+.iwarn{background:var(--red-dim);border:1px solid rgba(220,38,38,0.2);color:#c08080;}
+.inote{background:var(--orange-dim);border:1px solid rgba(217,119,6,0.2);color:#a08060;}
+
+@media(max-width:768px){
+  .header,.verdict,.tab-panel{padding-left:20px;padding-right:20px;}
+  .tab-nav{padding:0 20px;overflow-x:auto;}
+  .grid{grid-template-columns:1fr;}.full{grid-column:1;}
+  .ticker{font-size:48px;}.price-now{font-size:28px;}
+  .bq-grid{grid-template-columns:repeat(3,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="hgrid">
+    <div>
+      <div class="ticker">UNH</div>
+      <div class="co-name">UnitedHealth Group Inc. · Minnesota, USA · Est. 1974</div>
+      <div class="warning-badge">⚠ DOJ Investigation · CEO Change · MCR Crisis</div>
+    </div>
+    <div class="price-block">
+      <div class="price-now">$282.63</div>
+      <div class="price-sub">All-time High <span style="color:#93c5fd">$630.73</span> &nbsp;·&nbsp; Down <span style="color:var(--red2)">55%</span> from peak</div>
+    </div>
+  </div>
+  <div class="header-pills">
+    <div class="pill">M/Cap <strong>$256.3B</strong></div>
+    <div class="pill">P/E <strong>14.73</strong> · Ind. <strong>16.15</strong></div>
+    <div class="pill">BQ <strong>18 / 30</strong></div>
+    <div class="pill">Segments <strong>UHC · Optum Health · Insight · Rx</strong></div>
+    <div class="pill">MCR Q3 <strong style="color:var(--red2)">89.9%</strong></div>
+    <div class="pill">2026 Rev Guide <strong>+2%</strong></div>
+  </div>
+</div>
+
+<div class="verdict">
+  <div class="v-label">Verdict</div>
+  <div class="v-text">
+    UNH is America's largest health insurer — but 2025 was a year of compounding disasters. <strong>Medical Cost Ratio surged to 89.9%</strong>, Optum Health margins collapsed from 8.3% to near-zero, the CEO was shot and replaced, a DOJ investigation is ongoing, and EPS guidance was cut four times from $29.50 to $14.90. The company expects recovery by 2027 — but that's a long wait with high execution risk. At PEG 0.80, it looks statistically cheap. <strong>But this is a show-me story that needs MCR stabilisation, DOJ resolution, and Optum Health recovery before conviction is warranted.</strong>
+  </div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
+  <button class="tab-btn" onclick="switchTab('financials',this)">Financials</button>
+  <button class="tab-btn" onclick="switchTab('events',this)">Events</button>
+  <button class="tab-btn" onclick="switchTab('verdict',this)">Verdict</button>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-panel active" id="tab-overview">
+  <div class="grid">
+    <div class="card">
+      <div class="ctitle">Medical Cost Ratio — The Core Problem</div>
+      <div class="mcr-wrap">
+        <div class="mcr-val" id="mcrVal" style="color:var(--red2)">—</div>
+        <div class="mcr-sub">Q3 2025 MCR &nbsp;·&nbsp; Historical target ~83–85%</div>
+        <div class="mcr-track"><div class="mcr-fill" id="mcrFill" style="background:linear-gradient(90deg,var(--green),var(--orange),var(--red));"></div></div>
+        <div style="display:flex;justify-content:space-between;font-family:'Source Code Pro',monospace;font-size:9px;color:var(--muted);">
+          <span>80% (ideal)</span><span>85% (target)</span><span>90% (danger)</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Business Quality Score</div>
+      <div class="bq-grid">
+        <div class="bq-item"><div class="bq-lbl">RG</div><div class="bq-score">3</div></div>
+        <div class="bq-item"><div class="bq-lbl">GM</div><div class="bq-score">3</div></div>
+        <div class="bq-item"><div class="bq-lbl">OC</div><div class="bq-score">3</div></div>
+        <div class="bq-item"><div class="bq-lbl">OM</div><div class="bq-score">3</div></div>
+        <div class="bq-item"><div class="bq-lbl">NI</div><div class="bq-score">3</div></div>
+        <div class="bq-item"><div class="bq-lbl">FCF</div><div class="bq-score">3</div></div>
+      </div>
+      <div class="bq-total"><span>18</span> / 30 &nbsp;·&nbsp; All average — reflecting a company in reset</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Analyst Consensus · 28 Analysts</div>
+      <div style="position:relative;margin-bottom:44px;">
+        <div class="spectrum">
+          <div class="smark" style="left:0%;background:#dc2626;"><div class="slbl" style="left:0;transform:none;">$280<br>Low</div></div>
+          <div class="smark" style="left:68%;background:#d97706;"><div class="slbl">$391<br>Avg</div></div>
+          <div class="smark" style="left:100%;background:#059669;transform:translateX(-100%);"><div class="slbl" style="transform:translateX(-50%);">$444<br>High</div></div>
+        </div>
+      </div>
+      <div style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);margin-bottom:10px;">
+        Current <strong style="color:var(--red2)">$282.63</strong> — just above analyst floor of <strong style="color:var(--orange)">$280</strong>
+      </div>
+      <div class="asplit">
+        <div class="sb"><div class="snum" style="color:var(--green)">20</div><div class="slb2">Buy / Outperform</div></div>
+        <div class="sb"><div class="snum" style="color:var(--red2)">8</div><div class="slb2">Hold / Underperform</div></div>
+      </div>
+      <div style="font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);margin:12px 0 6px;">Earnings Surprise / EPS Guidance Cuts</div>
+      <div class="erow">
+        <div class="ebox eneg">MISS<span class="elbl">Q1</span></div>
+        <div class="ebox eneg">MISS<span class="elbl">Q2</span></div>
+        <div class="ebox epos">BEAT<span class="elbl">Q3</span></div>
+        <div class="ebox epos">BEAT<span class="elbl">Q4</span></div>
+      </div>
+      <div style="font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);margin-top:12px;">RG Est &nbsp;<strong style="color:var(--text)">+1.88%</strong> FY2026 &nbsp;·&nbsp; <strong style="color:var(--text)">+4.95%</strong> FY2027</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">EPS Guidance Collapse — 2025</div>
+      <div style="padding:8px 0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);">Dec 2024 Guidance</span>
+          <span style="font-family:'Source Code Pro',monospace;font-size:13px;color:var(--green);">$29.50 – $30.00</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);">After Q1</span>
+          <span style="font-family:'Source Code Pro',monospace;font-size:13px;color:var(--orange);">$26.00 – $26.50</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);">After Q2</span>
+          <span style="font-family:'Source Code Pro',monospace;font-size:13px;color:var(--red2);">≥ $16.00</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;">
+          <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);">After Q3 (Final)</span>
+          <span style="font-family:'Source Code Pro',monospace;font-size:13px;color:var(--red2);">≥ $16.25 adj.</span>
+        </div>
+      </div>
+      <div class="ibox iwarn" style="margin-top:8px;">Guidance cut by ~46% over the year. Q4 EPS down 69% YoY.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FINANCIALS -->
+<div class="tab-panel" id="tab-financials">
+  <div class="grid">
+    <div class="card full">
+      <div class="ctitle">Revenue Breakdown by Segment</div>
+      <table class="rtbl">
+        <thead><tr><th>Segment</th><th>FY2024 Mix</th><th>YoY</th><th>Q2 2025 Mix</th><th>YoY</th><th>FY2025 Mix</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td>Total Revenue</td><td>—</td><td class="pos">+8%</td><td>—</td><td class="pos">+13%</td><td>—</td><td class="pos">+12%</td></tr>
+          <tr><td class="seg">UnitedHealthcare</td><td>54%</td><td class="pos">+6%</td><td>56%</td><td class="pos">+6%</td><td>56%</td><td class="pos">+16%</td></tr>
+          <tr><td class="seg">Optum (total)</td><td>46%</td><td class="pos">+12%</td><td>44%</td><td class="pos">+7%</td><td>44%</td><td class="pos">+7%</td></tr>
+          <tr><td class="seg">— Optum Health</td><td>42%</td><td class="pos">+11%</td><td>37%</td><td class="neg">−7%</td><td>38%</td><td class="neg">−3%</td></tr>
+          <tr><td class="seg">— Optum Rx</td><td>53%</td><td class="pos">+15%</td><td>56%</td><td class="pos">+19%</td><td>57%</td><td class="pos">+16%</td></tr>
+          <tr><td class="seg">— Optum Insight</td><td>7%</td><td class="neg">−1%</td><td>7%</td><td class="pos">+6%</td><td>7%</td><td class="pos">+4%</td></tr>
+          <tr><td class="seg">Premiums (rev type)</td><td>77%</td><td class="pos">+6%</td><td>79%</td><td class="pos">+14%</td><td>79%</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="ibox inote" style="margin-top:10px;">Optum Health revenue declined despite volume — driven by higher medical costs on underpriced risk contracts. Optum Rx (+19% Q2) remains the bright spot.</div>
+    </div>
+    <div class="card" id="marginCard">
+      <div class="ctitle">Operating Margin Collapse</div>
+      <div class="mrow">
+        <div class="mhdr"><div class="mname">UNH Group Operating Margin</div><div class="mvals"><span style="color:var(--green)">8.1% FY24</span><span style="color:var(--orange)">4.6% Q2</span><span style="color:var(--red2)">2.7% FY25</span></div></div>
+        <div class="btrack"><div class="bfill" id="om1" style="background:var(--green);opacity:.7"></div></div>
+        <div class="btrack"><div class="bfill" id="om2" style="background:var(--orange);opacity:.7"></div></div>
+        <div class="btrack"><div class="bfill" id="om3" style="background:var(--red2);opacity:.7"></div></div>
+      </div>
+      <div class="mrow" style="margin-top:18px;">
+        <div class="mhdr"><div class="mname">Optum Health Margin</div><div class="mvals"><span style="color:var(--green)">7.4% FY24</span><span style="color:var(--orange)">1.0% Q3</span><span style="color:var(--red2)">~0.1% Q4</span></div></div>
+        <div class="btrack"><div class="bfill" id="oh1" style="background:var(--green);opacity:.7"></div></div>
+        <div class="btrack"><div class="bfill" id="oh2" style="background:var(--orange);opacity:.7"></div></div>
+        <div class="btrack"><div class="bfill" id="oh3" style="background:var(--red2);opacity:.7"></div></div>
+      </div>
+      <div class="mrow" style="margin-top:18px;">
+        <div class="mhdr"><div class="mname">Net Earnings Margin</div><div class="mvals"><span style="color:var(--green)">5.4% FY24</span><span style="color:var(--orange)">3.1% Q2</span><span style="color:var(--red2)">2.2% Q3</span></div></div>
+        <div class="btrack"><div class="bfill" id="nm1" style="background:var(--green);opacity:.65"></div></div>
+        <div class="btrack"><div class="bfill" id="nm2" style="background:var(--orange);opacity:.65"></div></div>
+        <div class="btrack"><div class="bfill" id="nm3" style="background:var(--red2);opacity:.65"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Valuation vs. 12 Peers</div>
+      <div class="val-grid">
+        <div class="vi"><div class="vname">P/E</div><div><div class="vnum">14.77</div><div class="vrank">#4 / 12</div></div></div>
+        <div class="vi"><div class="vname">Fwd P/E</div><div><div class="vnum">13.60</div><div class="vrank">#4 / 12</div></div></div>
+        <div class="vi" style="border-color:rgba(59,130,246,0.4)"><div class="vname">PEG</div><div><div class="vnum" style="color:var(--accent)">0.80</div><div class="vrank">#2 / 12</div></div></div>
+        <div class="vi"><div class="vname">P/S</div><div><div class="vnum">0.59</div><div class="vrank">#8 / 12</div></div></div>
+        <div class="vi"><div class="vname">P/FCF</div><div><div class="vnum">14.76</div><div class="vrank">#6 / 12</div></div></div>
+        <div class="vi" style="border-color:rgba(59,130,246,0.4)"><div class="vname">ROIC</div><div><div class="vnum" style="color:var(--accent)">10.46%</div><div class="vrank">#2 / 12</div></div></div>
+        <div class="vi"><div class="vname">Dividend</div><div><div class="vnum">3.24%</div><div class="vrank">#2 / 12</div></div></div>
+        <div class="vi"><div class="vname">Debt/Eq</div><div><div class="vnum" style="color:var(--orange)">0.78x</div><div class="vrank">#7 / 12</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EVENTS -->
+<div class="tab-panel" id="tab-events">
+  <div class="grid">
+    <div class="card full">
+      <div class="alert">
+        <div class="alert-title">⚠ Critical — Structural Integrity Under Review</div>
+        <p><strong>Three independent issues</strong> — V28 model losses, CEO assassination, and DOJ investigation — converged in 2025. Each alone would be manageable. Together they represent the most significant crisis in UNH's history.</p>
+      </div>
+      <div class="ctitle">Key Events — click to expand</div>
+      <div id="evList">
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--red)"></div><div class="evtrow"><span class="tag tr">MCR Crisis</span><span class="evtitle">Medical Cost Ratio hit 89.9% — structural or cyclical?</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">MCR surged from ~85% historical to <strong>89.9% in Q3 2025</strong>. The V28 CMS risk model transition alone costs ~$11B over three years according to analyst estimates. Optum Health assumed full risk on underpriced Medicare Advantage contracts — and got burned when utilisation spiked post-COVID. UnitedHealthcare is dropping 100+ Medicare Advantage plans in 2026, affecting 600,000 members, as it pulls back from unprofitable markets.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--red)"></div><div class="evtrow"><span class="tag tr">DOJ</span><span class="evtitle">DOJ investigation ongoing — scope and outcome unclear</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">A DOJ investigation is underway. Former CEO Brian Thompson was shot in December 2024 — Stephen Hemsley returned as Chairman and CEO. The combination of leadership instability and regulatory investigation creates significant overhang. The company also faces disclosure concerns: <strong>$3.3B in asset sale gains were counted as operating income</strong> in 2024, which critics argue inflated reported profitability.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--red)"></div><div class="evtrow"><span class="tag tr">Optum</span><span class="evtitle">Optum charges UHC 2x market rates — internal conflict flagged</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">Analysts flagged that <strong>Optum is charging UnitedHealthcare twice the market rate</strong> for services — inflating Optum's reported margins while artificially pressuring UHC margins. This cross-segment pricing dynamic makes it difficult to assess true segment profitability and raises questions about disclosure quality. Poor transparency is a recurring theme in analyst coverage.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--orange)"></div><div class="evtrow"><span class="tag tw">Medicare</span><span class="evtitle">CMS rate increase only 0.09% vs projected 4–6%</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">CMS proposed Medicare rates that were essentially flat (+0.09%), while the industry had modelled 4–6% increases to offset utilisation trends. This rate shortfall compounds the MCR crisis — the company is caught between higher costs and lower reimbursement simultaneously. Management expects Medicare margins to <strong>decline further in 2026</strong> if rates and cost trends don't change.</div></div>
+        </div>
+        <div class="ev" onclick="toggleEv(this)">
+          <div class="evh"><div class="evdot" style="background:var(--green)"></div><div class="evtrow"><span class="tag tu">Recovery</span><span class="evtitle">CEO guiding double-digit growth from 2027 — VBC expansion</span></div><div class="evchev">▼</div></div>
+          <div class="evbody"><div class="evbi">Stephen Hemsley (CEO) explicitly guided <strong>double-digit earnings growth from 2027</strong>. Value-Based Care expansion is expected to grow at 17.4% CAGR. Medicaid stabilisation is expected by 2026. 78% of plans are rated 4-star or higher for 2026 (vs 75% in 2025), improving Medicare reimbursement eligibility. The recovery thesis exists — but it requires flawless execution across multiple fronts simultaneously.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Key Risks</div>
+      <div class="ri"><strong>MCR Does Not Stabilise</strong>If medical cost trends continue into 2026, margins will fall further. Each 100bps of MCR = $1B+ earnings impact at current scale.</div>
+      <div class="ri"><strong>DOJ Investigation Escalates</strong>Outcome unknown, timeline unclear. Settlement costs and reputation damage could be significant.</div>
+      <div class="ri"><strong>Optum Health Impairment</strong>V28 transition alone = $11B over 3 years. VBC membership shrinking 10% in 2026. Recovery to 2027 is management's promise — not a market consensus.</div>
+      <div class="ri"><strong>Debt Load</strong>$32B cash against $79.19B total debt. Leverage limits flexibility at the worst possible time.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Upside Catalysts</div>
+      <div class="ui"><strong>2027 Recovery on Track</strong>If CEO's double-digit growth guidance proves accurate, the stock at current levels is deeply undervalued. PEG of 0.80 supports this thesis.</div>
+      <div class="ui"><strong>Medicaid Stabilisation</strong>Medicaid margins expected to stabilise by 2026. Peer Molina already operating at 3% margin in the same space.</div>
+      <div class="ui"><strong>Star Rating Improvement</strong>78% of plans 4-star+ in 2026 vs 75% in 2025 — qualifies for higher CMS bonuses and improves Medicare economics.</div>
+      <div class="ui"><strong>VBC Long-Term Tailwind</strong>Value-Based Care at 17.4% CAGR is a genuine structural growth driver if operational execution improves.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="tab-panel" id="tab-verdict">
+  <div class="grid">
+    <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div class="ctitle">Conviction Level</div>
+      <div class="conv-wrap">
+        <div class="conv-arc">
+          <svg viewBox="0 0 160 80">
+            <path d="M10,75 A70,70 0 0,1 150,75" fill="none" stroke="#1e2d45" stroke-width="12" stroke-linecap="round"/>
+            <path id="convArc" d="M10,75 A70,70 0 0,1 150,75" fill="none" stroke="url(#cgu)" stroke-width="12" stroke-linecap="round" stroke-dasharray="220" stroke-dashoffset="220" style="transition:stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1)"/>
+            <defs><linearGradient id="cgu" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#dc2626"/><stop offset="50%" stop-color="#d97706"/><stop offset="100%" stop-color="#059669"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="conv-val">LOW</span>
+        <div class="conv-lbl">Too many unresolved unknowns</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Bull vs. Bear</div>
+      <div style="display:flex;gap:10px;">
+        <div style="flex:1;padding:14px;background:var(--green-dim);border:1px solid rgba(5,150,105,0.2);border-radius:3px;">
+          <div style="font-family:'Source Code Pro',monospace;font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:10px;">BULL</div>
+          <ul style="list-style:none;font-size:12px;line-height:1.9;color:#508070;">
+            <li>✓ PEG 0.80 — deeply cheap if 2027 growth lands</li>
+            <li>✓ Double-digit growth guided for 2027</li>
+            <li>✓ Optum Rx growing 15–19% consistently</li>
+            <li>✓ Star ratings improving — better CMS rates</li>
+            <li>✓ Largest US insurer — too big to structurally fail</li>
+          </ul>
+        </div>
+        <div style="flex:1;padding:14px;background:var(--red-dim);border:1px solid rgba(220,38,38,0.2);border-radius:3px;">
+          <div style="font-family:'Source Code Pro',monospace;font-size:9px;color:var(--red2);letter-spacing:2px;margin-bottom:10px;">BEAR</div>
+          <ul style="list-style:none;font-size:12px;line-height:1.9;color:#906060;">
+            <li>✗ DOJ investigation — unknown severity</li>
+            <li>✗ MCR still trending wrong direction</li>
+            <li>✗ Optum Health breakeven at best in 2026</li>
+            <li>✗ $79B debt with limited cash buffer</li>
+            <li>✗ 2027 recovery requires simultaneous fixes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card full">
+      <div class="ctitle">Recovery Signals to Watch</div>
+      <div class="watch">
+        <div class="wl">Critical Date</div>
+        <div class="wd">Q1 2026 Earnings — April 2026</div>
+        <div class="ws">First data point on whether MCR is stabilising below 89%</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;">
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:3px;padding:12px;text-align:center;">
+          <div style="font-family:'Source Code Pro',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">SIGNAL 1</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">MCR returns<br>below 87%</div>
+        </div>
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:3px;padding:12px;text-align:center;">
+          <div style="font-family:'Source Code Pro',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">SIGNAL 2</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">DOJ investigation<br>resolved</div>
+        </div>
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:3px;padding:12px;text-align:center;">
+          <div style="font-family:'Source Code Pro',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">SIGNAL 3</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">Optum Health margin<br>above 5%</div>
+        </div>
+        <div style="background:var(--subtle);border:1px solid var(--border);border-radius:3px;padding:12px;text-align:center;">
+          <div style="font-family:'Source Code Pro',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">SIGNAL 4</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">CMS 2027 rate<br>increase above 4%</div>
+        </div>
+      </div>
+    </div>
+    <div class="card full bl">
+      <div class="bll">Bottom Line</div>
+      <p>UNH is not a business in terminal decline — it is the largest US health insurer, and Optum Rx continues to grow at 15–19%. But 2025 was a year of simultaneous compounding failures: <strong>MCR at historic highs, Optum Health near breakeven, CEO change, DOJ investigation, and four guidance cuts</strong>. The stock has already fallen 55% from its peak, and PEG 0.80 looks superficially cheap.<br><br>
+      The problem is that the 2027 recovery thesis requires too many things to go right at once — MCR stabilisation, Medicaid normalisation, Optum Health restructuring, CMS rate improvement, and DOJ resolution. Each has a reasonable probability. All five simultaneously is a high bar. <strong>Low conviction. Wait for Q1 2026 MCR data. The entry point will still be attractive if the numbers show stabilisation.</strong></p>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='financials')initMargins();
+  if(name==='overview')initMCR();
+  if(name==='verdict')initConv();
+}
+function toggleEv(el){
+  const body=el.querySelector('.evbody');
+  const isOpen=el.classList.contains('open');
+  document.querySelectorAll('.ev.open').forEach(o=>{o.classList.remove('open');o.querySelector('.evbody').style.maxHeight='0';});
+  if(!isOpen){el.classList.add('open');body.style.maxHeight=body.scrollHeight+'px';}
+}
+let mcrInit=false;
+function initMCR(){
+  if(mcrInit)return;mcrInit=true;
+  setTimeout(()=>{
+    document.getElementById('mcrFill').style.width='98%';
+    let n=80,target=89.9,el=document.getElementById('mcrVal');
+    const step=()=>{if(n<target){n=Math.min(n+0.5,target);el.textContent=n.toFixed(1)+'%';requestAnimationFrame(step);}};
+    step();
+  },200);
+}
+let mInit=false;
+function initMargins(){
+  if(mInit)return;mInit=true;
+  setTimeout(()=>{
+    document.getElementById('om1').style.width='81%';
+    document.getElementById('om2').style.width='46%';
+    document.getElementById('om3').style.width='27%';
+    document.getElementById('oh1').style.width='74%';
+    document.getElementById('oh2').style.width='10%';
+    document.getElementById('oh3').style.width='1%';
+    document.getElementById('nm1').style.width='54%';
+    document.getElementById('nm2').style.width='31%';
+    document.getElementById('nm3').style.width='22%';
+  },100);
+}
+let vInit=false;
+function initConv(){
+  if(vInit)return;vInit=true;
+  setTimeout(()=>{const a=document.getElementById('convArc');if(a)a.style.strokeDashoffset='198';},200);
+}
+window.addEventListener('load',()=>{initMCR();});
+</script>
+</body>
+</html>
