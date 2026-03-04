@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Easy Equity — Research Made Simple</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Sentient:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── RESET ───────────────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f7f8fa;
+  --surface:#ffffff;
+  --surface2:#f0f2f7;
+  --border:#e2e7f0;
+  --border2:#c8d0e2;
+  --navy:#08111f;
+  --navy2:#0d1a30;
+  --blue:#1847d4;
+  --blue2:#2563eb;
+  --blue-light:#eef3ff;
+  --blue-mid:#dbe6ff;
+  --green:#0a6e42;
+  --green-bg:#eafaf3;
+  --red:#b91c1c;
+  --red-bg:#fff1f1;
+  --amber:#92400e;
+  --amber-bg:#fff8ed;
+  --text:#08111f;
+  --muted:#5a6a82;
+  --subtle:#f0f3f9;
+  --white:#ffffff;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* ── CANVAS BACKGROUND ───────────────────────────────── */
+#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.45;}
+.page-wrap{position:relative;z-index:1;}
+
+/* ── TICKER TAPE ─────────────────────────────────────── */
+.ticker-tape{background:var(--navy);padding:8px 0;overflow:hidden;border-bottom:1px solid #1a2a40;position:relative;z-index:50;}
+.ticker-track{display:flex;white-space:nowrap;animation:tickRoll 40s linear infinite;}
+.ticker-track:hover{animation-play-state:paused;}
+.tick-item{display:inline-flex;align-items:center;gap:8px;padding:0 30px;border-right:1px solid rgba(255,255,255,0.07);font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,0.55);}
+.tick-sym{color:#fff;font-weight:500;letter-spacing:0.5px;}
+.tick-up{color:#4ade80;}
+.tick-dn{color:#f87171;}
+@keyframes tickRoll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* ── NAV ─────────────────────────────────────────────── */
+nav{background:rgba(255,255,255,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 64px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;box-shadow:0 1px 20px rgba(8,17,31,0.06);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-mark{width:36px;height:36px;background:var(--navy);border-radius:8px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.logo-mark::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--blue),transparent);opacity:0.5;}
+.logo-mark svg{width:18px;height:18px;position:relative;z-index:1;}
+.logo-text{font-family:'Manrope',sans-serif;font-size:17px;font-weight:800;color:var(--navy);letter-spacing:-0.3px;}
+.logo-text em{color:var(--blue);font-style:normal;}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-links a{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;padding:7px 15px;border-radius:7px;transition:all .18s;letter-spacing:0.1px;}
+.nav-links a:hover{color:var(--navy);background:var(--subtle);}
+.nav-links a.active{color:var(--blue);background:var(--blue-light);}
+.nav-cta{background:var(--navy);color:#fff;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 22px;border-radius:8px;text-decoration:none;transition:all .2s;letter-spacing:0.2px;}
+.nav-cta:hover{background:var(--blue);transform:translateY(-1px);box-shadow:0 4px 16px rgba(24,71,212,0.3);}
+
+/* ── HERO ────────────────────────────────────────────── */
+.hero{background:var(--navy);padding:90px 64px 76px;position:relative;overflow:hidden;min-height:560px;display:flex;align-items:center;}
+.hero-noise{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");opacity:0.4;pointer-events:none;}
+.hero-lines{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.hero-lines svg{position:absolute;bottom:-40px;right:-60px;opacity:0.07;width:600px;}
+.hero-glow1{position:absolute;top:-120px;left:-80px;width:500px;height:500px;background:radial-gradient(circle,rgba(24,71,212,0.25) 0%,transparent 65%);pointer-events:none;}
+.hero-glow2{position:absolute;bottom:-100px;right:100px;width:400px;height:400px;background:radial-gradient(circle,rgba(10,110,66,0.12) 0%,transparent 65%);pointer-events:none;}
+.hero-inner{max-width:760px;position:relative;z-index:2;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:24px;padding:6px 16px;margin-bottom:28px;}
+.badge-pulse{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:badgePulse 2.2s infinite;}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.4);}50%{box-shadow:0 0 0 6px rgba(74,222,128,0);}}
+.hero-badge span{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,0.6);letter-spacing:1.5px;text-transform:uppercase;}
+.hero h1{font-family:'Manrope',sans-serif;font-size:58px;font-weight:800;color:#fff;line-height:1.07;letter-spacing:-2px;margin-bottom:20px;}
+.hero h1 .line2{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,0.35);}
+.hero h1 .accent{color:#60a5fa;}
+.hero-sub{font-size:16px;color:rgba(255,255,255,0.5);line-height:1.7;max-width:520px;margin-bottom:38px;font-weight:400;}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-primary{background:var(--blue2);color:#fff;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;padding:14px 28px;border-radius:9px;text-decoration:none;border:none;cursor:pointer;transition:all .2s;letter-spacing:0.2px;display:inline-flex;align-items:center;gap:8px;}
+.btn-primary:hover{background:#1347c0;transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,99,235,0.4);}
+.btn-outline{background:transparent;color:rgba(255,255,255,0.75);font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;padding:14px 28px;border-radius:9px;text-decoration:none;border:1px solid rgba(255,255,255,0.18);cursor:pointer;transition:all .2s;}
+.btn-outline:hover{border-color:rgba(255,255,255,0.4);color:#fff;background:rgba(255,255,255,0.05);}
+.hero-stats{display:flex;gap:0;margin-top:56px;padding-top:36px;border-top:1px solid rgba(255,255,255,0.07);}
+.hstat{padding-right:40px;margin-right:40px;border-right:1px solid rgba(255,255,255,0.07);}
+.hstat:last-child{border-right:none;margin-right:0;padding-right:0;}
+.hstat-num{font-family:'Manrope',sans-serif;font-size:34px;font-weight:800;color:#fff;letter-spacing:-1px;line-height:1;}
+.hstat-num .accent{color:#60a5fa;}
+.hstat-lbl{font-size:12px;color:rgba(255,255,255,0.35);margin-top:4px;font-weight:500;letter-spacing:0.3px;}
+
+/* ── SECTION ─────────────────────────────────────────── */
+.section{padding:68px 64px;}
+.section-alt{background:var(--surface);}
+.sec-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;gap:20px;flex-wrap:wrap;}
+.sec-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:6px;}
+.sec-title{font-size:24px;font-weight:800;color:var(--navy);letter-spacing:-0.4px;}
+.sec-sub{font-size:13px;color:var(--muted);margin-top:4px;font-weight:400;}
+.sec-link{font-size:13px;font-weight:700;color:var(--blue);text-decoration:none;white-space:nowrap;display:flex;align-items:center;gap:4px;padding:8px 14px;border-radius:7px;border:1px solid var(--border);transition:all .2s;}
+.sec-link:hover{background:var(--blue-light);border-color:var(--blue);}
+
+/* ── LIVE NEWS (GNews API) ───────────────────────────── */
+.news-featured-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-bottom:16px;}
+.news-small-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.news-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .22s;text-decoration:none;display:flex;flex-direction:column;}
+.news-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(8,17,31,0.1);border-color:var(--border2);}
+.nc-img{height:180px;background:var(--surface2);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.nc-img img{width:100%;height:100%;object-fit:cover;}
+.nc-img-icon{font-size:48px;opacity:0.15;}
+.news-card.featured .nc-img{height:240px;}
+.nc-tag{position:absolute;top:12px;left:12px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;padding:4px 9px;border-radius:4px;text-transform:uppercase;font-weight:500;}
+.tag-live{background:rgba(8,17,31,0.75);color:#4ade80;border:1px solid rgba(74,222,128,0.3);}
+.tag-bull{background:rgba(10,110,66,0.85);color:#fff;}
+.tag-bear{background:rgba(185,28,28,0.85);color:#fff;}
+.tag-neutral{background:rgba(146,64,14,0.85);color:#fff;}
+.nc-body{padding:16px 18px;flex:1;display:flex;flex-direction:column;}
+.nc-source{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue);letter-spacing:0.5px;margin-bottom:6px;font-weight:500;}
+.nc-title{font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:var(--navy);line-height:1.4;margin-bottom:8px;flex:1;}
+.news-card.featured .nc-title{font-size:18px;}
+.nc-excerpt{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px;}
+.nc-meta{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);margin-top:auto;}
+.nc-date{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);}
+.nc-read{font-size:11px;font-weight:700;color:var(--blue);}
+.news-loading{text-align:center;padding:40px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:12px;}
+.news-loading .spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── REPORTS ─────────────────────────────────────────── */
+.reports-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.report-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;cursor:pointer;transition:all .22s;text-decoration:none;display:block;position:relative;overflow:hidden;}
+.report-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0;}
+.rc-bull::before{background:linear-gradient(90deg,#0a6e42,#34d399);}
+.rc-bear::before{background:linear-gradient(90deg,#b91c1c,#f87171);}
+.rc-neutral::before{background:linear-gradient(90deg,#92400e,#fbbf24);}
+.rc-wait::before{background:linear-gradient(90deg,#4f46e5,#a78bfa);}
+.report-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(8,17,31,0.1);border-color:var(--border2);}
+.rc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.rc-ticker{font-family:'Manrope',sans-serif;font-size:26px;font-weight:800;color:var(--navy);letter-spacing:-0.8px;}
+.rc-verdict{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:4px 10px;border-radius:20px;font-weight:500;text-transform:uppercase;border:1px solid;}
+.rv-wait{background:rgba(79,70,229,0.08);color:#4f46e5;border-color:rgba(79,70,229,0.2);}
+.rv-watch{background:rgba(146,64,14,0.08);color:var(--amber);border-color:rgba(146,64,14,0.2);}
+.rv-buy{background:rgba(10,110,66,0.08);color:var(--green);border-color:rgba(10,110,66,0.2);}
+.rv-low{background:rgba(185,28,28,0.08);color:var(--red);border-color:rgba(185,28,28,0.2);}
+.rc-company{font-size:12px;color:var(--muted);margin-bottom:12px;font-weight:500;}
+.rc-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px;font-weight:400;}
+.rc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.rc-tag{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:3px 8px;border-radius:4px;background:var(--subtle);color:var(--muted);border:1px solid var(--border);letter-spacing:0.3px;}
+.rc-footer{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--border);}
+.rc-price{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--navy);}
+.rc-bq{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);}
+.rc-bq strong{color:var(--blue);}
+.rc-arrow{font-size:18px;color:var(--blue);transition:transform .2s;}
+.report-card:hover .rc-arrow{transform:translateX(4px);}
+.rc-placeholder{border-style:dashed;background:var(--subtle);cursor:default;display:flex;align-items:center;justify-content:center;min-height:200px;}
+.rc-placeholder:hover{transform:none;box-shadow:none;}
+.placeholder-inner{text-align:center;}
+.placeholder-inner .pi-icon{font-size:24px;opacity:0.25;margin-bottom:8px;}
+.placeholder-inner .pi-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+
+/* ── ARTICLES ────────────────────────────────────────── */
+.articles-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.article-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px 26px;cursor:pointer;transition:all .22s;text-decoration:none;display:flex;gap:20px;align-items:flex-start;}
+.article-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(8,17,31,0.09);border-color:var(--border2);}
+.ac-num{font-family:'Manrope',sans-serif;font-size:38px;font-weight:800;color:var(--border2);line-height:1;flex-shrink:0;width:50px;transition:color .2s;}
+.article-card:hover .ac-num{color:var(--blue-mid);}
+.ac-tag{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;margin-bottom:7px;font-weight:500;}
+.ac-title{font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:var(--navy);line-height:1.35;margin-bottom:8px;}
+.ac-excerpt{font-size:13px;color:var(--muted);line-height:1.6;font-weight:400;}
+.ac-meta{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:10px;}
+
+/* ── STATS ───────────────────────────────────────────── */
+.stats-band{background:var(--navy);padding:68px 64px;}
+.stats-inner{display:grid;grid-template-columns:1.2fr 1fr;gap:72px;align-items:center;}
+.stats-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:#60a5fa;text-transform:uppercase;margin-bottom:14px;}
+.stats-heading{font-family:'Manrope',sans-serif;font-size:36px;font-weight:800;color:#fff;line-height:1.15;letter-spacing:-0.8px;margin-bottom:16px;}
+.stats-heading em{font-style:italic;color:rgba(255,255,255,0.4);font-weight:300;}
+.stats-para{font-size:15px;color:rgba(255,255,255,0.45);line-height:1.75;font-weight:400;}
+.stats-boxes{display:grid;grid-template-columns:1fr 1fr;gap:3px;border-radius:12px;overflow:hidden;}
+.sbox{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);padding:28px 24px;transition:background .2s;cursor:default;}
+.sbox:hover{background:rgba(255,255,255,0.07);}
+.sbox-num{font-family:'Manrope',sans-serif;font-size:38px;font-weight:800;color:#fff;letter-spacing:-1px;line-height:1;}
+.sbox-num em{color:#60a5fa;font-style:normal;}
+.sbox-lbl{font-size:13px;color:rgba(255,255,255,0.4);margin-top:5px;font-weight:500;}
+.sbox-sub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,0.2);margin-top:4px;letter-spacing:0.3px;}
+
+/* ── CONNECT ─────────────────────────────────────────── */
+.connect-section{padding:68px 64px;}
+.connect-inner{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:60px 64px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+.conn-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:14px;}
+.conn-title{font-family:'Manrope',sans-serif;font-size:36px;font-weight:800;color:var(--navy);letter-spacing:-0.8px;line-height:1.15;margin-bottom:14px;}
+.conn-title em{font-style:italic;color:var(--blue);font-weight:300;}
+.conn-para{font-size:14px;color:var(--muted);line-height:1.78;margin-bottom:28px;font-weight:400;}
+.conn-features{display:flex;flex-direction:column;gap:14px;}
+.conn-feat{display:flex;align-items:flex-start;gap:14px;}
+.cf-icon{width:36px;height:36px;border-radius:9px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;border:1px solid var(--blue-mid);}
+.cf-title{font-size:13px;font-weight:700;color:var(--navy);}
+.cf-sub{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5;}
+
+/* ── BOOKING FORM ────────────────────────────────────── */
+.booking-card{background:var(--navy);border-radius:14px;padding:36px;position:relative;overflow:hidden;}
+.bc-glow{position:absolute;top:-80px;right:-80px;width:260px;height:260px;background:radial-gradient(circle,rgba(24,71,212,0.35),transparent 65%);pointer-events:none;}
+.bc-title{font-family:'Manrope',sans-serif;font-size:19px;font-weight:800;color:#fff;margin-bottom:4px;position:relative;z-index:1;}
+.bc-sub{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:28px;position:relative;z-index:1;}
+.form-group{margin-bottom:14px;position:relative;z-index:1;}
+.form-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:7px;display:block;}
+.form-input,.form-select,.form-textarea{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 15px;font-family:'Manrope',sans-serif;font-size:13px;color:#fff;outline:none;transition:border-color .2s,background .2s;font-weight:400;}
+.form-input::placeholder,.form-textarea::placeholder{color:rgba(255,255,255,0.22);}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(37,99,235,0.7);background:rgba(255,255,255,0.09);}
+.form-select{color:rgba(255,255,255,0.6);cursor:pointer;-webkit-appearance:none;}
+.form-select option{background:#0d1a30;color:#fff;}
+.form-textarea{resize:vertical;min-height:82px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-book{width:100%;background:var(--blue2);color:#fff;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;padding:14px;border-radius:9px;border:none;cursor:pointer;transition:all .2s;margin-top:8px;letter-spacing:0.3px;position:relative;z-index:1;}
+.btn-book:hover{background:#1347c0;transform:translateY(-1px);box-shadow:0 6px 22px rgba(37,99,235,0.45);}
+.btn-book:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.bc-note{font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,0.2);text-align:center;margin-top:12px;position:relative;z-index:1;}
+.success-msg{display:none;text-align:center;padding:28px 10px;}
+.success-msg.show{display:block;}
+.success-icon{font-size:44px;margin-bottom:12px;}
+.success-title{font-family:'Manrope',sans-serif;font-size:18px;font-weight:800;color:#fff;margin-bottom:6px;}
+.success-sub{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.6;}
+
+/* ── FOOTER ──────────────────────────────────────────── */
+footer{background:var(--navy2);border-top:1px solid rgba(255,255,255,0.06);padding:40px 64px;}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;flex-wrap:wrap;gap:24px;}
+.ft-brand{font-family:'Manrope',sans-serif;font-size:18px;font-weight:800;color:#fff;}
+.ft-brand em{color:#60a5fa;font-style:normal;}
+.ft-tagline{font-size:12px;color:rgba(255,255,255,0.3);margin-top:5px;font-weight:400;}
+.ft-links{display:flex;gap:24px;flex-wrap:wrap;}
+.ft-links a{font-size:13px;color:rgba(255,255,255,0.4);text-decoration:none;font-weight:500;transition:color .2s;}
+.ft-links a:hover{color:rgba(255,255,255,0.8);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.06);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.ft-copy{font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,0.2);}
+.ft-disc{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,0.15);max-width:520px;line-height:1.6;}
+
+/* ── SCROLL ANIM ─────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:.1s;}
+.reveal-delay-2{transition-delay:.2s;}
+.reveal-delay-3{transition-delay:.3s;}
+
+/* ── RESPONSIVE ──────────────────────────────────────── */
+@media(max-width:960px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .hero,.section,.stats-band,.connect-section{padding-left:20px;padding-right:20px;}
+  .hero{padding-top:56px;padding-bottom:48px;}
+  .hero h1{font-size:38px;}
+  .hero-stats{gap:20px;flex-wrap:wrap;}
+  .hstat{border-right:none;margin-right:0;padding-right:20px;}
+  .news-featured-grid,.news-small-grid,.reports-grid,.articles-grid{grid-template-columns:1fr;}
+  .stats-inner,.connect-inner{grid-template-columns:1fr;gap:36px;}
+  .connect-inner{padding:28px 20px;}
+  footer{padding:32px 20px;}
+  .footer-top{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- ANIMATED BACKGROUND -->
+<canvas id="bgCanvas"></canvas>
+
+<div class="page-wrap">
+
+<!-- TICKER -->
+<div class="ticker-tape">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 18 18" fill="none"><polyline points="2,13 6,8 10,11 16,4" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="4" r="1.8" fill="white"/></svg>
+    </div>
+    <span class="logo-text">Easy<em>Equity</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="#news">News</a>
+    <a href="#reports">Reports</a>
+    <a href="#articles">Articles</a>
+    <a href="#connect">1-on-1</a>
+  </div>
+  <a href="#connect" class="nav-cta">Book a Call →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-glow1"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-lines">
+    <svg viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 300 L80 240 L160 260 L240 180 L320 200 L400 120 L480 140 L560 60 L600 80" stroke="white" stroke-width="1.5" fill="none"/>
+      <path d="M0 340 L80 280 L160 300 L240 220 L320 240 L400 160 L480 180 L560 100 L600 120" stroke="white" stroke-width="0.8" fill="none" stroke-dasharray="4 8"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <div class="badge-pulse"></div>
+      <span>Independent Equity Research</span>
+    </div>
+    <h1>Stocks decoded.<br><span class="line2">Jargon removed.</span><br><span class="accent">Truth delivered.</span></h1>
+    <p class="hero-sub">Deep company analysis written for real investors — no finance degree needed. Just the numbers, the story, and an honest verdict on every stock.</p>
+    <div class="hero-actions">
+      <a href="#reports" class="btn-primary">Read Latest Reports →</a>
+      <a href="#connect" class="btn-outline">Book a Free Call</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-num">4<span class="accent">+</span></div>
+        <div class="hstat-lbl">Reports Published</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">100<span class="accent">%</span></div>
+        <div class="hstat-lbl">Independent</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">0</div>
+        <div class="hstat-lbl">Conflicts of Interest</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">∞</div>
+        <div class="hstat-lbl">Plain Language</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="section section-alt" id="news">
+  <div class="sec-header reveal">
+    <div>
+      <div class="sec-eyebrow">Live Market News</div>
+      <div class="sec-title">Top Stories</div>
+      <div class="sec-sub">Latest business & market news — powered by live feeds</div>
+    </div>
+    <a href="https://finance.yahoo.com" target="_blank" class="sec-link">All News →</a>
+  </div>
+  <div id="newsContainer" class="reveal reveal-delay-1">
+    <div class="news-loading"><div class="spinner"></div>Loading latest news...</div>
+  </div>
+</section>
+
+<!-- REPORTS -->
+<section class="section" id="reports">
+  <div class="sec-header reveal">
+    <div>
+      <div class="sec-eyebrow">Research Coverage</div>
+      <div class="sec-title">Stock Reports</div>
+      <div class="sec-sub">Deep-dive analysis — plain language, honest verdict on every stock</div>
+    </div>
+    <a href="#" class="sec-link">All Reports →</a>
+  </div>
+  <div class="reports-grid reveal reveal-delay-1">
+
+    <a href="DOCS_Analysis.html" class="report-card rc-neutral">
+      <div class="rc-top">
+        <div><div class="rc-ticker">DOCS</div><div class="rc-company">Doximity · Healthcare Tech · California</div></div>
+        <div class="rc-verdict rv-watch">Phased Buy</div>
+      </div>
+      <div class="rc-desc">LinkedIn for doctors — 80%+ of US physicians on one platform, 117% revenue retention, #1 ROIC of 47 peers. Pharma budget headwind is cyclical, not structural.</div>
+      <div class="rc-tags"><span class="rc-tag">Healthcare</span><span class="rc-tag">SaaS</span><span class="rc-tag">AI Optionality</span><span class="rc-tag">Network Effect</span></div>
+      <div class="rc-footer">
+        <div><div class="rc-price">$26.38 · <span style="color:var(--red)">↓75% from ATH</span></div><div class="rc-bq">BQ <strong>23</strong>/30 · P/E 22 vs Ind. 54</div></div>
+        <div class="rc-arrow">→</div>
+      </div>
+    </a>
+
+    <a href="UNH_Analysis.html" class="report-card rc-bear">
+      <div class="rc-top">
+        <div><div class="rc-ticker">UNH</div><div class="rc-company">UnitedHealth Group · Insurance · Minnesota</div></div>
+        <div class="rc-verdict rv-low">Low Conv.</div>
+      </div>
+      <div class="rc-desc">Largest US health insurer under pressure: MCR 89.9%, Optum near breakeven, DOJ investigation, four EPS guidance cuts in 2025. PEG 0.80 looks cheap — but recovery needs too much to go right at once.</div>
+      <div class="rc-tags"><span class="rc-tag">Insurance</span><span class="rc-tag">Medicare</span><span class="rc-tag">Turnaround</span><span class="rc-tag">DOJ Risk</span></div>
+      <div class="rc-footer">
+        <div><div class="rc-price">$282.63 · <span style="color:var(--red)">↓55% from ATH</span></div><div class="rc-bq">BQ <strong>18</strong>/30 · PEG 0.80</div></div>
+        <div class="rc-arrow">→</div>
+      </div>
+    </a>
+
+    <a href="BRBR_Analysis.html" class="report-card rc-wait">
+      <div class="rc-top">
+        <div><div class="rc-ticker">BRBR</div><div class="rc-company">BellRing Brands · Nutrition · Missouri</div></div>
+        <div class="rc-verdict rv-wait">Wait</div>
+      </div>
+      <div class="rc-desc">Premier Protein — real brand, 25% RTD market share, ROIC #2 of 64 peers. But revenue inflated by retailer stockpiling now reversing. Class action filed. Two clean quarters needed before buying.</div>
+      <div class="rc-tags"><span class="rc-tag">Consumer</span><span class="rc-tag">Nutrition</span><span class="rc-tag">GLP-1 Tailwind</span><span class="rc-tag">Channel Risk</span></div>
+      <div class="rc-footer">
+        <div><div class="rc-price">$18.15 · <span style="color:var(--red)">↓77% from ATH</span></div><div class="rc-bq">BQ <strong>18</strong>/30 · Fwd P/E 8.32</div></div>
+        <div class="rc-arrow">→</div>
+      </div>
+    </a>
+
+    <a href="SAFE_Analysis.html" class="report-card rc-bull">
+      <div class="rc-top">
+        <div><div class="rc-ticker">SAFE</div><div class="rc-company">Safehold · Ground Lease REIT · New York</div></div>
+        <div class="rc-verdict rv-buy">Income Hold</div>
+      </div>
+      <div class="rc-desc">Only public ground lease REIT. Contractual CPI-linked rent escalations, 5.23% dividend, P/B 0.41x. Rate environment crushed the price — not the business. Dividend pays you while waiting for the re-rate.</div>
+      <div class="rc-tags"><span class="rc-tag">REIT</span><span class="rc-tag">Real Estate</span><span class="rc-tag">Income</span><span class="rc-tag">Rate Sensitive</span></div>
+      <div class="rc-footer">
+        <div><div class="rc-price">$13.62 · <span style="color:var(--red)">↓75% from ATH</span></div><div class="rc-bq">BQ <strong>20</strong>/30 · Div 5.23%</div></div>
+        <div class="rc-arrow">→</div>
+      </div>
+    </a>
+
+    <div class="report-card rc-placeholder">
+      <div class="placeholder-inner"><div class="pi-icon">📋</div><div class="pi-label">Coming Soon</div></div>
+    </div>
+    <div class="report-card rc-placeholder">
+      <div class="placeholder-inner"><div class="pi-icon">📋</div><div class="pi-label">Coming Soon</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ARTICLES -->
+<section class="section section-alt" id="articles">
+  <div class="sec-header reveal">
+    <div>
+      <div class="sec-eyebrow">Education</div>
+      <div class="sec-title">Articles & Explainers</div>
+      <div class="sec-sub">Finance concepts broken down simply — for investors at any level</div>
+    </div>
+    <a href="#" class="sec-link">All Articles →</a>
+  </div>
+  <div class="articles-grid reveal reveal-delay-1">
+    <a href="#" class="article-card">
+      <div class="ac-num">01</div>
+      <div class="ac-body">
+        <div class="ac-tag">Fundamentals</div>
+        <div class="ac-title">What is a Business Quality Score — and why it matters more than P/E</div>
+        <div class="ac-excerpt">Most investors stop at the P/E ratio. Here's why revenue growth, margins, and free cash flow quality tell a much richer story about whether a company will survive and grow.</div>
+        <div class="ac-meta">5 min read · Beginner</div>
+      </div>
+    </a>
+    <a href="#" class="article-card">
+      <div class="ac-num">02</div>
+      <div class="ac-body">
+        <div class="ac-tag">Sector Deep Dive</div>
+        <div class="ac-title">GLP-1 drugs and the nutrition industry — who wins and who loses</div>
+        <div class="ac-excerpt">Wegovy and Ozempic are changing how people eat. We break down which nutrition companies benefit from the protein tailwind — and which ones are at serious risk.</div>
+        <div class="ac-meta">7 min read · Intermediate</div>
+      </div>
+    </a>
+    <a href="#" class="article-card">
+      <div class="ac-num">03</div>
+      <div class="ac-body">
+        <div class="ac-tag">Healthcare</div>
+        <div class="ac-title">Medical Cost Ratio explained — the one number that brought down UNH</div>
+        <div class="ac-excerpt">MCR is the single most important metric in health insurance. Here's what it means, what a safe range looks like, and why 89.9% is a crisis number.</div>
+        <div class="ac-meta">6 min read · Beginner</div>
+      </div>
+    </a>
+    <a href="#" class="article-card">
+      <div class="ac-num">04</div>
+      <div class="ac-body">
+        <div class="ac-tag">Real Estate</div>
+        <div class="ac-title">Ground leases for beginners — what Safehold actually owns</div>
+        <div class="ac-excerpt">Ground leases are one of real estate's oldest and least understood structures. We explain how SAFE earns money, why land never depreciates, and what a re-rate looks like.</div>
+        <div class="ac-meta">8 min read · Beginner</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="reveal">
+      <div class="stats-eyebrow">By the Numbers</div>
+      <div class="stats-heading">Research that <em>anyone</em> can understand.</div>
+      <div class="stats-para">Every report is written as if explaining to a friend with no finance background. No unexplained formulas. No verdict without full reasoning. If you can read a news article, you can understand our research.</div>
+    </div>
+    <div class="stats-boxes reveal reveal-delay-1">
+      <div class="sbox">
+        <div class="sbox-num">4<em>+</em></div>
+        <div class="sbox-lbl">Stocks Covered</div>
+        <div class="sbox-sub">Healthcare · REIT · Consumer · Tech</div>
+      </div>
+      <div class="sbox">
+        <div class="sbox-num">30<em>+</em></div>
+        <div class="sbox-lbl">Data Points Per Report</div>
+        <div class="sbox-sub">Revenue · Margins · Valuation · Peers</div>
+      </div>
+      <div class="sbox">
+        <div class="sbox-num">1<em>:1</em></div>
+        <div class="sbox-lbl">Personal Sessions</div>
+        <div class="sbox-sub">Private call — plain-language deep dive</div>
+      </div>
+      <div class="sbox">
+        <div class="sbox-num">0</div>
+        <div class="sbox-lbl">Paid Promotions</div>
+        <div class="sbox-sub">100% independent — no sponsors</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECT -->
+<section class="connect-section" id="connect">
+  <div class="connect-inner">
+    <div class="reveal">
+      <div class="conn-eyebrow">1-on-1 Sessions</div>
+      <div class="conn-title">Your stock,<br><em>explained simply</em><br>just for you.</div>
+      <div class="conn-para">Not sure what a company actually does? Confused by the numbers? Want an honest second opinion before investing? Book a private session — we walk through it together in plain language, no judgment.</div>
+      <div class="conn-features">
+        <div class="conn-feat">
+          <div class="cf-icon">📊</div>
+          <div class="cf-text"><div class="cf-title">Company Deep-Dive</div><div class="cf-sub">Walk through any stock — business model, financials, risks, and verdict</div></div>
+        </div>
+        <div class="conn-feat">
+          <div class="cf-icon">💬</div>
+          <div class="cf-text"><div class="cf-title">Plain Language Only</div><div class="cf-sub">No finance degree needed — every term explained as we go</div></div>
+        </div>
+        <div class="conn-feat">
+          <div class="cf-icon">🎯</div>
+          <div class="cf-text"><div class="cf-title">Your Stock, Your Questions</div><div class="cf-sub">You pick the company — we do the research and present it live</div></div>
+        </div>
+        <div class="conn-feat">
+          <div class="cf-icon">🆓</div>
+          <div class="cf-text"><div class="cf-title">First Session Free</div><div class="cf-sub">30 minutes, no commitment, no charge — just bring your questions</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="booking-card">
+        <div class="bc-glow"></div>
+        <div id="bookingForm">
+          <div class="bc-title">Book a Free Intro Call</div>
+          <div class="bc-sub">30 min · No commitment · 100% free first session</div>
+          <form id="contactForm" action="https://formspree.io/f/xgolgrqe" method="POST" onsubmit="handleSubmit(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Your Name</label>
+                <input class="form-input" type="text" name="name" placeholder="First name" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" type="email" name="email" placeholder="you@email.com" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Stock you want to discuss</label>
+              <input class="form-input" type="text" name="stock" placeholder="e.g. Apple, NVIDIA, any stock" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">What's your question?</label>
+              <textarea class="form-textarea" name="question" placeholder="e.g. Is this stock overvalued? What are the main risks?" required></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Your investing experience</label>
+              <select class="form-select" name="experience" required>
+                <option value="">Select one</option>
+                <option>Complete beginner — just starting out</option>
+                <option>Some experience — bought a few stocks</option>
+                <option>Intermediate — follow markets regularly</option>
+                <option>Experienced — want a second opinion</option>
+              </select>
+            </div>
+            <button class="btn-book" type="submit" id="submitBtn">Request My Free Call →</button>
+          </form>
+          <div class="bc-note">Usually responds within 24 hours · Sessions via Google Meet or Zoom</div>
+        </div>
+        <div class="success-msg" id="successMsg">
+          <div class="success-icon">✅</div>
+          <div class="success-title">Request Sent!</div>
+          <div class="success-sub">We'll be in touch within 24 hours to confirm your session time. Check your inbox — and your spam folder just in case.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="ft-brand">Easy<em>Equity</em></div>
+      <div class="ft-tagline">Equity research made easy to understand.</div>
+    </div>
+    <div class="ft-links">
+      <a href="#news">News</a>
+      <a href="#reports">Reports</a>
+      <a href="#articles">Articles</a>
+      <a href="#connect">Book a Call</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="ft-copy">© 2026 Easy Equity. All rights reserved.</div>
+    <div class="ft-disc">For informational purposes only. Not financial advice. Always conduct your own research before making any investment decisions.</div>
+  </div>
+</footer>
+
+</div><!-- end page-wrap -->
+
+<script>
+/* ── ANIMATED BACKGROUND CANVAS ───────────────────── */
+(function(){
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, nodes = [], animId;
+  const NODE_COUNT = 55;
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function initNodes(){
+    nodes = [];
+    for(let i=0;i<NODE_COUNT;i++){
+      nodes.push({
+        x: Math.random()*W, y: Math.random()*H,
+        vx:(Math.random()-.5)*0.3, vy:(Math.random()-.5)*0.3,
+        r: Math.random()*2+1
+      });
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // draw connections
+    for(let i=0;i<nodes.length;i++){
+      for(let j=i+1;j<nodes.length;j++){
+        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<120){
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x,nodes[i].y);
+          ctx.lineTo(nodes[j].x,nodes[j].y);
+          ctx.strokeStyle=`rgba(24,71,212,${(1-dist/120)*0.12})`;
+          ctx.lineWidth=0.8;
+          ctx.stroke();
+        }
+      }
+    }
+    // draw nodes
+    nodes.forEach(n=>{
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(24,71,212,0.18)';
+      ctx.fill();
+      n.x+=n.vx; n.y+=n.vy;
+      if(n.x<0||n.x>W) n.vx*=-1;
+      if(n.y<0||n.y>H) n.vy*=-1;
+    });
+    animId=requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize',()=>{ resize(); initNodes(); });
+  resize(); initNodes(); draw();
+})();
+
+/* ── TICKER ────────────────────────────────────────── */
+const tickData = [
+  {sym:'DOCS', price:'26.38', chg:'+0.42', pct:'+1.62%', up:true},
+  {sym:'UNH',  price:'282.63',chg:'-4.21', pct:'-1.47%', up:false},
+  {sym:'BRBR', price:'18.15', chg:'+0.23', pct:'+1.28%', up:true},
+  {sym:'SAFE', price:'13.62', chg:'-0.11', pct:'-0.80%', up:false},
+  {sym:'AAPL', price:'213.49',chg:'+1.84', pct:'+0.87%', up:true},
+  {sym:'NVDA', price:'876.35',chg:'+12.4', pct:'+1.44%', up:true},
+  {sym:'MSFT', price:'411.20',chg:'+3.50', pct:'+0.86%', up:true},
+  {sym:'AMZN', price:'186.90',chg:'-0.80', pct:'-0.43%', up:false},
+  {sym:'SPY',  price:'524.81',chg:'-2.10', pct:'-0.40%', up:false},
+  {sym:'QQQ',  price:'448.62',chg:'+1.22', pct:'+0.27%', up:true},
+  {sym:'TSLA', price:'248.42',chg:'+5.60', pct:'+2.31%', up:true},
+  {sym:'META', price:'512.80',chg:'+8.20', pct:'+1.63%', up:true},
+];
+function buildTicker(){
+  const track = document.getElementById('tickerTrack');
+  [...tickData,...tickData].forEach(t=>{
+    const el = document.createElement('div');
+    el.className = 'tick-item';
+    el.innerHTML = `<span class="tick-sym">${t.sym}</span><span>${t.price}</span><span class="${t.up?'tick-up':'tick-dn'}">${t.chg} (${t.pct})</span>`;
+    track.appendChild(el);
+  });
+}
+
+/* ── LIVE NEWS via RSS2JSON ────────────────────────── */
+async function loadNews(){
+  const container = document.getElementById('newsContainer');
+  // Using rss2json.com free API to fetch Yahoo Finance RSS
+  const feeds = [
+    'https://api.rss2json.com/v1/api.json?rss_url=https://finance.yahoo.com/rss/topfinstories',
+    'https://api.rss2json.com/v1/api.json?rss_url=https://feeds.finance.yahoo.com/rss/2.0/headline?s=UNH,DOCS,BRBR,SAFE&region=US&lang=en-US'
+  ];
+
+  try {
+    const res = await fetch(feeds[0]);
+    const data = await res.json();
+
+    if(data.status !== 'ok' || !data.items || data.items.length === 0){
+      throw new Error('No items');
+    }
+
+    const items = data.items.slice(0,7);
+    const tags = ['neutral','bull','neutral','bear','bull','neutral','bear'];
+    const icons = ['📈','💹','🏦','📊','💰','🌐','📉'];
+
+    let featuredHTML = `
+      <div class="news-featured-grid">
+        <a href="${items[0].link}" target="_blank" class="news-card featured">
+          <div class="nc-img featured-img">
+            ${items[0].thumbnail ? `<img src="${items[0].thumbnail}" alt="" onerror="this.style.display='none'">` : ''}
+            <div class="nc-img-icon">${icons[0]}</div>
+            <div class="nc-tag tag-live">Live</div>
+          </div>
+          <div class="nc-body">
+            <div class="nc-source">${items[0].author || 'Yahoo Finance'}</div>
+            <div class="nc-title">${items[0].title}</div>
+            <div class="nc-excerpt">${items[0].description ? items[0].description.replace(/<[^>]*>/g,'').slice(0,140)+'...' : ''}</div>
+            <div class="nc-meta">
+              <span class="nc-date">${new Date(items[0].pubDate).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
+              <span class="nc-read">Read Full Story →</span>
+            </div>
+          </div>
+        </a>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          ${items.slice(1,3).map((item,i)=>`
+          <a href="${item.link}" target="_blank" class="news-card" style="flex:1;">
+            <div class="nc-img" style="height:110px;">
+              ${item.thumbnail ? `<img src="${item.thumbnail}" alt="" onerror="this.style.display='none'">` : ''}
+              <div class="nc-img-icon">${icons[i+1]}</div>
+              <div class="nc-tag tag-${tags[i+1]}">${tags[i+1]}</div>
+            </div>
+            <div class="nc-body">
+              <div class="nc-source">${item.author || 'Yahoo Finance'}</div>
+              <div class="nc-title" style="font-size:13px;">${item.title}</div>
+              <div class="nc-meta" style="margin-top:8px;">
+                <span class="nc-date">${new Date(item.pubDate).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
+                <span class="nc-read">Read →</span>
+              </div>
+            </div>
+          </a>`).join('')}
+        </div>
+      </div>
+      <div class="news-small-grid">
+        ${items.slice(3,7).map((item,i)=>`
+        <a href="${item.link}" target="_blank" class="news-card">
+          <div class="nc-img" style="height:130px;">
+            ${item.thumbnail ? `<img src="${item.thumbnail}" alt="" onerror="this.style.display='none'">` : ''}
+            <div class="nc-img-icon">${icons[i+3]}</div>
+            <div class="nc-tag tag-${tags[i+3]}">${tags[i+3]}</div>
+          </div>
+          <div class="nc-body">
+            <div class="nc-source">${item.author || 'Yahoo Finance'}</div>
+            <div class="nc-title" style="font-size:13px;">${item.title}</div>
+            <div class="nc-meta">
+              <span class="nc-date">${new Date(item.pubDate).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
+              <span class="nc-read">Read →</span>
+            </div>
+          </div>
+        </a>`).join('')}
+      </div>`;
+
+    container.innerHTML = featuredHTML;
+
+  } catch(e) {
+    // Fallback to static cards if API fails / CORS
+    container.innerHTML = `
+      <div class="news-featured-grid">
+        <a href="UNH_Analysis.html" class="news-card featured">
+          <div class="nc-img featured-img"><div class="nc-img-icon">🏥</div><div class="nc-tag tag-bear">Breaking</div></div>
+          <div class="nc-body">
+            <div class="nc-source">Easy Equity · UNH Coverage</div>
+            <div class="nc-title">UNH Medical Cost Ratio Hits 89.9% — EPS Cut Four Times in 2025, CEO Replaced</div>
+            <div class="nc-excerpt">America's largest health insurer faces a perfect storm: surging utilisation, V28 model losses, DOJ investigation, and leadership upheaval. The 2027 recovery thesis exists — but execution risk is high.</div>
+            <div class="nc-meta"><span class="nc-date">Mar 2026</span><span class="nc-read">Read Full Report →</span></div>
+          </div>
+        </a>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <a href="DOCS_Analysis.html" class="news-card" style="flex:1;">
+            <div class="nc-img" style="height:110px;"><div class="nc-img-icon">🩺</div><div class="nc-tag tag-neutral">Watch</div></div>
+            <div class="nc-body">
+              <div class="nc-source">Easy Equity · DOCS Coverage</div>
+              <div class="nc-title" style="font-size:13px;">Pharma Budget Freeze Hits Doximity — Q4 Guided at Just +4% Growth</div>
+              <div class="nc-meta"><span class="nc-date">Mar 2026</span><span class="nc-read">Read →</span></div>
+            </div>
+          </a>
+          <a href="SAFE_Analysis.html" class="news-card" style="flex:1;">
+            <div class="nc-img" style="height:110px;"><div class="nc-img-icon">🏗️</div><div class="nc-tag tag-bull">Income</div></div>
+            <div class="nc-body">
+              <div class="nc-source">Easy Equity · SAFE Coverage</div>
+              <div class="nc-title" style="font-size:13px;">Only Public Ground Lease REIT at 0.41x Book — 5.23% Dividend</div>
+              <div class="nc-meta"><span class="nc-date">Mar 2026</span><span class="nc-read">Read →</span></div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="news-small-grid">
+        <a href="BRBR_Analysis.html" class="news-card">
+          <div class="nc-img" style="height:130px;"><div class="nc-img-icon">💪</div><div class="nc-tag tag-bear">Caution</div></div>
+          <div class="nc-body">
+            <div class="nc-source">Easy Equity · BRBR Coverage</div>
+            <div class="nc-title" style="font-size:13px;">Class Action Filed — Channel Destocking Hits BellRing Revenue</div>
+            <div class="nc-meta"><span class="nc-date">Feb 2026</span><span class="nc-read">Read →</span></div>
+          </div>
+        </a>
+        <a href="https://finance.yahoo.com" target="_blank" class="news-card">
+          <div class="nc-img" style="height:130px;"><div class="nc-img-icon">📈</div><div class="nc-tag tag-neutral">Markets</div></div>
+          <div class="nc-body">
+            <div class="nc-source">Yahoo Finance</div>
+            <div class="nc-title" style="font-size:13px;">Latest market news and financial updates</div>
+            <div class="nc-meta"><span class="nc-date">Live</span><span class="nc-read">Visit →</span></div>
+          </div>
+        </a>
+        <a href="https://www.marketwatch.com" target="_blank" class="news-card">
+          <div class="nc-img" style="height:130px;"><div class="nc-img-icon">📊</div><div class="nc-tag tag-neutral">Markets</div></div>
+          <div class="nc-body">
+            <div class="nc-source">MarketWatch</div>
+            <div class="nc-title" style="font-size:13px;">Breaking business news, market data and analysis</div>
+            <div class="nc-meta"><span class="nc-date">Live</span><span class="nc-read">Visit →</span></div>
+          </div>
+        </a>
+      </div>`;
+  }
+}
+
+/* ── FORMSPREE SUBMIT ──────────────────────────────── */
+async function handleSubmit(e){
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  try {
+    const form = document.getElementById('contactForm');
+    const res = await fetch('https://formspree.io/f/xgolgrqe',{
+      method:'POST',
+      body: new FormData(form),
+      headers:{'Accept':'application/json'}
+    });
+    if(res.ok){
+      document.getElementById('bookingForm').querySelector('form').style.display='none';
+      document.getElementById('successMsg').classList.add('show');
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Try Again';
+    }
+  } catch(err){
+    btn.disabled = false;
+    btn.textContent = 'Try Again';
+  }
+}
+
+/* ── SCROLL REVEAL ─────────────────────────────────── */
+function initReveal(){
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+
+/* ── NAV HIGHLIGHT ─────────────────────────────────── */
+function initNavHighlight(){
+  const ids = ['news','reports','articles','connect'];
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll',()=>{
+    let cur = '';
+    ids.forEach(id=>{ const el=document.getElementById(id); if(el&&window.scrollY>=el.offsetTop-120) cur=id; });
+    links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+  });
+}
+
+/* ── INIT ──────────────────────────────────────────── */
+buildTicker();
+loadNews();
+initReveal();
+initNavHighlight();
+</script>
+</body>
+</html>
