@@ -36,8 +36,8 @@ html{scroll-behavior:smooth;}
 body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 
 /* ── CANVAS BACKGROUND ───────────────────────────────── */
-#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.45;}
-.page-wrap{position:relative;z-index:1;}
+
+
 
 /* ── TICKER TAPE ─────────────────────────────────────── */
 .ticker-tape{background:var(--navy);padding:8px 0;overflow:hidden;border-bottom:1px solid #1a2a40;position:relative;z-index:50;}
@@ -258,12 +258,29 @@ footer{background:var(--navy2);border-top:1px solid rgba(255,255,255,0.06);paddi
   footer{padding:32px 20px;}
   .footer-top{flex-direction:column;}
 }
+
+/* ── FLOATING ORBS BACKGROUND ────────────────────── */
+.bg-orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0;animation:orbFloat 18s ease-in-out infinite;}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(24,71,212,0.18),transparent 70%);top:-100px;left:-100px;animation-delay:0s;animation-duration:20s;}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(10,110,66,0.12),transparent 70%);top:40%;right:-80px;animation-delay:-6s;animation-duration:22s;}
+.orb3{width:350px;height:350px;background:radial-gradient(circle,rgba(24,71,212,0.1),transparent 70%);bottom:10%;left:20%;animation-delay:-10s;animation-duration:24s;}
+.orb4{width:280px;height:280px;background:radial-gradient(circle,rgba(99,102,241,0.1),transparent 70%);top:30%;left:40%;animation-delay:-3s;animation-duration:19s;}
+.orb5{width:320px;height:320px;background:radial-gradient(circle,rgba(14,124,74,0.08),transparent 70%);bottom:20%;right:20%;animation-delay:-14s;animation-duration:26s;}
+@keyframes orbFloat{
+  0%  {opacity:0;transform:translate(0,0) scale(1);}
+  10% {opacity:1;}
+  50% {transform:translate(40px,-60px) scale(1.08);}
+  90% {opacity:1;}
+  100%{opacity:0;transform:translate(0,0) scale(1);}
+}
+.page-wrap{position:relative;z-index:1;}
 </style>
 </head>
 <body>
 
 <!-- ANIMATED BACKGROUND -->
-<canvas id="bgCanvas"></canvas>
+
 
 <div class="page-wrap">
 
@@ -602,62 +619,7 @@ footer{background:var(--navy2);border-top:1px solid rgba(255,255,255,0.06);paddi
 </div><!-- end page-wrap -->
 
 <script>
-/* ── ANIMATED BACKGROUND CANVAS ───────────────────── */
-(function(){
-  const canvas = document.getElementById('bgCanvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, nodes = [], animId;
-  const NODE_COUNT = 55;
 
-  function resize(){
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-
-  function initNodes(){
-    nodes = [];
-    for(let i=0;i<NODE_COUNT;i++){
-      nodes.push({
-        x: Math.random()*W, y: Math.random()*H,
-        vx:(Math.random()-.5)*0.3, vy:(Math.random()-.5)*0.3,
-        r: Math.random()*2+1
-      });
-    }
-  }
-
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    // draw connections
-    for(let i=0;i<nodes.length;i++){
-      for(let j=i+1;j<nodes.length;j++){
-        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
-        const dist=Math.sqrt(dx*dx+dy*dy);
-        if(dist<120){
-          ctx.beginPath();
-          ctx.moveTo(nodes[i].x,nodes[i].y);
-          ctx.lineTo(nodes[j].x,nodes[j].y);
-          ctx.strokeStyle=`rgba(24,71,212,${(1-dist/120)*0.12})`;
-          ctx.lineWidth=0.8;
-          ctx.stroke();
-        }
-      }
-    }
-    // draw nodes
-    nodes.forEach(n=>{
-      ctx.beginPath();
-      ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
-      ctx.fillStyle='rgba(24,71,212,0.18)';
-      ctx.fill();
-      n.x+=n.vx; n.y+=n.vy;
-      if(n.x<0||n.x>W) n.vx*=-1;
-      if(n.y<0||n.y>H) n.vy*=-1;
-    });
-    animId=requestAnimationFrame(draw);
-  }
-
-  window.addEventListener('resize',()=>{ resize(); initNodes(); });
-  resize(); initNodes(); draw();
-})();
 
 /* ── TICKER ────────────────────────────────────────── */
 const tickData = [
