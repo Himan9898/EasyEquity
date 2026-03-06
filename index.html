@@ -190,6 +190,15 @@ nav{background:rgba(15,17,23,0.85);backdrop-filter:blur(20px);-webkit-backdrop-f
 .acc-link:hover{gap:9px;}
 
 /* ── ARTICLES PLACEHOLDER ── */
+.articles-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.ac{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:22px 24px;cursor:pointer;transition:all .2s;text-decoration:none;display:flex;gap:16px;backdrop-filter:blur(10px);}
+.ac:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(0,0,0,0.4);border-color:rgba(59,130,246,0.3);}
+.ac-num{font-size:32px;font-weight:800;color:rgba(255,255,255,0.08);line-height:1;flex-shrink:0;width:44px;transition:color .2s;}
+.ac:hover .ac-num{color:rgba(59,130,246,0.25);}
+.ac-tag{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;margin-bottom:6px;}
+.ac-title{font-size:14px;font-weight:700;color:var(--text-bright);line-height:1.35;margin-bottom:7px;}
+.ac-exc{font-size:12px;color:var(--text-dim);line-height:1.6;}
+.ac-meta{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--text-dim);margin-top:8px;}
 .art-placeholder{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:52px;text-align:center;backdrop-filter:blur(12px);}
 .ap-icon{font-size:30px;opacity:.2;margin-bottom:12px;}
 .ap-title{font-size:16px;font-weight:700;color:var(--text-bright);margin-bottom:6px;}
@@ -519,201 +528,11 @@ footer{background:rgba(11,21,38,0.9);border-top:1px solid var(--glass-border);pa
   <div class="sec-hd rv">
     <div><div class="eyebrow">Education</div><div class="sec-title">Articles</div><div class="sec-sub">Plain-language explainers — coming soon</div></div>
   </div>
-  <div class="art-placeholder rv rv1">
-    <div class="ap-icon">📝</div>
-    <div class="ap-title">Articles coming soon</div>
-    <div class="ap-sub">Plain-language explainers on finance concepts, sector analysis, and investing fundamentals.</div>
+  <div class="articles-grid rv rv1">
+    <a href="Article_BQ_Score.html" class="ac"><div class="ac-num">01</div><div><div class="ac-tag">Methodology</div><div class="ac-title">The BQ Score Explained — How We Rate Business Quality</div><div class="ac-exc">Five parameters. One score out of 30. How we measure whether a business is genuinely getting stronger.</div><div class="ac-meta">7 min · Original</div></div></a>
+    <a href="Article_FCF_PE.html" class="ac"><div class="ac-num">02</div><div><div class="ac-tag">Fundamentals</div><div class="ac-title">The Gold Medal Problem — Why Cash Often Wins Over Profit</div><div class="ac-exc">P/E shows the story. Free Cash Flow shows whether it's real. The Mumbai bazaar explains it perfectly.</div><div class="ac-meta">6 min · Beginner</div></div></a>
+    <a href="Gold_Article.html" class="ac"><div class="ac-num">03</div><div><div class="ac-tag">Macro · Commodities</div><div class="ac-title">GOLD — The Barometer of Fear and Uncertainty</div><div class="ac-exc">Five thousand years of history, one signal: when gold rises, the world is afraid. Why $5,000/oz matters.</div><div class="ac-meta">5 min · Intermediate</div></div></a>
+    <a href="Article_UNH_MRF.html" class="ac"><div class="ac-num">04</div><div><div class="ac-tag">Healthcare · Case Study</div><div class="ac-title">What If UNH Today Is Like MRF in February 2025?</div><div class="ac-exc">A global giant facing a short-term reset, not a collapse. The Indian parallel that makes this easier to understand.</div><div class="ac-meta">5 min · Intermediate</div></div></a>
+    <a href="Article_MangoSeed.html" class="ac"><div class="ac-num">05</div><div><div class="ac-tag">Investing · Beginner</div><div class="ac-title">Plant a Mango Seed, Not a Gamble</div><div class="ac-exc">Why patience beats hype every time. The Titan vs Yes Bank story every new investor needs to read.</div><div class="ac-meta">5 min · Beginner</div></div></a>
+    <a href="Article_MoonDust.html" class="ac"><div class="ac-num">06</div><div><div class="ac-tag">Macro · Tech</div><div class="ac-title">From Moon Dust to Data Points — The Age of AI Advertising</div><div class="ac-exc">We went to the moon. Then we built an algorithm to sell you running shoes. What this means for investors.</div><div class="ac-meta">6 min · Intermediate</div></div></a>
   </div>
-</section>
-
-<!-- BOOK A CALL -->
-<section class="sec" id="connect">
-  <div class="sec-hd rv">
-    <div><div class="eyebrow">1-on-1 Sessions</div><div class="sec-title">Book a Call</div><div class="sec-sub">Get a personal stock deep-dive in plain language</div></div>
-  </div>
-  <div class="connect-wrap rv rv1">
-    <div>
-      <div class="co-eyebrow">Free First Session</div>
-      <div class="co-title">Your stock,<br><em>explained simply.</em></div>
-      <div class="co-para">Not sure what a company does? Confused by the numbers? Book a private 30-minute session — we walk through it together in plain language, no judgment.</div>
-      <div class="co-feats">
-        <div class="cof"><div class="cof-icon">📊</div><div><div class="cof-title">Company Deep-Dive</div><div class="cof-sub">Any stock — business model, financials, risks, verdict</div></div></div>
-        <div class="cof"><div class="cof-icon">💬</div><div><div class="cof-title">Plain Language Only</div><div class="cof-sub">Every term explained as we go</div></div></div>
-        <div class="cof"><div class="cof-icon">🎯</div><div><div class="cof-title">Your Questions</div><div class="cof-sub">You pick the stock — we research and present it live</div></div></div>
-        <div class="cof"><div class="cof-icon">🆓</div><div><div class="cof-title">First Session Free</div><div class="cof-sub">30 minutes, no commitment, no charge</div></div></div>
-      </div>
-    </div>
-    <div>
-      <div class="booking">
-        <div class="bk-gl"></div>
-        <div id="bkForm">
-          <div class="bk-title">Book a Free Intro Call</div>
-          <div class="bk-sub">30 min · Free · No commitment</div>
-          <form id="cf" action="https://formspree.io/f/xgolgrqe" method="POST" onsubmit="send(event)">
-            <div class="fr">
-              <div class="fg"><label class="fl">Name</label><input class="fi" type="text" name="name" placeholder="First name" required></div>
-              <div class="fg"><label class="fl">Email</label><input class="fi" type="email" name="email" placeholder="you@email.com" required></div>
-            </div>
-            <div class="fg"><label class="fl">Stock to discuss</label><input class="fi" type="text" name="stock" placeholder="e.g. Apple, NVIDIA…" required></div>
-            <div class="fg"><label class="fl">Your question</label><textarea class="ft" name="question" placeholder="What do you want to understand?" required></textarea></div>
-            <div class="fg"><label class="fl">Experience</label><select class="fs" name="experience" required><option value="">Select…</option><option>Complete beginner</option><option>Some experience</option><option>Intermediate</option><option>Experienced</option></select></div>
-            <button class="bk-btn" type="submit" id="sb">Request My Free Call →</button>
-          </form>
-          <div class="bk-note">Responds within 24 hours · Google Meet or Zoom</div>
-        </div>
-        <div class="success" id="sm"><div class="s-icon">✅</div><div class="s-title">Request Sent!</div><div class="s-sub">We'll confirm your session within 24 hours.</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="ft-top">
-    <div><div class="ft-brand">Easy<b>Equity</b></div><div class="ft-tag">Equity research made easy to understand.</div></div>
-    <div class="ft-links"><a href="#reports">Reports</a><a href="#news">News</a><a href="#articles">Articles</a><a href="#connect">Book a Call</a></div>
-  </div>
-  <div class="ft-bot">
-    <div class="ft-copy">© 2026 Easy Equity. All rights reserved.</div>
-    <div class="ft-disc">For informational purposes only. Not financial advice. Always conduct your own research before making investment decisions.</div>
-  </div>
-</footer>
-
-</div><!-- end pw -->
-
-<script>
-/* ── CONSTELLATION ─────────────────────────────────── */
-(function(){
-  const c=document.getElementById('constellation');
-  const ctx=c.getContext('2d');
-  let W,H,nodes=[];
-  const N=65;
-  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
-  function init(){
-    nodes=[];
-    for(let i=0;i<N;i++) nodes.push({
-      x:Math.random()*W, y:Math.random()*H,
-      vx:(Math.random()-.5)*0.25, vy:(Math.random()-.5)*0.25,
-      r:Math.random()*1.5+0.5
-    });
-  }
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    for(let i=0;i<N;i++){
-      for(let j=i+1;j<N;j++){
-        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
-        const d=Math.sqrt(dx*dx+dy*dy);
-        if(d<130){
-          ctx.beginPath();
-          ctx.moveTo(nodes[i].x,nodes[i].y);
-          ctx.lineTo(nodes[j].x,nodes[j].y);
-          ctx.strokeStyle=`rgba(148,163,184,${(1-d/130)*0.18})`;
-          ctx.lineWidth=0.6;
-          ctx.stroke();
-        }
-      }
-      ctx.beginPath();
-      ctx.arc(nodes[i].x,nodes[i].y,nodes[i].r,0,Math.PI*2);
-      ctx.fillStyle='rgba(203,213,225,0.55)';
-      ctx.fill();
-      nodes[i].x+=nodes[i].vx; nodes[i].y+=nodes[i].vy;
-      if(nodes[i].x<0||nodes[i].x>W) nodes[i].vx*=-1;
-      if(nodes[i].y<0||nodes[i].y>H) nodes[i].vy*=-1;
-    }
-    requestAnimationFrame(draw);
-  }
-  window.addEventListener('resize',()=>{resize();init();});
-  resize(); init(); draw();
-})();
-
-/* ── TICKER ─────────────────────────────────────────── */
-const ticks=[
-  {s:'DOCS',p:'26.38',c:'+0.42',u:true},{s:'UNH',p:'282.63',c:'-4.21',u:false},
-  {s:'BRBR',p:'18.15',c:'+0.23',u:true},{s:'SAFE',p:'13.62',c:'-0.11',u:false},
-  {s:'AAPL',p:'213.49',c:'+1.84',u:true},{s:'NVDA',p:'876.35',c:'+12.4',u:true},
-  {s:'MSFT',p:'411.20',c:'+3.50',u:true},{s:'AMZN',p:'186.90',c:'-0.80',u:false},
-  {s:'SPY',p:'524.81',c:'-2.10',u:false},{s:'QQQ',p:'448.62',c:'+1.22',u:true},
-  {s:'TSLA',p:'248.42',c:'+5.60',u:true},{s:'META',p:'512.80',c:'+8.20',u:true},
-];
-(function(){
-  const t=document.getElementById('tt');
-  [...ticks,...ticks].forEach(d=>{
-    const el=document.createElement('div');
-    el.className='t-item';
-    el.innerHTML=`<span class="t-sym">${d.s}</span><span>${d.p}</span><span class="${d.u?'t-up':'t-dn'}">${d.c}</span>`;
-    t.appendChild(el);
-  });
-})();
-
-/* ── COUNTING ────────────────────────────────────────── */
-let cStarted=false;
-function runCount(el){
-  const target=+el.dataset.t, suf=el.dataset.s||'';
-  if(target===0){el.textContent='0'+suf;return;}
-  const dur=1800,t0=performance.now();
-  (function step(now){
-    const p=Math.min((now-t0)/dur,1),e=1-Math.pow(1-p,4);
-    el.textContent=Math.floor(e*target)+suf;
-    if(p<1) requestAnimationFrame(step); else el.textContent=target+suf;
-  })(performance.now());
-}
-function checkCount(){
-  if(cStarted)return;
-  const el=document.querySelector('.hero-stats');
-  if(el&&el.getBoundingClientRect().top<window.innerHeight-40){
-    cStarted=true;
-    document.querySelectorAll('.cnt').forEach(runCount);
-  }
-}
-window.addEventListener('scroll',checkCount,{passive:true});
-setTimeout(checkCount,400);
-
-/* ── ACCORDION ───────────────────────────────────────── */
-function toggle(row){
-  const body=row.querySelector('.acc-body');
-  const isOpen=row.classList.contains('open');
-  document.querySelectorAll('.acc-row.open').forEach(r=>{
-    r.classList.remove('open');
-    r.querySelector('.acc-body').style.maxHeight='0';
-  });
-  if(!isOpen){row.classList.add('open');body.style.maxHeight=body.scrollHeight+'px';}
-}
-
-/* ── BQ BARS ─────────────────────────────────────────── */
-const bqObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      e.target.querySelectorAll('.bq-fill').forEach(b=>setTimeout(()=>b.style.width=b.dataset.w,250));
-      bqObs.unobserve(e.target);
-    }
-  });
-},{threshold:0.25});
-document.querySelectorAll('.rc').forEach(c=>bqObs.observe(c));
-
-/* ── REVEAL ──────────────────────────────────────────── */
-const rvObs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');}),{threshold:0.08});
-document.querySelectorAll('.rv').forEach(el=>rvObs.observe(el));
-
-/* ── NAV ACTIVE ──────────────────────────────────────── */
-const navIds=['reports','news','articles','connect'];
-const navAs=document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll',()=>{
-  let cur='';
-  navIds.forEach(id=>{const el=document.getElementById(id);if(el&&scrollY>=el.offsetTop-110)cur=id;});
-  navAs.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
-},{passive:true});
-
-/* ── FORMSPREE ───────────────────────────────────────── */
-async function send(e){
-  e.preventDefault();
-  const btn=document.getElementById('sb');
-  btn.disabled=true;btn.textContent='Sending…';
-  try{
-    const r=await fetch('https://formspree.io/f/xgolgrqe',{method:'POST',body:new FormData(document.getElementById('cf')),headers:{'Accept':'application/json'}});
-    if(r.ok){document.getElementById('cf').style.display='none';document.getElementById('sm').classList.add('show');}
-    else{btn.disabled=false;btn.textContent='Try Again';}
-  }catch{btn.disabled=false;btn.textContent='Try Again';}
-}
-</script>
-</body>
-</html>
