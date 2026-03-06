@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Moon Dust to Data Points | Easy Equity</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0f1117;--glass:rgba(255,255,255,0.04);--gb:rgba(255,255,255,0.09);--blue:#3b82f6;--blue-d:#1a4fd6;--bl:rgba(59,130,246,0.12);--ac:#8b5cf6;--acl:rgba(139,92,246,0.1);--text:#f1f5f9;--mid:rgba(241,245,249,0.65);--dim:rgba(241,245,249,0.35);}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.7;}
+#cv{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.pw{position:relative;z-index:1;}
+nav{background:rgba(15,17,23,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--gb);padding:0 52px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.lb{width:34px;height:34px;background:var(--blue-d);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(59,130,246,0.3);}
+.lb svg{width:17px;height:17px;}
+.ln{font-size:17px;font-weight:800;color:#fff;letter-spacing:-.3px;}
+.ln b{color:var(--blue);}
+.nb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.nb:hover{color:#fff;border-color:rgba(255,255,255,0.2);background:var(--glass);}
+.hero{padding:64px 52px 44px;max-width:860px;margin:0 auto;}
+.ew{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.etag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:4px;font-weight:500;background:var(--acl);color:var(--ac);border:1px solid var(--ac);opacity:0.85;}
+.edate{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);}
+h1{font-family:'Playfair Display',serif;font-size:46px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:16px;}
+h1 .hl{color:var(--ac);}
+.sub{font-size:17px;color:var(--mid);line-height:1.65;margin-bottom:26px;font-style:italic;border-left:3px solid var(--ac);padding-left:16px;}
+.meta{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--glass);border:1px solid var(--gb);border-radius:10px;backdrop-filter:blur(8px);}
+.av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--ac),#1a4fd6);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;}
+.an{font-size:13px;font-weight:700;color:#fff;}
+.as{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);margin-top:1px;}
+.ar{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);margin-left:auto;}
+.body{max-width:720px;margin:0 auto;padding:0 52px 80px;}
+h2{font-size:24px;font-weight:800;color:#fff;letter-spacing:-.3px;margin:44px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--gb);}
+.p{font-size:15px;color:var(--mid);line-height:1.82;margin-bottom:18px;}
+.p strong{color:var(--text);font-weight:700;}
+.pq{margin:32px 0;padding:22px 28px;background:var(--glass);border:1px solid var(--gb);border-radius:12px;backdrop-filter:blur(10px);position:relative;}
+.pq::before{content:'"';position:absolute;top:-6px;left:22px;font-size:70px;color:rgba(255,255,255,0.06);font-family:'Playfair Display',serif;line-height:1;}
+.pq p{font-size:17px;color:var(--text);line-height:1.6;font-style:italic;font-weight:500;position:relative;z-index:1;}
+.pq cite{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;letter-spacing:.5px;font-style:normal;position:relative;z-index:1;}
+.ib{background:var(--acl);border:1px solid var(--ac);border-radius:10px;padding:20px 24px;margin:26px 0;opacity:0.85;}
+.il{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ac);text-transform:uppercase;margin-bottom:7px;}
+.it{font-size:14px;color:var(--mid);line-height:1.72;}
+.it strong{color:var(--text);}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:26px 0;}
+.sc{background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:16px;text-align:center;backdrop-filter:blur(8px);transition:all .2s;}
+.sc:hover{border-color:var(--ac);}
+.sv{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;color:var(--ac);letter-spacing:-.5px;}
+.sl{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);margin-top:4px;letter-spacing:.5px;}
+.src{margin-top:48px;padding-top:24px;border-top:1px solid var(--gb);}
+.srct{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:12px;}
+.srcl{list-style:none;display:flex;flex-direction:column;gap:6px;counter-reset:item;}
+.srcl li{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);display:flex;gap:8px;}
+.srcl li::before{content:counter(item);counter-increment:item;color:var(--ac);font-weight:500;}
+.fnav{max-width:720px;margin:0 auto;padding:0 52px 52px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+.fb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;padding:9px 15px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.fb:hover{color:#fff;border-color:rgba(255,255,255,0.2);}
+.fs{font-size:13px;font-weight:700;color:#fff;text-decoration:none;padding:9px 18px;background:var(--blue-d);border-radius:7px;transition:all .18s;}
+.fs:hover{background:var(--blue);}
+footer{background:rgba(11,21,38,0.9);border-top:1px solid var(--gb);padding:26px 52px;backdrop-filter:blur(10px);}
+.fi{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.fb2{font-size:14px;font-weight:800;color:#fff;}
+.fb2 b{color:var(--blue);}
+.fd{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,0.15);max-width:420px;line-height:1.6;}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease;}
+.rv.on{opacity:1;transform:translateY(0);}
+@media(max-width:768px){nav,footer{padding:0 18px;}  .hero,.body,.fnav{padding-left:18px;padding-right:18px;} h1{font-size:30px;} .stats{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="pw">
+<nav>
+  <a href="index.html" class="logo"><div class="lb"><svg viewBox="0 0 16 16" fill="none"><polyline points="1,12 5,7 9,10 15,3" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="ln">Easy<b>Equity</b></span></a>
+  <a href="index.html#articles" class="nb">← Back to Articles</a>
+</nav>
+<div class="hero rv">
+  <div class="ew"><span class="etag">Macro · Tech</span><span class="edate">Feb 27, 2026 · 6 min read</span></div>
+  <h1>From Moon Dust to <span class="hl">Data Points</span></h1>
+  <div class="sub">We went to the moon. And somehow, this is what we built next — the age of AI-powered advertising.</div>
+  <div class="meta"><div class="av">H</div><div><div class="an">Himan Roshan Borah</div><div class="as">The Investment Letter · Easy Equity</div></div><div class="ar">6 min read</div></div>
+</div>
+<div class="body">
+<div class="stats rv"><div class="sc"><div class="sv">$1T+</div><div class="sl">Global ad spend 2025</div></div><div class="sc"><div class="sv">3</div><div class="sl">Companies control majority</div></div><div class="sc"><div class="sv">Billions</div><div class="sl">Profiles built daily</div></div></div>
+<h2 class="rv">From the Moon to the Feed</h2>
+<p class="p rv">It was July 20th, 1969. A man was standing on the surface of another world. Below him, 239,000 miles away, roughly half a billion people had crowded around television sets — collectively holding their breath. They were witnessing the single most audacious thing their species had ever done.</p>
+<p class="p rv">Now ask yourself: <strong>what are those same screens showing us tonight?</strong> An ad for running shoes you Googled once. A notification telling you seventeen people liked your photo. And somewhere in the feed, between a sponsored post and a reel you didn't ask for — the quiet, relentless hum of the most sophisticated machine ever built. Not a rocket. Not a reactor. An algorithm designed to know exactly what you want before you do.</p>
+<div class="pq rv"><p>We went to the moon. And somehow, this is what we built next.</p><cite>— Easy Equity</cite></div>
+<h2 class="rv">What Meta Actually Sells</h2>
+<p class="p rv">Consider what Meta actually sells. Not software. Not hardware. Not a service you consciously pay for. <strong>Meta sells your habits, your moods, your moments of weakness at 11 PM</strong> — to companies trying to reach you. The revenue this generates has made Meta one of the most valuable corporations in the history of capitalism.</p>
+<p class="p rv">Google does the same. So does Amazon. Between them, these three companies have quietly captured the majority of all money businesses spend on advertising worldwide. Not a slice. Not a significant share. The majority. Every dollar a local restaurant spends trying to reach new customers — it flows through pipes these companies own and control.</p>
+<div class="ib rv"><div class="il">Key Insight</div><div class="it">Their market valuations have at times individually exceeded the entire annual economic output of most countries. We are talking about entities with the financial gravity of nations — except without the accountability.</div></div>
+<h2 class="rv">The Real AI Revolution</h2>
+<p class="p rv">Every time you open Instagram, an AI has already decided — in milliseconds, before the screen even loads — exactly which posts, ads, and videos will appear in your feed. Not randomly. Not chronologically. Strategically. Based on thousands of data points about you.</p>
+<p class="p rv"><strong>The goal isn't to show you what you asked for. The goal is to show you what will keep you there longest and make you most likely to buy.</strong></p>
+<p class="p rv">Today's AI systems don't just know that you're a 28-year-old woman who likes fitness. They know you looked at marathon training plans three weeks ago, paused on a post about burnout yesterday, and tend to make impulse purchases on Thursday evenings between 9 and 11 PM. They know you respond better to aspirational imagery than discount messaging.</p>
+<div class="pq rv"><p>This is the real AI revolution. Not the chatbots. Not the image generators. The quiet, invisible AI — the one that has been shaping human behavior at scale for years.</p><cite>— Easy Equity</cite></div>
+<h2 class="rv">What This Means for Investors</h2>
+<p class="p rv">What Meta, Google, Amazon, and Apple have actually built is infrastructure — the same way roads, power grids, and water systems are infrastructure. Except this infrastructure doesn't just carry goods or electricity. <strong>It carries attention, behavior, and desire.</strong></p>
+<p class="p rv">For investors, this means these platforms are not media companies. They are toll roads on human attention — and every business in the world must pay to access the consumers on the other side. That structural advantage does not disappear in a downturn. If anything, it concentrates.</p>
+</div>
+<div class="fnav">
+  <a href="index.html#articles" class="fb">← All Articles</a>
+  <a href="https://himanrbfintalk.substack.com" target="_blank" class="fs">Follow on Substack →</a>
+</div>
+<footer><div class="fi"><div class="fb2">Easy<b>Equity</b></div><div class="fd">For informational purposes only. Not financial advice. Always conduct your own research before making investment decisions.</div></div></footer>
+</div>
+<script>
+(function(){const c=document.getElementById('cv');const x=c.getContext('2d');let W,H,n=[];const N=55;function r(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}function i(){n=[];for(let k=0;k<N;k++)n.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:Math.random()*1.4+0.4});}function d(){x.clearRect(0,0,W,H);for(let a=0;a<N;a++){for(let b=a+1;b<N;b++){const dx=n[a].x-n[b].x,dy=n[a].y-n[b].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<130){x.beginPath();x.moveTo(n[a].x,n[a].y);x.lineTo(n[b].x,n[b].y);x.strokeStyle=`rgba(148,163,184,${(1-dist/130)*.16})`;x.lineWidth=.6;x.stroke();}}x.beginPath();x.arc(n[a].x,n[a].y,n[a].r,0,Math.PI*2);x.fillStyle='rgba(203,213,225,0.5)';x.fill();n[a].x+=n[a].vx;n[a].y+=n[a].vy;if(n[a].x<0||n[a].x>W)n[a].vx*=-1;if(n[a].y<0||n[a].y>H)n[a].vy*=-1;}requestAnimationFrame(d);}window.addEventListener('resize',()=>{r();i();});r();i();d();})();
+const o=new IntersectionObserver(e=>e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('on');}),{threshold:0.08});document.querySelectorAll('.rv').forEach(el=>o.observe(el));
+</script>
+</body>
+</html>

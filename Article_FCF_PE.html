@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Cash Wins Over Profit — FCF vs P/E | Easy Equity</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0f1117;--glass:rgba(255,255,255,0.04);--gb:rgba(255,255,255,0.09);--blue:#3b82f6;--blue-d:#1a4fd6;--bl:rgba(59,130,246,0.12);--ac:#f59e0b;--acl:rgba(245,158,11,0.1);--text:#f1f5f9;--mid:rgba(241,245,249,0.65);--dim:rgba(241,245,249,0.35);}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.7;}
+#cv{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.pw{position:relative;z-index:1;}
+nav{background:rgba(15,17,23,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--gb);padding:0 52px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.lb{width:34px;height:34px;background:var(--blue-d);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(59,130,246,0.3);}
+.lb svg{width:17px;height:17px;}
+.ln{font-size:17px;font-weight:800;color:#fff;letter-spacing:-.3px;}
+.ln b{color:var(--blue);}
+.nb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.nb:hover{color:#fff;border-color:rgba(255,255,255,0.2);background:var(--glass);}
+.hero{padding:64px 52px 44px;max-width:860px;margin:0 auto;}
+.ew{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.etag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:4px;font-weight:500;background:var(--acl);color:var(--ac);border:1px solid var(--ac);opacity:0.85;}
+.edate{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);}
+h1{font-family:'Playfair Display',serif;font-size:46px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:16px;}
+h1 .hl{color:var(--ac);}
+.sub{font-size:17px;color:var(--mid);line-height:1.65;margin-bottom:26px;font-style:italic;border-left:3px solid var(--ac);padding-left:16px;}
+.meta{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--glass);border:1px solid var(--gb);border-radius:10px;backdrop-filter:blur(8px);}
+.av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--ac),#1a4fd6);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;}
+.an{font-size:13px;font-weight:700;color:#fff;}
+.as{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);margin-top:1px;}
+.ar{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);margin-left:auto;}
+.body{max-width:720px;margin:0 auto;padding:0 52px 80px;}
+h2{font-size:24px;font-weight:800;color:#fff;letter-spacing:-.3px;margin:44px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--gb);}
+.p{font-size:15px;color:var(--mid);line-height:1.82;margin-bottom:18px;}
+.p strong{color:var(--text);font-weight:700;}
+.pq{margin:32px 0;padding:22px 28px;background:var(--glass);border:1px solid var(--gb);border-radius:12px;backdrop-filter:blur(10px);position:relative;}
+.pq::before{content:'"';position:absolute;top:-6px;left:22px;font-size:70px;color:rgba(255,255,255,0.06);font-family:'Playfair Display',serif;line-height:1;}
+.pq p{font-size:17px;color:var(--text);line-height:1.6;font-style:italic;font-weight:500;position:relative;z-index:1;}
+.pq cite{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;letter-spacing:.5px;font-style:normal;position:relative;z-index:1;}
+.ib{background:var(--acl);border:1px solid var(--ac);border-radius:10px;padding:20px 24px;margin:26px 0;opacity:0.85;}
+.il{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ac);text-transform:uppercase;margin-bottom:7px;}
+.it{font-size:14px;color:var(--mid);line-height:1.72;}
+.it strong{color:var(--text);}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:26px 0;}
+.sc{background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:16px;text-align:center;backdrop-filter:blur(8px);transition:all .2s;}
+.sc:hover{border-color:var(--ac);}
+.sv{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;color:var(--ac);letter-spacing:-.5px;}
+.sl{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);margin-top:4px;letter-spacing:.5px;}
+.src{margin-top:48px;padding-top:24px;border-top:1px solid var(--gb);}
+.srct{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:12px;}
+.srcl{list-style:none;display:flex;flex-direction:column;gap:6px;counter-reset:item;}
+.srcl li{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);display:flex;gap:8px;}
+.srcl li::before{content:counter(item);counter-increment:item;color:var(--ac);font-weight:500;}
+.fnav{max-width:720px;margin:0 auto;padding:0 52px 52px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+.fb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;padding:9px 15px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.fb:hover{color:#fff;border-color:rgba(255,255,255,0.2);}
+.fs{font-size:13px;font-weight:700;color:#fff;text-decoration:none;padding:9px 18px;background:var(--blue-d);border-radius:7px;transition:all .18s;}
+.fs:hover{background:var(--blue);}
+footer{background:rgba(11,21,38,0.9);border-top:1px solid var(--gb);padding:26px 52px;backdrop-filter:blur(10px);}
+.fi{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.fb2{font-size:14px;font-weight:800;color:#fff;}
+.fb2 b{color:var(--blue);}
+.fd{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,0.15);max-width:420px;line-height:1.6;}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease;}
+.rv.on{opacity:1;transform:translateY(0);}
+@media(max-width:768px){nav,footer{padding:0 18px;}  .hero,.body,.fnav{padding-left:18px;padding-right:18px;} h1{font-size:30px;} .stats{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="pw">
+<nav>
+  <a href="index.html" class="logo"><div class="lb"><svg viewBox="0 0 16 16" fill="none"><polyline points="1,12 5,7 9,10 15,3" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="ln">Easy<b>Equity</b></span></a>
+  <a href="index.html#articles" class="nb">← Back to Articles</a>
+</nav>
+<div class="hero rv">
+  <div class="ew"><span class="etag">Fundamentals · Education</span><span class="edate">Jan 20, 2026 · 6 min read</span></div>
+  <h1>The <span class="hl">Gold Medal Problem:</span> Why Cash Often Wins Over Profit</h1>
+  <div class="sub">P/E shows you the story. Free Cash Flow shows you whether it's real. Here's the difference.</div>
+  <div class="meta"><div class="av">H</div><div><div class="an">Himan Roshan Borah</div><div class="as">The Investment Letter · Easy Equity</div></div><div class="ar">6 min read</div></div>
+</div>
+<div class="body">
+<div class="stats rv"><div class="sc"><div class="sv">P/E</div><div class="sl">Shows the story</div></div><div class="sc"><div class="sv">FCF</div><div class="sl">Shows if it's real</div></div><div class="sc"><div class="sv">Cash</div><div class="sl">Pays the bills</div></div></div>
+<h2 class="rv">The Exam Hall Problem</h2>
+<p class="p rv">Walk into any exam hall and you'll see the same pattern. One student scores 100 out of 100 and walks away with the gold medal. Another scores 75, but actually understands the subject deeply. The uncomfortable truth: marks look impressive, but understanding decides who succeeds later.</p>
+<p class="p rv"><strong>Investing has the same problem.</strong> We celebrate profits the way we celebrate marks. We reward companies that look good on paper. We use ratios like P/E to decide who deserves the medal. But just like exams, the real test of a business happens in real life — not on the report card.</p>
+<h2 class="rv">A Bazaar, Two Stalls, One Illusion</h2>
+<p class="p rv">In a busy Mumbai bazaar, two stalls stood side by side. One belonged to <strong>Profit Pankaj</strong> — big numbers on the chalkboard, rising sales, a glamorous ledger. If this were the stock market, Pankaj would look attractively priced on a P/E basis.</p>
+<p class="p rv">Next door was <strong>Cash Kunal</strong>. Nothing flashy. He ran his stall with three jars labeled: Cash In, Cash Out, and Invest. To a casual observer, Kunal looked boring. Maybe even inefficient.</p>
+<div class="pq rv"><p>Some evenings, when the bazaar lights dimmed, Pankaj's cash drawer quietly whispered: "Not enough cash to pay today's bills."</p><cite>— Easy Equity</cite></div>
+<h2 class="rv">What P/E Sees — and What It Misses</h2>
+<p class="p rv">P/E is simple. It compares a company's price to its reported profit. It tells you how expensive a stock looks relative to earnings. <strong>What it doesn't tell you is whether those earnings have turned into real money.</strong></p>
+<p class="p rv">Profit is an accounting outcome. It depends on timing, assumptions, and rules. You can book revenue today and collect cash later. You can delay expenses. You can look profitable while your bank balance quietly shrinks. That's exactly what was happening with Pankaj.</p>
+<div class="ib rv"><div class="il">Key Insight</div><div class="it">When a rough monsoon week arrived — sales slowed, suppliers called, bills arrived — Pankaj ran dry. No cash cushion. He shut his doors early. Not because the business looked bad on paper. Because <strong>paper doesn't pay bills.</strong></div></div>
+<h2 class="rv">What Free Cash Flow Actually Means</h2>
+<p class="p rv"><strong>Free Cash Flow (FCF)</strong> is simply the cash left after running the business properly and investing for its future. Not revenue. Not profit. Cash. It's the money that pays suppliers on time. It's the money that survives downturns. It's the money that allows growth without begging for capital.</p>
+<p class="p rv">Where P/E focuses on how good the story looks, <strong>FCF shows whether the story is real.</strong> In easy-money times, profit stories can survive longer than they should. In tougher environments — higher rates, tighter liquidity — that illusion breaks quickly.</p>
+<div class="pq rv"><p>Experienced investors don't ask "Is this stock cheap on P/E?" They ask "Does profit turn into cash, consistently?"</p><cite>— Easy Equity</cite></div>
+<h2 class="rv">The Lesson Worth Remembering</h2>
+<p class="p rv">Profit tells a story. Cash tells the ending. P/E may win the gold medal. Free Cash Flow wins the long race. And just like in school, the student who truly understands the subject usually does better in life than the one who only scored well on paper.</p>
+</div>
+<div class="fnav">
+  <a href="index.html#articles" class="fb">← All Articles</a>
+  <a href="https://himanrbfintalk.substack.com" target="_blank" class="fs">Follow on Substack →</a>
+</div>
+<footer><div class="fi"><div class="fb2">Easy<b>Equity</b></div><div class="fd">For informational purposes only. Not financial advice. Always conduct your own research before making investment decisions.</div></div></footer>
+</div>
+<script>
+(function(){const c=document.getElementById('cv');const x=c.getContext('2d');let W,H,n=[];const N=55;function r(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}function i(){n=[];for(let k=0;k<N;k++)n.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:Math.random()*1.4+0.4});}function d(){x.clearRect(0,0,W,H);for(let a=0;a<N;a++){for(let b=a+1;b<N;b++){const dx=n[a].x-n[b].x,dy=n[a].y-n[b].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<130){x.beginPath();x.moveTo(n[a].x,n[a].y);x.lineTo(n[b].x,n[b].y);x.strokeStyle=`rgba(148,163,184,${(1-dist/130)*.16})`;x.lineWidth=.6;x.stroke();}}x.beginPath();x.arc(n[a].x,n[a].y,n[a].r,0,Math.PI*2);x.fillStyle='rgba(203,213,225,0.5)';x.fill();n[a].x+=n[a].vx;n[a].y+=n[a].vy;if(n[a].x<0||n[a].x>W)n[a].vx*=-1;if(n[a].y<0||n[a].y>H)n[a].vy*=-1;}requestAnimationFrame(d);}window.addEventListener('resize',()=>{r();i();});r();i();d();})();
+const o=new IntersectionObserver(e=>e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('on');}),{threshold:0.08});document.querySelectorAll('.rv').forEach(el=>o.observe(el));
+</script>
+</body>
+</html>
