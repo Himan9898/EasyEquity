@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNC — Centene | Easy Equity</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0f1117;--glass:rgba(255,255,255,0.04);--gb:rgba(255,255,255,0.09);--blue:#3b82f6;--blue-d:#1a4fd6;--text:#f1f5f9;--mid:rgba(241,245,249,0.65);--dim:rgba(241,245,249,0.35);--ac:#ef4444;--acl:rgba(239,68,68,0.08);--red:#ef4444;--green:#10b981;--amber:#f59e0b;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.7;}
+#cv{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.pw{position:relative;z-index:1;}
+nav{background:rgba(15,17,23,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--gb);padding:0 52px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.lb{width:34px;height:34px;background:var(--blue-d);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(59,130,246,0.3);}
+.lb svg{width:17px;height:17px;}
+.ln{font-size:17px;font-weight:800;color:#fff;letter-spacing:-.3px;}
+.ln b{color:var(--blue);}
+.nb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.nb:hover{color:#fff;border-color:rgba(255,255,255,0.2);background:var(--glass);}
+.hero{padding:56px 52px 36px;max-width:920px;margin:0 auto;}
+.ew{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.etag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:4px;font-weight:500;background:var(--acl);color:var(--ac);border:1px solid rgba(239,68,68,0.3);}
+.edate{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);}
+.verdict-pill{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:5px 14px;border-radius:20px;background:rgba(239,68,68,0.15);color:var(--ac);border:1px solid rgba(239,68,68,0.35);}
+h1{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:14px;}
+h1 .hl{color:var(--ac);}
+.sub{font-size:16px;color:var(--mid);line-height:1.65;margin-bottom:22px;font-style:italic;border-left:3px solid var(--ac);padding-left:16px;}
+.scorecard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px;}
+.sc{background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:16px;text-align:center;backdrop-filter:blur(8px);transition:border-color .2s;}
+.sc:hover{border-color:var(--ac);}
+.sv{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;color:var(--ac);letter-spacing:-.5px;}
+.sv.amber{color:var(--amber);}
+.sv.green{color:var(--green);}
+.sl{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);margin-top:4px;letter-spacing:.5px;text-transform:uppercase;}
+.body{max-width:860px;margin:0 auto;padding:0 52px 80px;}
+h2{font-size:21px;font-weight:800;color:#fff;letter-spacing:-.3px;margin:40px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--gb);}
+.p{font-size:15px;color:var(--mid);line-height:1.82;margin-bottom:16px;}
+.p strong{color:var(--text);font-weight:700;}
+.pq{margin:28px 0;padding:20px 26px;background:var(--glass);border:1px solid var(--gb);border-radius:12px;backdrop-filter:blur(10px);position:relative;}
+.pq::before{content:'"';position:absolute;top:-6px;left:22px;font-size:70px;color:rgba(255,255,255,0.05);font-family:'Playfair Display',serif;line-height:1;}
+.pq p{font-size:16px;color:var(--text);line-height:1.6;font-style:italic;font-weight:500;position:relative;z-index:1;}
+.pq cite{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;letter-spacing:.5px;font-style:normal;position:relative;z-index:1;}
+.bq-row{display:flex;align-items:center;gap:0;margin:6px 0;background:var(--glass);border:1px solid var(--gb);border-radius:8px;overflow:hidden;}
+.bq-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mid);padding:10px 16px;width:200px;flex-shrink:0;}
+.bq-bar-wrap{flex:1;padding:10px 16px 10px 0;display:flex;align-items:center;gap:10px;}
+.bq-bar{height:6px;border-radius:3px;background:var(--amber);}
+.bq-bar.low{background:var(--red);}
+.bq-score{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--amber);width:28px;text-align:right;}
+.bq-score.low{color:var(--red);}
+.bq-total{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;margin-top:8px;}
+.bq-total-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;}
+.bq-total-val{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:var(--amber);}
+.fin-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;}
+.fin-table th{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:1px solid var(--gb);}
+.fin-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--mid);}
+.fin-table td:first-child{color:var(--text);font-weight:600;}
+.fin-table td.up{color:var(--green);}
+.fin-table td.dn{color:var(--red);}
+.fin-table tr:hover td{background:rgba(255,255,255,0.02);}
+.ib{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:18px 22px;margin:22px 0;}
+.ib.risk{background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.2);}
+.ib.good{background:rgba(16,185,129,0.07);border-color:rgba(16,185,129,0.2);}
+.il{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:7px;}
+.ib.risk .il{color:var(--red);}
+.ib.good .il{color:var(--green);}
+.it{font-size:14px;color:var(--mid);line-height:1.72;}
+.it strong{color:var(--text);}
+.verdict-box{margin:32px 0;padding:28px 32px;background:linear-gradient(135deg,rgba(239,68,68,0.08),rgba(239,68,68,0.03));border:1px solid rgba(239,68,68,0.3);border-radius:14px;backdrop-filter:blur(12px);}
+.verdict-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--ac);text-transform:uppercase;margin-bottom:10px;}
+.verdict-title{font-size:20px;font-weight:800;color:#fff;margin-bottom:10px;line-height:1.3;}
+.verdict-body{font-size:14px;color:var(--mid);line-height:1.8;}
+.fnav{max-width:860px;margin:0 auto;padding:0 52px 52px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+.fb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;padding:9px 15px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.fb:hover{color:#fff;border-color:rgba(255,255,255,0.2);}
+.fs{font-size:13px;font-weight:700;color:#fff;text-decoration:none;padding:9px 18px;background:var(--blue-d);border-radius:7px;transition:all .18s;}
+.fs:hover{background:var(--blue);}
+footer{background:rgba(11,21,38,0.9);border-top:1px solid var(--gb);padding:26px 52px;backdrop-filter:blur(10px);}
+.fi{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.fb2{font-size:14px;font-weight:800;color:#fff;}
+.fb2 b{color:var(--blue);}
+.fd{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,0.15);max-width:420px;line-height:1.6;}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease;}
+.rv.on{opacity:1;transform:translateY(0);}
+@media(max-width:768px){nav,footer,.fnav{padding-left:18px;padding-right:18px;}.hero,.body{padding-left:18px;padding-right:18px;}h1{font-size:28px;}.scorecard{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="pw">
+<nav>
+  <a href="index.html" class="logo"><div class="lb"><svg viewBox="0 0 16 16" fill="none"><polyline points="1,12 5,7 9,10 15,3" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="ln">Easy<b>Equity</b></span></a>
+  <a href="index.html#reports" class="nb">← Back to Reports</a>
+</nav>
+
+<div class="hero">
+  <div class="ew rv">
+    <span class="etag">Healthcare · Insurance</span>
+    <span class="edate">Mar 2026 · Stock Report</span>
+    <span class="verdict-pill">CAUTION</span>
+  </div>
+  <h1 class="rv">CNC — <span class="hl">Centene</span></h1>
+  <div class="sub rv">Stock down 50% from highs after guidance was withdrawn — a high-policy-risk insurer fighting to stabilise margins while ACA subsidy uncertainty hangs over its largest business segment.</div>
+
+  <div class="scorecard rv">
+    <div class="sc"><div class="sv">$46.61</div><div class="sl">Current Price</div></div>
+    <div class="sc"><div class="sv">$22.9B</div><div class="sl">Market Cap</div></div>
+    <div class="sc"><div class="sv red">$98.53</div><div class="sl">52-Week High</div></div>
+    <div class="sc"><div class="sv amber">16/30</div><div class="sl">BQ Score</div></div>
+  </div>
+</div>
+
+<div class="body">
+
+<h2 class="rv">What Does Centene Do?</h2>
+<p class="p rv">Founded in 1984 and headquartered in Saint Louis, Missouri, Centene is a leading managed care organisation serving government-sponsored healthcare programs. It operates across four segments: <strong>Medicaid</strong> (its historical core), <strong>Medicare</strong>, <strong>Commercial/Marketplace</strong> (ACA exchange plans), and Other (pharmacy, dental, vision, behavioural health). Serving roughly 1 in 15 Americans, Centene is the <strong>largest ACA Marketplace insurer in the US</strong>, with 5.6 million Marketplace enrollees — approximately 23% of total national ACA enrollment.</p>
+
+<div class="ib risk rv">
+  <div class="il">The Core Problem in One Number</div>
+  <div class="it">Q2 2025 Health Benefits Ratio (HBR): <strong>93.0%</strong> vs 87.6% prior year. For every $100 in premiums collected, $93 went to paying medical claims — before any administrative costs. This is not a sustainable operating model and is the root cause of the stock's collapse.</div>
+</div>
+
+<h2 class="rv">BQ Score — Business Quality</h2>
+<div class="rv">
+  <div class="bq-row"><div class="bq-label">Revenue Growth</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-row"><div class="bq-label">Gross Margin</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-row"><div class="bq-label">Operating Cost Control</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-row"><div class="bq-label">Operating Margin</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-row"><div class="bq-label">Net Income Trend</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-row"><div class="bq-label">Free Cash Flow</div><div class="bq-bar-wrap"><div class="bq-bar low" style="width:16%"></div><div class="bq-score low">1</div></div></div>
+  <div class="bq-total"><div class="bq-total-label">Total BQ Score</div><div class="bq-total-val">16 / 30</div></div>
+</div>
+
+<h2 class="rv">The Collapse — What Happened</h2>
+<p class="p rv">In July 2025, Centene shares <strong>plunged ~40% in a single session</strong> after the company withdrew its full-year earnings outlook. Adjusted EPS guidance fell from approximately $7.25 to just $1.25–$1.75. The cause: a sicker-than-expected ACA Marketplace member pool, driven by the scheduled expiration of enhanced Advance Premium Tax Credits (APTCs) which brought in healthier, lower-income enrollees. As subsidies shrink, healthier people leave — and the remaining pool gets sicker.</p>
+
+<table class="fin-table rv">
+  <tr><th>Period</th><th>Rev Growth</th><th>Op Margin</th><th>HBR</th><th>Net Income</th></tr>
+  <tr><td>FY 2024</td><td class="up">+4%</td><td>2%</td><td>—</td><td>3%</td></tr>
+  <tr><td>Q1 2025</td><td class="up">+15%</td><td>3.2%</td><td>—</td><td>Positive</td></tr>
+  <tr><td>Q2 2025</td><td class="up">+22%</td><td class="dn">-1%</td><td class="dn">93.0%</td><td class="dn">Negative</td></tr>
+  <tr><td>Q3 2025</td><td class="up">+18%</td><td class="dn">-14%</td><td class="dn">High</td><td class="dn">Negative</td></tr>
+</table>
+
+<div class="ib risk rv">
+  <div class="il">Risk 1 — ACA Subsidy Dependency</div>
+  <div class="it">Centene's Marketplace segment is the most subsidy-dependent book of business in US managed care. With <strong>5.6M enrollees (23% of ACA market)</strong>, any reduction or expiration of enhanced APTCs directly worsens the risk pool, increases medical costs, and squeezes margins. This is a political risk, not just a business risk.</div>
+</div>
+
+<div class="ib risk rv">
+  <div class="il">Risk 2 — $6.7B Goodwill Impairment</div>
+  <div class="it">In Q3 2025, Centene recorded a <strong>$6.7 billion goodwill impairment</strong>, attributed in part to the "non-renewal of Marketplace enhanced APTCs." This is a non-cash charge but signals that management has materially written down the value of the Marketplace business they once paid a premium to acquire.</div>
+</div>
+
+<div class="ib good rv">
+  <div class="il">The Policy Wildcard — Potential Upside</div>
+  <div class="it">A Trump-backed ACA subsidy extension push in late 2025 triggered a <strong>~8% single-day jump</strong> in CNC shares. If enhanced APTCs are extended, the risk pool improves, medical costs normalise, and Centene's margins could recover faster than the base case implies. Policy moves are the biggest near-term catalyst — in both directions.</div>
+</div>
+
+<h2 class="rv">Analyst View</h2>
+<p class="p rv">20 analysts cover CNC — 5 Buy, 15 Hold/Sell. Targets range from $32 to $70, averaging $43.06 against a current price of $46.61. Projected revenue growth of 18.28% in 2025 but near-zero 0.15% in 2026 as the Marketplace drag weighs on the top line. Current P/E is negative (EPS: -$10.67). Forward P/E of 15.78× assumes a meaningful earnings recovery by 2026, which requires the margin situation to stabilise.</p>
+
+<div class="verdict-box rv">
+  <div class="verdict-label">Easy Equity Verdict</div>
+  <div class="verdict-title">High-policy-risk, high-morbidity — multiple things need to go right.</div>
+  <div class="verdict-body">Centene's problems are structural, not cyclical. The Marketplace business is fundamentally exposed to government subsidy decisions, and the company has already taken a $6.7B goodwill write-down acknowledging the damage. The stock has bounced from its lows on policy hope — but a full recovery requires stable policy outcomes, disciplined repricing, and medical cost normalisation all happening simultaneously. We do not see enough margin of safety at current levels to justify entry. Track policy developments, and wait for at least two consecutive quarters of HBR improvement below 90% before reconsidering.</div>
+</div>
+
+</div>
+
+<div class="fnav">
+  <a href="index.html#reports" class="fb">← All Reports</a>
+  <a href="https://himanrbfintalk.substack.com" target="_blank" class="fs">Follow on Substack →</a>
+</div>
+<footer><div class="fi"><div class="fb2">Easy<b>Equity</b></div><div class="fd">For informational purposes only. Not financial advice. Always conduct your own research before making investment decisions. Past performance does not guarantee future results.</div></div></footer>
+</div>
+<script>
+(function(){const c=document.getElementById('cv');const x=c.getContext('2d');let W,H,n=[];const N=50;function r(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}function i(){n=[];for(let k=0;k<N;k++)n.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,r:Math.random()*1.3+0.3});}function d(){x.clearRect(0,0,W,H);for(let a=0;a<N;a++){for(let b=a+1;b<N;b++){const dx=n[a].x-n[b].x,dy=n[a].y-n[b].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<120){x.beginPath();x.moveTo(n[a].x,n[a].y);x.lineTo(n[b].x,n[b].y);x.strokeStyle=`rgba(148,163,184,${(1-dist/120)*.12})`;x.lineWidth=.5;x.stroke();}}x.beginPath();x.arc(n[a].x,n[a].y,n[a].r,0,Math.PI*2);x.fillStyle='rgba(203,213,225,0.4)';x.fill();n[a].x+=n[a].vx;n[a].y+=n[a].vy;if(n[a].x<0||n[a].x>W)n[a].vx*=-1;if(n[a].y<0||n[a].y>H)n[a].vy*=-1;}requestAnimationFrame(d);}window.addEventListener('resize',()=>{r();i();});r();i();d();})();
+const o=new IntersectionObserver(e=>e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('on');}),{threshold:0.06});document.querySelectorAll('.rv').forEach(el=>o.observe(el));
+</script>
+</body>
+</html>

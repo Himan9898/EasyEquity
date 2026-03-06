@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUM — Humana | Easy Equity</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0f1117;--glass:rgba(255,255,255,0.04);--gb:rgba(255,255,255,0.09);--blue:#3b82f6;--blue-d:#1a4fd6;--text:#f1f5f9;--mid:rgba(241,245,249,0.65);--dim:rgba(241,245,249,0.35);--ac:#f59e0b;--acl:rgba(245,158,11,0.1);--red:#ef4444;--green:#10b981;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.7;}
+#cv{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.pw{position:relative;z-index:1;}
+nav{background:rgba(15,17,23,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--gb);padding:0 52px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.lb{width:34px;height:34px;background:var(--blue-d);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(59,130,246,0.3);}
+.lb svg{width:17px;height:17px;}
+.ln{font-size:17px;font-weight:800;color:#fff;letter-spacing:-.3px;}
+.ln b{color:var(--blue);}
+.nb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.nb:hover{color:#fff;border-color:rgba(255,255,255,0.2);background:var(--glass);}
+.hero{padding:56px 52px 36px;max-width:920px;margin:0 auto;}
+.ew{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.etag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:4px;font-weight:500;background:var(--acl);color:var(--ac);border:1px solid rgba(245,158,11,0.3);}
+.edate{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);}
+.verdict-pill{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:5px 14px;border-radius:20px;background:rgba(245,158,11,0.15);color:var(--ac);border:1px solid rgba(245,158,11,0.35);}
+h1{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:14px;}
+h1 .hl{color:var(--ac);}
+.sub{font-size:16px;color:var(--mid);line-height:1.65;margin-bottom:22px;font-style:italic;border-left:3px solid var(--ac);padding-left:16px;}
+.scorecard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px;}
+.sc{background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:16px;text-align:center;backdrop-filter:blur(8px);transition:border-color .2s;}
+.sc:hover{border-color:var(--ac);}
+.sv{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;color:var(--ac);letter-spacing:-.5px;}
+.sv.red{color:var(--red);}
+.sv.green{color:var(--green);}
+.sl{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);margin-top:4px;letter-spacing:.5px;text-transform:uppercase;}
+.body{max-width:860px;margin:0 auto;padding:0 52px 80px;}
+h2{font-size:21px;font-weight:800;color:#fff;letter-spacing:-.3px;margin:40px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--gb);}
+.p{font-size:15px;color:var(--mid);line-height:1.82;margin-bottom:16px;}
+.p strong{color:var(--text);font-weight:700;}
+.pq{margin:28px 0;padding:20px 26px;background:var(--glass);border:1px solid var(--gb);border-radius:12px;backdrop-filter:blur(10px);position:relative;}
+.pq::before{content:'"';position:absolute;top:-6px;left:22px;font-size:70px;color:rgba(255,255,255,0.05);font-family:'Playfair Display',serif;line-height:1;}
+.pq p{font-size:16px;color:var(--text);line-height:1.6;font-style:italic;font-weight:500;position:relative;z-index:1;}
+.pq cite{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;letter-spacing:.5px;font-style:normal;position:relative;z-index:1;}
+.bq-row{display:flex;align-items:center;gap:0;margin:6px 0;background:var(--glass);border:1px solid var(--gb);border-radius:8px;overflow:hidden;}
+.bq-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mid);padding:10px 16px;width:200px;flex-shrink:0;}
+.bq-bar-wrap{flex:1;padding:10px 16px 10px 0;display:flex;align-items:center;gap:10px;}
+.bq-bar{height:6px;border-radius:3px;background:var(--ac);}
+.bq-bar.low{background:var(--red);}
+.bq-score{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--ac);width:28px;text-align:right;}
+.bq-score.low{color:var(--red);}
+.bq-total{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:8px;margin-top:8px;}
+.bq-total-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;}
+.bq-total-val{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:var(--red);}
+.fin-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;}
+.fin-table th{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:1px solid var(--gb);}
+.fin-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--mid);}
+.fin-table td:first-child{color:var(--text);font-weight:600;}
+.fin-table td.up{color:var(--green);}
+.fin-table td.dn{color:var(--red);}
+.fin-table tr:hover td{background:rgba(255,255,255,0.02);}
+.ib{background:var(--acl);border:1px solid rgba(245,158,11,0.25);border-radius:10px;padding:18px 22px;margin:22px 0;}
+.ib.risk{background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.2);}
+.ib.good{background:rgba(16,185,129,0.07);border-color:rgba(16,185,129,0.2);}
+.il{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ac);text-transform:uppercase;margin-bottom:7px;}
+.ib.risk .il{color:var(--red);}
+.ib.good .il{color:var(--green);}
+.it{font-size:14px;color:var(--mid);line-height:1.72;}
+.it strong{color:var(--text);}
+.verdict-box{margin:32px 0;padding:28px 32px;background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.03));border:1px solid rgba(245,158,11,0.3);border-radius:14px;backdrop-filter:blur(12px);}
+.verdict-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--ac);text-transform:uppercase;margin-bottom:10px;}
+.verdict-title{font-size:20px;font-weight:800;color:#fff;margin-bottom:10px;line-height:1.3;}
+.verdict-body{font-size:14px;color:var(--mid);line-height:1.8;}
+.fnav{max-width:860px;margin:0 auto;padding:0 52px 52px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+.fb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;padding:9px 15px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.fb:hover{color:#fff;border-color:rgba(255,255,255,0.2);}
+.fs{font-size:13px;font-weight:700;color:#fff;text-decoration:none;padding:9px 18px;background:var(--blue-d);border-radius:7px;transition:all .18s;}
+.fs:hover{background:var(--blue);}
+footer{background:rgba(11,21,38,0.9);border-top:1px solid var(--gb);padding:26px 52px;backdrop-filter:blur(10px);}
+.fi{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.fb2{font-size:14px;font-weight:800;color:#fff;}
+.fb2 b{color:var(--blue);}
+.fd{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,0.15);max-width:420px;line-height:1.6;}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease;}
+.rv.on{opacity:1;transform:translateY(0);}
+@media(max-width:768px){nav,footer,.fnav{padding-left:18px;padding-right:18px;}.hero,.body{padding-left:18px;padding-right:18px;}h1{font-size:28px;}.scorecard{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="pw">
+<nav>
+  <a href="index.html" class="logo"><div class="lb"><svg viewBox="0 0 16 16" fill="none"><polyline points="1,12 5,7 9,10 15,3" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="ln">Easy<b>Equity</b></span></a>
+  <a href="index.html#reports" class="nb">← Back to Reports</a>
+</nav>
+
+<div class="hero">
+  <div class="ew rv">
+    <span class="etag">Healthcare · Insurance</span>
+    <span class="edate">Mar 2026 · Stock Report</span>
+    <span class="verdict-pill">TRACK</span>
+  </div>
+  <h1 class="rv">HUM — <span class="hl">Humana</span></h1>
+  <div class="sub rv">A strong healthcare franchise under severe margin pressure from rising medical costs and Star rating degradation — once Stars stabilise, the upside case becomes compelling.</div>
+
+  <div class="scorecard rv">
+    <div class="sc"><div class="sv">$277.57</div><div class="sl">Current Price</div></div>
+    <div class="sc"><div class="sv">$33.4B</div><div class="sl">Market Cap</div></div>
+    <div class="sc"><div class="sv red">7/15</div><div class="sl">BQ Score (Declining)</div></div>
+    <div class="sc"><div class="sv">$423.92</div><div class="sl">52-Week High</div></div>
+  </div>
+</div>
+
+<div class="body">
+
+<h2 class="rv">What Does Humana Do?</h2>
+<p class="p rv">Founded in 1961 and headquartered in Louisville, Kentucky, Humana is one of the largest managed healthcare companies in the United States. It operates in two segments: <strong>Insurance</strong> (Medicare Advantage, Medicaid, commercial plans, military/TRICARE services) and <strong>CenterWell</strong> (pharmacy benefit management, senior-focused primary care centres, and home health services). With 35 years as a public company, Humana has historically been a blue-chip healthcare compounder — but the past two years have seen a structural deterioration in its core Medicare Advantage margins.</p>
+
+<h2 class="rv">BQ Score — Business Quality</h2>
+<p class="p rv">Humana's BQ score is assessed on a compressed 15-point scale due to data availability. The scores reflect recent deterioration in margins and cash flow — this is not a stable-quality business at this moment.</p>
+<div class="rv">
+  <div class="bq-row"><div class="bq-label">Revenue Growth</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-row"><div class="bq-label">Net Income Trend</div><div class="bq-bar-wrap"><div class="bq-bar low" style="width:33%"></div><div class="bq-score low">2</div></div></div>
+  <div class="bq-row"><div class="bq-label">Free Cash Flow</div><div class="bq-bar-wrap"><div class="bq-bar low" style="width:33%"></div><div class="bq-score low">2</div></div></div>
+  <div class="bq-total"><div class="bq-total-label">Total BQ Score</div><div class="bq-total-val">7 / 15</div></div>
+</div>
+
+<h2 class="rv">The Margin Crisis</h2>
+<p class="p rv">The core problem at Humana is simple: <strong>medical costs are rising faster than premiums</strong>. The Benefit Ratio (what percentage of premiums go to paying medical claims) has surged. In Q3 2025, the Insurance Segment Benefit Ratio hit <strong>91.1%</strong> — meaning Humana spent $91.10 paying claims for every $100 it collected in premiums. Operating margins have collapsed from 2% in FY2024 to just 1.2% in Q3 2025.</p>
+
+<table class="fin-table rv">
+  <tr><th>Period</th><th>Rev Growth</th><th>Op Margin</th><th>Benefit Ratio</th><th>Net Margin</th></tr>
+  <tr><td>FY 2024</td><td class="up">+11%</td><td class="dn">2%</td><td class="dn">90.4%</td><td>3%</td></tr>
+  <tr><td>Q1 2025</td><td class="up">+8.4%</td><td>6%</td><td>87.4%</td><td>5%</td></tr>
+  <tr><td>Q2 2025</td><td class="up">+10%</td><td class="dn">3.3%</td><td class="dn">89.9%</td><td>3%</td></tr>
+  <tr><td>Q3 2025</td><td class="up">+11%</td><td class="dn">1.2%</td><td class="dn">91.1%</td><td>3%</td></tr>
+</table>
+
+<div class="ib risk rv">
+  <div class="il">The Star Rating Problem</div>
+  <div class="it">CMS Star Ratings determine the bonuses Medicare Advantage plans receive from the government. Humana's Star ratings have degraded, and a US judge rejected its legal challenge to the 2025 ratings. <strong>Lower Stars = fewer bonus payments = direct revenue and margin hit.</strong> This is not just an accounting issue — it flows directly to the income statement.</div>
+</div>
+
+<div class="ib risk rv">
+  <div class="il">Membership Growth Slowing</div>
+  <div class="it">Humana expects only ~160,000 Medicaid membership additions in 2025, down from prior guidance of 175,000–250,000. Management is intentionally prioritising profit over growth — which is the right strategic call, but it reduces the near-term growth story.</div>
+</div>
+
+<div class="ib good rv">
+  <div class="il">CenterWell — The Hidden Asset</div>
+  <div class="it">CenterWell (home health, pharmacy, senior care) represents a growing, higher-margin business within Humana. It is less exposed to the Medicare Advantage repricing cycle and has been growing revenue at 35–52% year-on-year in recent quarters. Long-term, this segment de-risks the pure-insurance model.</div>
+</div>
+
+<h2 class="rv">Analyst View</h2>
+<p class="p rv">27 analysts cover HUM — 9 Buy, 18 Hold. Price targets range from $215 to $353, averaging $287.38 against a current price of $277.57. The split consensus reflects genuine uncertainty about the Star rating recovery timeline and medical cost normalisation. Revenue growth projections remain modest: 9.72% for 2025, 11.92% for 2026.</p>
+
+<div class="verdict-box rv">
+  <div class="verdict-label">Easy Equity Verdict</div>
+  <div class="verdict-title">A quality franchise in a temporary — but painful — reset. Track, don't buy yet.</div>
+  <div class="verdict-body">Humana is a fundamentally strong business caught in a structural repricing cycle. The Medicare Advantage system forces insurers to set premiums a year in advance, and Humana mispriced its cost assumptions in 2023–2024. It is now paying the price. The recovery thesis is real — if Stars stabilise, if medical cost trends normalise, and if CenterWell continues to grow — but multiple things need to go right simultaneously. We prefer to wait for at least two consecutive quarters of improving benefit ratios before considering entry.</div>
+</div>
+
+</div>
+
+<div class="fnav">
+  <a href="index.html#reports" class="fb">← All Reports</a>
+  <a href="https://himanrbfintalk.substack.com" target="_blank" class="fs">Follow on Substack →</a>
+</div>
+<footer><div class="fi"><div class="fb2">Easy<b>Equity</b></div><div class="fd">For informational purposes only. Not financial advice. Always conduct your own research before making investment decisions. Past performance does not guarantee future results.</div></div></footer>
+</div>
+<script>
+(function(){const c=document.getElementById('cv');const x=c.getContext('2d');let W,H,n=[];const N=50;function r(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}function i(){n=[];for(let k=0;k<N;k++)n.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,r:Math.random()*1.3+0.3});}function d(){x.clearRect(0,0,W,H);for(let a=0;a<N;a++){for(let b=a+1;b<N;b++){const dx=n[a].x-n[b].x,dy=n[a].y-n[b].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<120){x.beginPath();x.moveTo(n[a].x,n[a].y);x.lineTo(n[b].x,n[b].y);x.strokeStyle=`rgba(148,163,184,${(1-dist/120)*.12})`;x.lineWidth=.5;x.stroke();}}x.beginPath();x.arc(n[a].x,n[a].y,n[a].r,0,Math.PI*2);x.fillStyle='rgba(203,213,225,0.4)';x.fill();n[a].x+=n[a].vx;n[a].y+=n[a].vy;if(n[a].x<0||n[a].x>W)n[a].vx*=-1;if(n[a].y<0||n[a].y>H)n[a].vy*=-1;}requestAnimationFrame(d);}window.addEventListener('resize',()=>{r();i();});r();i();d();})();
+const o=new IntersectionObserver(e=>e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('on');}),{threshold:0.06});document.querySelectorAll('.rv').forEach(el=>o.observe(el));
+</script>
+</body>
+</html>

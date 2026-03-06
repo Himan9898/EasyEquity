@@ -90,6 +90,14 @@ nav{position:sticky;top:0;z-index:100;background:rgba(11,14,23,0.9);backdrop-fil
 /* ── FLIP REPORT CARDS ── */
 .flip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
 .flip-card{height:260px;perspective:1000px;cursor:pointer;}
+/* More reports expandable */
+.more-reports{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:16px;overflow:hidden;max-height:0;transition:max-height 0.5s ease,opacity 0.4s ease;opacity:0;}
+.more-reports.open{max-height:1200px;opacity:1;}
+.expand-btn{margin-top:20px;display:flex;align-items:center;justify-content:center;}
+.expand-btn button{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blue);background:none;border:1px solid rgba(59,130,246,0.25);border-radius:7px;padding:9px 22px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:8px;}
+.expand-btn button:hover{background:rgba(59,130,246,0.08);border-color:rgba(59,130,246,0.5);}
+.expand-btn button .arr{transition:transform .3s;}
+.expand-btn button.open .arr{transform:rotate(180deg);}
 .flip-inner{position:relative;width:100%;height:100%;transition:transform 0.55s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;}
 .flip-card:hover .flip-inner{transform:rotateY(180deg);}
 .flip-front,.flip-back{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:14px;overflow:hidden;border:1px solid var(--gb);}
@@ -159,16 +167,17 @@ footer{position:relative;z-index:1;background:rgba(8,10,18,0.95);border-top:1px 
 .rv.on{opacity:1;transform:translateY(0);}
 .rv1{transition-delay:.08s;}.rv2{transition-delay:.16s;}.rv3{transition-delay:.24s;}.rv4{transition-delay:.32s;}
 
+@media(max-width:1100px){.flip-grid,.more-reports{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:900px){
   nav,.hero,.sec,footer{padding-left:18px;padding-right:18px;}
   .hero h1{font-size:34px;}
-  .flip-grid{grid-template-columns:repeat(2,1fr);}
+  .flip-grid,.more-reports{grid-template-columns:repeat(2,1fr);}
   .art-grid{grid-template-columns:1fr 1fr;}
   .hero-stats{flex-wrap:wrap;gap:16px;}
   .stat{border:none;}
 }
 @media(max-width:540px){
-  .flip-grid{grid-template-columns:1fr 1fr;}
+  .flip-grid,.more-reports{grid-template-columns:1fr 1fr;}
   .art-grid{grid-template-columns:1fr;}
 }
 </style>
@@ -227,7 +236,7 @@ footer{position:relative;z-index:1;background:rgba(8,10,18,0.95);border-top:1px 
       <a href="#articles" class="btn-o">Read Articles</a>
     </div>
     <div class="hero-stats">
-      <div class="stat"><div class="stat-num">4<span>+</span></div><div class="stat-lbl">Active Reports</div></div>
+      <div class="stat"><div class="stat-num">10<span>+</span></div><div class="stat-lbl">Active Reports</div></div>
       <div class="stat"><div class="stat-num">100<span>%</span></div><div class="stat-lbl">Plain Language</div></div>
       <div class="stat"><div class="stat-num">10<span>min</span></div><div class="stat-lbl">Reads</div></div>
       <div class="stat"><div class="stat-num">Free</div><div class="stat-lbl">Always</div></div>
@@ -346,7 +355,170 @@ footer{position:relative;z-index:1;background:rgba(8,10,18,0.95);border-top:1px 
       </div>
     </div>
 
+  </div><!-- end flip-grid -->
+
+  <!-- EXPANDABLE: 6 more reports -->
+  <div class="more-reports" id="more-reports">
+
+    <!-- CPRX -->
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="flip-front-body">
+            <div class="fcard-sym">CPRX</div>
+            <div class="fcard-name">Catalyst Pharma</div>
+            <div class="fcard-sector">Pharma · Rare Disease</div>
+            <span class="fcard-tag tag-wait">WAIT</span>
+          </div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="fb-sym">CPRX · PHARMA</div>
+            <div class="fb-title">Cheap at 13.65× P/E but Hetero patent trial (Mar 2026) is binary risk for FIRDAPSE — its core revenue driver.</div>
+            <div class="fb-stats">
+              <div class="fb-stat"><div class="fb-stat-val" style="color:#10b981">20/30</div><div class="fb-stat-lbl">BQ Score</div></div>
+              <div class="fb-stat"><div class="fb-stat-val">44%</div><div class="fb-stat-lbl">Op Margin</div></div>
+            </div>
+          </div>
+          <a href="CPRX_Analysis.html" class="fb-link"><span>Full Report</span><span class="fb-link-arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- HALO -->
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="flip-front-body">
+            <div class="fcard-sym">HALO</div>
+            <div class="fcard-name">Halozyme Therapeutics</div>
+            <div class="fcard-sector">Pharma · Drug Delivery</div>
+            <span class="fcard-tag tag-hold">WATCH</span>
+          </div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="fb-sym">HALO · PHARMA</div>
+            <div class="fb-title">Royalty engine for 20+ pharma giants. Fwd P/E 8.28× but ENHANZE patents expire 2027–29.</div>
+            <div class="fb-stats">
+              <div class="fb-stat"><div class="fb-stat-val" style="color:#10b981">62%</div><div class="fb-stat-lbl">Op Margin</div></div>
+              <div class="fb-stat"><div class="fb-stat-val">45.7%</div><div class="fb-stat-lbl">ROIC</div></div>
+            </div>
+          </div>
+          <a href="HALO_Analysis.html" class="fb-link"><span>Full Report</span><span class="fb-link-arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- EPRT -->
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="flip-front-body">
+            <div class="fcard-sym">EPRT</div>
+            <div class="fcard-name">Essential Properties</div>
+            <div class="fcard-sector">REIT · Net Lease</div>
+            <span class="fcard-tag tag-bull">INCOME</span>
+          </div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="fb-sym">EPRT · REIT</div>
+            <div class="fb-title">99.8% occupancy across 2,266 properties. FFO growing 6–14% per quarter. 4.05% dividend yield.</div>
+            <div class="fb-stats">
+              <div class="fb-stat"><div class="fb-stat-val" style="color:#10b981">99.8%</div><div class="fb-stat-lbl">Occupancy</div></div>
+              <div class="fb-stat"><div class="fb-stat-val">4.05%</div><div class="fb-stat-lbl">Dividend</div></div>
+            </div>
+          </div>
+          <a href="EPRT_Analysis.html" class="fb-link"><span>Full Report</span><span class="fb-link-arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- HUM -->
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="flip-front-body">
+            <div class="fcard-sym">HUM</div>
+            <div class="fcard-name">Humana</div>
+            <div class="fcard-sector">Healthcare · Insurance</div>
+            <span class="fcard-tag tag-hold">TRACK</span>
+          </div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="fb-sym">HUM · HEALTHCARE</div>
+            <div class="fb-title">Benefit ratio hit 91.1% in Q3 2025. Star rating degradation cutting bonuses. Wait for margin recovery.</div>
+            <div class="fb-stats">
+              <div class="fb-stat"><div class="fb-stat-val" style="color:#ef4444">91.1%</div><div class="fb-stat-lbl">Benefit Ratio</div></div>
+              <div class="fb-stat"><div class="fb-stat-val">$423</div><div class="fb-stat-lbl">52W High</div></div>
+            </div>
+          </div>
+          <a href="HUM_Analysis.html" class="fb-link"><span>Full Report</span><span class="fb-link-arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CNC -->
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="flip-front-body">
+            <div class="fcard-sym">CNC</div>
+            <div class="fcard-name">Centene</div>
+            <div class="fcard-sector">Healthcare · Insurance</div>
+            <span class="fcard-tag tag-bear">CAUTION</span>
+          </div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="fb-sym">CNC · HEALTHCARE</div>
+            <div class="fb-title">Stock -53% from highs. $6.7B goodwill impairment. HBR hit 93% in Q2 2025. ACA subsidy policy is the key swing factor.</div>
+            <div class="fb-stats">
+              <div class="fb-stat"><div class="fb-stat-val" style="color:#ef4444">93%</div><div class="fb-stat-lbl">HBR Q2 2025</div></div>
+              <div class="fb-stat"><div class="fb-stat-val">$98.53</div><div class="fb-stat-lbl">52W High</div></div>
+            </div>
+          </div>
+          <a href="CNC_Analysis.html" class="fb-link"><span>Full Report</span><span class="fb-link-arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOH -->
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="flip-front-body">
+            <div class="fcard-sym">MOH</div>
+            <div class="fcard-name">Molina Healthcare</div>
+            <div class="fcard-sector">Healthcare · Managed Care</div>
+            <span class="fcard-tag tag-hold">WATCH</span>
+          </div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="fb-sym">MOH · HEALTHCARE</div>
+            <div class="fb-title">Contract wins support revenue. EPS guidance cut 26% in 2025. $1B buyback. Michael Burry bought in Q3 2025.</div>
+            <div class="fb-stats">
+              <div class="fb-stat"><div class="fb-stat-val" style="color:#10b981">11×</div><div class="fb-stat-lbl">P/E (Best in peer)</div></div>
+              <div class="fb-stat"><div class="fb-stat-val">$1B</div><div class="fb-stat-lbl">Buyback 2025</div></div>
+            </div>
+          </div>
+          <a href="MOH_Analysis.html" class="fb-link"><span>Full Report</span><span class="fb-link-arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end more-reports -->
+
+  <div class="expand-btn">
+    <button id="expand-btn" onclick="toggleReports()">
+      <span id="expand-label">Show 6 More Reports</span>
+      <span class="arr">▼</span>
+    </button>
   </div>
+
 </section>
 
 <!-- CURRENT NEWS -->
@@ -605,7 +777,18 @@ footer{position:relative;z-index:1;background:rgba(8,10,18,0.95);border-top:1px 
   resize(); initDots(); draw();
 })();
 
-// ── ACCORDION ────────────────────────────────────────────────────────
+// ── EXPAND MORE REPORTS ──────────────────────────────────────────────
+function toggleReports() {
+  const grid = document.getElementById('more-reports');
+  const btn = document.getElementById('expand-btn');
+  const label = document.getElementById('expand-label');
+  const isOpen = grid.classList.contains('open');
+  grid.classList.toggle('open');
+  btn.classList.toggle('open');
+  label.textContent = isOpen ? 'Show 6 More Reports' : 'Show Less';
+}
+
+
 function toggleAcc(row) {
   const isOpen = row.classList.contains('open');
   document.querySelectorAll('.acc-row.open').forEach(r => r.classList.remove('open'));

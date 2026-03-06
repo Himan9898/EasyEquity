@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPRX — Catalyst Pharmaceuticals | Easy Equity</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0f1117;--glass:rgba(255,255,255,0.04);--gb:rgba(255,255,255,0.09);--blue:#3b82f6;--blue-d:#1a4fd6;--text:#f1f5f9;--mid:rgba(241,245,249,0.65);--dim:rgba(241,245,249,0.35);--ac:#f59e0b;--acl:rgba(245,158,11,0.1);--red:#ef4444;--green:#10b981;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.7;}
+#cv{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.pw{position:relative;z-index:1;}
+nav{background:rgba(15,17,23,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--gb);padding:0 52px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.lb{width:34px;height:34px;background:var(--blue-d);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(59,130,246,0.3);}
+.lb svg{width:17px;height:17px;}
+.ln{font-size:17px;font-weight:800;color:#fff;letter-spacing:-.3px;}
+.ln b{color:var(--blue);}
+.nb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.nb:hover{color:#fff;border-color:rgba(255,255,255,0.2);background:var(--glass);}
+/* HERO */
+.hero{padding:56px 52px 36px;max-width:920px;margin:0 auto;}
+.ew{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.etag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:4px;font-weight:500;background:var(--acl);color:var(--ac);border:1px solid rgba(245,158,11,0.3);}
+.edate{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);}
+.verdict-pill{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:5px 14px;border-radius:20px;background:rgba(245,158,11,0.15);color:var(--ac);border:1px solid rgba(245,158,11,0.35);}
+h1{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:14px;}
+h1 .hl{color:var(--ac);}
+.sub{font-size:16px;color:var(--mid);line-height:1.65;margin-bottom:22px;font-style:italic;border-left:3px solid var(--ac);padding-left:16px;}
+/* SCORECARD TOP */
+.scorecard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px;}
+.sc{background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:16px;text-align:center;backdrop-filter:blur(8px);transition:border-color .2s;}
+.sc:hover{border-color:var(--ac);}
+.sv{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;color:var(--ac);letter-spacing:-.5px;}
+.sv.red{color:var(--red);}
+.sv.green{color:var(--green);}
+.sl{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);margin-top:4px;letter-spacing:.5px;text-transform:uppercase;}
+/* BODY */
+.body{max-width:860px;margin:0 auto;padding:0 52px 80px;}
+h2{font-size:21px;font-weight:800;color:#fff;letter-spacing:-.3px;margin:40px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--gb);}
+.p{font-size:15px;color:var(--mid);line-height:1.82;margin-bottom:16px;}
+.p strong{color:var(--text);font-weight:700;}
+.pq{margin:28px 0;padding:20px 26px;background:var(--glass);border:1px solid var(--gb);border-radius:12px;backdrop-filter:blur(10px);position:relative;}
+.pq::before{content:'"';position:absolute;top:-6px;left:22px;font-size:70px;color:rgba(255,255,255,0.05);font-family:'Playfair Display',serif;line-height:1;}
+.pq p{font-size:16px;color:var(--text);line-height:1.6;font-style:italic;font-weight:500;position:relative;z-index:1;}
+.pq cite{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;letter-spacing:.5px;font-style:normal;position:relative;z-index:1;}
+/* BQ SCORE */
+.bq-row{display:flex;align-items:center;gap:0;margin:6px 0;background:var(--glass);border:1px solid var(--gb);border-radius:8px;overflow:hidden;}
+.bq-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mid);padding:10px 16px;width:200px;flex-shrink:0;}
+.bq-bar-wrap{flex:1;padding:10px 16px 10px 0;display:flex;align-items:center;gap:10px;}
+.bq-bar{height:6px;border-radius:3px;background:var(--ac);transition:width .5s;}
+.bq-score{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--ac);width:28px;text-align:right;}
+.bq-total{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;margin-top:8px;}
+.bq-total-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;}
+.bq-total-val{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:var(--ac);}
+/* FINANCIALS TABLE */
+.fin-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;}
+.fin-table th{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:1px solid var(--gb);}
+.fin-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--mid);}
+.fin-table td:first-child{color:var(--text);font-weight:600;}
+.fin-table td.up{color:var(--green);}
+.fin-table td.dn{color:var(--red);}
+.fin-table tr:hover td{background:rgba(255,255,255,0.02);}
+/* INFO BOX */
+.ib{background:var(--acl);border:1px solid rgba(245,158,11,0.25);border-radius:10px;padding:18px 22px;margin:22px 0;}
+.ib.risk{background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.2);}
+.ib.good{background:rgba(16,185,129,0.07);border-color:rgba(16,185,129,0.2);}
+.il{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ac);text-transform:uppercase;margin-bottom:7px;}
+.ib.risk .il{color:var(--red);}
+.ib.good .il{color:var(--green);}
+.it{font-size:14px;color:var(--mid);line-height:1.72;}
+.it strong{color:var(--text);}
+/* VERDICT */
+.verdict-box{margin:32px 0;padding:28px 32px;background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.03));border:1px solid rgba(245,158,11,0.3);border-radius:14px;backdrop-filter:blur(12px);}
+.verdict-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--ac);text-transform:uppercase;margin-bottom:10px;}
+.verdict-title{font-size:20px;font-weight:800;color:#fff;margin-bottom:10px;line-height:1.3;}
+.verdict-body{font-size:14px;color:var(--mid);line-height:1.8;}
+/* FOOTER NAV */
+.fnav{max-width:860px;margin:0 auto;padding:0 52px 52px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+.fb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;padding:9px 15px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.fb:hover{color:#fff;border-color:rgba(255,255,255,0.2);}
+.fs{font-size:13px;font-weight:700;color:#fff;text-decoration:none;padding:9px 18px;background:var(--blue-d);border-radius:7px;transition:all .18s;}
+.fs:hover{background:var(--blue);}
+footer{background:rgba(11,21,38,0.9);border-top:1px solid var(--gb);padding:26px 52px;backdrop-filter:blur(10px);}
+.fi{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.fb2{font-size:14px;font-weight:800;color:#fff;}
+.fb2 b{color:var(--blue);}
+.fd{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,0.15);max-width:420px;line-height:1.6;}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease;}
+.rv.on{opacity:1;transform:translateY(0);}
+@media(max-width:768px){nav,footer,.fnav{padding-left:18px;padding-right:18px;}.hero,.body{padding-left:18px;padding-right:18px;}h1{font-size:28px;}.scorecard{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="pw">
+<nav>
+  <a href="index.html" class="logo"><div class="lb"><svg viewBox="0 0 16 16" fill="none"><polyline points="1,12 5,7 9,10 15,3" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="ln">Easy<b>Equity</b></span></a>
+  <a href="index.html#reports" class="nb">← Back to Reports</a>
+</nav>
+
+<div class="hero">
+  <div class="ew rv">
+    <span class="etag">Pharma · Rare Disease</span>
+    <span class="edate">Mar 2026 · Stock Report</span>
+    <span class="verdict-pill">WAIT</span>
+  </div>
+  <h1 class="rv">CPRX — <span class="hl">Catalyst Pharmaceuticals</span></h1>
+  <div class="sub rv">Rare disease drugs with solid fundamentals — but patent risk and single-product concentration make this a wait-and-see story until clarity improves.</div>
+
+  <div class="scorecard rv">
+    <div class="sc"><div class="sv">$23.03</div><div class="sl">Current Price</div></div>
+    <div class="sc"><div class="sv">$2.87B</div><div class="sl">Market Cap</div></div>
+    <div class="sc"><div class="sv green">13.65×</div><div class="sl">P/E (Industry: 23×)</div></div>
+    <div class="sc"><div class="sv">20/30</div><div class="sl">BQ Score</div></div>
+  </div>
+</div>
+
+<div class="body">
+
+<h2 class="rv">What Does Catalyst Do?</h2>
+<p class="p rv">Catalyst Pharmaceuticals is a Coral Gables, Florida-based commercial-stage biopharmaceutical company focused on rare and difficult-to-treat diseases. Founded in 2002, it markets three drugs: <strong>FIRDAPSE® (amifampridine)</strong> — the only FDA-approved treatment for Lambert-Eaton Myasthenic Syndrome (LEMS), a rare muscle weakness disease; <strong>FYCOMPA® (perampanel)</strong> — an epilepsy drug acquired from Eisai; and <strong>AGAMREE® (vamorolone)</strong> — a newer treatment for Duchenne Muscular Dystrophy. Its model is built around licensing, developing, and commercialising rare disease drugs in the US, Canada, and Japan.</p>
+
+<h2 class="rv">BQ Score — Business Quality</h2>
+<div class="rv">
+  <div class="bq-row"><div class="bq-label">Revenue Growth</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:66%"></div><div class="bq-score">4</div></div></div>
+  <div class="bq-row"><div class="bq-label">Gross Margin</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-row"><div class="bq-label">Operating Cost Control</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-row"><div class="bq-label">Operating Margin</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-row"><div class="bq-label">Net Income Trend</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-row"><div class="bq-label">Free Cash Flow</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:66%"></div><div class="bq-score">4</div></div></div>
+  <div class="bq-total"><div class="bq-total-label">Total BQ Score</div><div class="bq-total-val">20 / 30</div></div>
+</div>
+
+<h2 class="rv">Financial Performance</h2>
+<p class="p rv">Revenue has grown consistently, driven mainly by FIRDAPSE and the newer AGAMREE launch. Operating margins have stabilised around 44–45% in recent quarters — a healthy level for a commercial-stage pharma company of this size.</p>
+
+<table class="fin-table rv">
+  <tr><th>Period</th><th>Rev Growth</th><th>Op Margin</th><th>Net Margin</th><th>FCF Yield</th></tr>
+  <tr><td>FY 2024</td><td class="up">+40%</td><td>40%</td><td>33%</td><td>Strong</td></tr>
+  <tr><td>Q1 2025</td><td class="up">+44%</td><td>45%</td><td>40%</td><td>Strong</td></tr>
+  <tr><td>Q2 2025</td><td class="up">+19%</td><td>45%</td><td>36%</td><td>Strong</td></tr>
+  <tr><td>Q3 2025</td><td class="up">+15%</td><td>44%</td><td>36%</td><td>Strong</td></tr>
+</table>
+
+<div class="ib good rv">
+  <div class="il">Strong Valuation vs Peers</div>
+  <div class="it">Trading at a <strong>P/E of 13.65×</strong> against an industry average of <strong>23.29×</strong> — and at just <strong>12.25× free cash flow</strong>. The stock screens as genuinely cheap on a pure earnings and cash flow basis. <strong>6 analysts all rate it a Buy</strong>, with a consensus target of $34.86 vs current $23.34 — implying ~49% upside.</div>
+</div>
+
+<h2 class="rv">Revenue Breakdown</h2>
+<p class="p rv">Three products drive nearly all revenue. FIRDAPSE remains the core contributor (~58–63% of product revenue), FYCOMPA adds ~16–25%, and AGAMREE is growing fast from a small base — up 113–1194% year-on-year depending on the quarter (off a very low starting point).</p>
+
+<div class="ib rv">
+  <div class="il">AGAMREE Growth Watch</div>
+  <div class="it">AGAMREE was newly launched and is growing triple digits. If it scales successfully in DMD (Duchenne Muscular Dystrophy), it could materially reduce FIRDAPSE dependency over 3–5 years. <strong>This is the upside scenario to watch.</strong></div>
+</div>
+
+<h2 class="rv">Key Risks</h2>
+
+<div class="ib risk rv">
+  <div class="il">Risk 1 — Patent Cliff (Binary Risk)</div>
+  <div class="it">FIRDAPSE exclusivity was extended to 2035 through settlements with Teva and Lupin — but the <strong>Hetero trial (March 2026)</strong> could invalidate key patents and enable much earlier generic entry. This is a binary legal event that could materially impair Catalyst's primary revenue stream.</div>
+</div>
+
+<div class="ib risk rv">
+  <div class="il">Risk 2 — Revenue Concentration</div>
+  <div class="it"><strong>72% of net revenue</strong> comes from a single distributor. Additionally, FIRDAPSE alone accounts for roughly 60% of product revenue. This double concentration — one drug, one distributor — creates meaningful fragility in the business model.</div>
+</div>
+
+<div class="ib risk rv">
+  <div class="il">Risk 3 — FYCOMPA Patent Expiry</div>
+  <div class="it">FYCOMPA was generating ~$137M annually but <strong>nears patent expiration in May 2025</strong>, which has already begun reducing its contribution. This headwind is visible in the Q3 2025 data where FYCOMPA revenue fell 28% year-on-year.</div>
+</div>
+
+<div class="ib good rv">
+  <div class="il">What's Working</div>
+  <div class="it">Strong returns: <strong>ROA 23.86%, ROE 27.52%, ROIC 23.58%</strong>. Zero long-term debt. $200M share repurchase authorised through Dec 2026. Full-year 2025 guidance raised to $565–585M after Q3 strength. AGAMREE growing rapidly from base.</div>
+</div>
+
+<h2 class="rv">Analyst View</h2>
+<p class="p rv">All 6 covering analysts rate CPRX a Buy with targets ranging from $32 to $40, averaging $34.86. Projected revenue growth of 17.52% in 2025 and 7.21% in 2026. Four consecutive positive earnings surprises. The market is pricing in significant patent risk discount — which is why the valuation looks anomalously cheap.</p>
+
+<div class="verdict-box rv">
+  <div class="verdict-label">Easy Equity Verdict</div>
+  <div class="verdict-title">Fundamentally strong, but the risk profile is too high to ignore right now.</div>
+  <div class="verdict-body">Catalyst's financials are genuinely healthy — strong margins, excellent capital efficiency, and cheap valuation. But the combination of FIRDAPSE patent risk (Hetero trial, March 2026), FYCOMPA decline, and 72% single-distributor concentration creates a high-risk setup. The upside is real if patent clarity resolves in Catalyst's favour. Until then, we prefer to wait for the Hetero trial outcome and evidence of AGAMREE reaching meaningful scale before considering entry.</div>
+</div>
+
+</div>
+
+<div class="fnav">
+  <a href="index.html#reports" class="fb">← All Reports</a>
+  <a href="https://himanrbfintalk.substack.com" target="_blank" class="fs">Follow on Substack →</a>
+</div>
+<footer><div class="fi"><div class="fb2">Easy<b>Equity</b></div><div class="fd">For informational purposes only. Not financial advice. Always conduct your own research before making investment decisions. Past performance does not guarantee future results.</div></div></footer>
+</div>
+<script>
+(function(){const c=document.getElementById('cv');const x=c.getContext('2d');let W,H,n=[];const N=50;function r(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}function i(){n=[];for(let k=0;k<N;k++)n.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,r:Math.random()*1.3+0.3});}function d(){x.clearRect(0,0,W,H);for(let a=0;a<N;a++){for(let b=a+1;b<N;b++){const dx=n[a].x-n[b].x,dy=n[a].y-n[b].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<120){x.beginPath();x.moveTo(n[a].x,n[a].y);x.lineTo(n[b].x,n[b].y);x.strokeStyle=`rgba(148,163,184,${(1-dist/120)*.12})`;x.lineWidth=.5;x.stroke();}}x.beginPath();x.arc(n[a].x,n[a].y,n[a].r,0,Math.PI*2);x.fillStyle='rgba(203,213,225,0.4)';x.fill();n[a].x+=n[a].vx;n[a].y+=n[a].vy;if(n[a].x<0||n[a].x>W)n[a].vx*=-1;if(n[a].y<0||n[a].y>H)n[a].vy*=-1;}requestAnimationFrame(d);}window.addEventListener('resize',()=>{r();i();});r();i();d();})();
+const o=new IntersectionObserver(e=>e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('on');}),{threshold:0.06});document.querySelectorAll('.rv').forEach(el=>o.observe(el));
+</script>
+</body>
+</html>
