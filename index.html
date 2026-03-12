@@ -237,7 +237,7 @@ footer{position:relative;z-index:1;background:rgba(8,10,18,0.95);border-top:1px 
       <a href="#articles" class="btn-o">Read Articles</a>
     </div>
     <div class="hero-stats">
-      <div class="stat"><div class="stat-num">10<span>+</span></div><div class="stat-lbl">Active Reports</div></div>
+      <div class="stat"><div class="stat-num">11<span>+</span></div><div class="stat-lbl">Active Reports</div></div>
       <div class="stat"><div class="stat-num">100<span>%</span></div><div class="stat-lbl">Plain Language</div></div>
       <div class="stat"><div class="stat-num">10<span>min</span></div><div class="stat-lbl">Reads</div></div>
       <div class="stat"><div class="stat-num">Free</div><div class="stat-lbl">Always</div></div>
@@ -511,11 +511,36 @@ footer{position:relative;z-index:1;background:rgba(8,10,18,0.95);border-top:1px 
       </div>
     </div>
 
+    <!-- MELI -->
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="flip-front-body">
+            <div class="fcard-sym">MELI</div>
+            <div class="fcard-name">MercadoLibre</div>
+            <div class="fcard-sector">E-Commerce · FinTech</div>
+            <span class="fcard-tag tag-hold">WATCH</span>
+          </div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="fb-sym">MELI · E-COMMERCE</div>
+            <div class="fb-title">Amazon + PayPal of Latin America. 33% off highs. PEG 0.61, P/FCF 11×. Margins under pressure by design.</div>
+            <div class="fb-stats">
+              <div class="fb-stat"><div class="fb-stat-val" style="color:#3b82f6">+39%</div><div class="fb-stat-lbl">Rev Growth FY25</div></div>
+              <div class="fb-stat"><div class="fb-stat-val">51.8%</div><div class="fb-stat-lbl">Analyst Upside</div></div>
+            </div>
+          </div>
+          <a href="MELI_Analysis.html" class="fb-link"><span>Full Report</span><span class="fb-link-arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
   </div><!-- end more-reports -->
 
   <div class="expand-btn">
     <button id="expand-btn" onclick="toggleReports()">
-      <span id="expand-label">Show 6 More Reports</span>
+      <span id="expand-label">Show 7 More Reports</span>
       <span class="arr">▼</span>
     </button>
   </div>
@@ -786,7 +811,7 @@ function toggleReports() {
   const isOpen = grid.classList.contains('open');
   grid.classList.toggle('open');
   btn.classList.toggle('open');
-  label.textContent = isOpen ? 'Show 6 More Reports' : 'Show Less';
+  label.textContent = isOpen ? 'Show 7 More Reports' : 'Show Less';
 }
 
 

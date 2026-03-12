@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MELI — MercadoLibre | Easy Equity</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0f1117;--glass:rgba(255,255,255,0.04);--gb:rgba(255,255,255,0.09);--blue:#3b82f6;--blue-d:#1a4fd6;--text:#f1f5f9;--mid:rgba(241,245,249,0.65);--dim:rgba(241,245,249,0.35);--ac:#3b82f6;--acl:rgba(59,130,246,0.1);--red:#ef4444;--green:#10b981;--amber:#f59e0b;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.7;}
+#cv{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.pw{position:relative;z-index:1;}
+nav{background:rgba(15,17,23,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--gb);padding:0 52px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.nb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.nb:hover{color:#fff;border-color:rgba(255,255,255,0.2);background:var(--glass);}
+.hero{padding:56px 52px 36px;max-width:920px;margin:0 auto;}
+.ew{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.etag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:4px;font-weight:500;background:var(--acl);color:var(--ac);border:1px solid rgba(59,130,246,0.3);}
+.edate{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);}
+.verdict-pill{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:5px 14px;border-radius:20px;background:rgba(59,130,246,0.15);color:var(--ac);border:1px solid rgba(59,130,246,0.35);}
+h1{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:14px;}
+h1 .hl{color:var(--ac);}
+.sub{font-size:16px;color:var(--mid);line-height:1.65;margin-bottom:22px;font-style:italic;border-left:3px solid var(--ac);padding-left:16px;}
+.scorecard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px;}
+.sc{background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:16px;text-align:center;backdrop-filter:blur(8px);transition:border-color .2s;}
+.sc:hover{border-color:var(--ac);}
+.sv{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;color:var(--ac);letter-spacing:-.5px;}
+.sv.red{color:var(--red);}
+.sl{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);margin-top:4px;letter-spacing:.5px;text-transform:uppercase;}
+.body{max-width:860px;margin:0 auto;padding:0 52px 80px;}
+h2{font-size:21px;font-weight:800;color:#fff;letter-spacing:-.3px;margin:40px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--gb);}
+.p{font-size:15px;color:var(--mid);line-height:1.82;margin-bottom:16px;}
+.p strong{color:var(--text);font-weight:700;}
+.pq{margin:28px 0;padding:20px 26px;background:var(--glass);border:1px solid var(--gb);border-radius:12px;backdrop-filter:blur(10px);position:relative;}
+.pq::before{content:'"';position:absolute;top:-6px;left:22px;font-size:70px;color:rgba(255,255,255,0.05);font-family:'Playfair Display',serif;line-height:1;}
+.pq p{font-size:16px;color:var(--text);line-height:1.6;font-style:italic;font-weight:500;position:relative;z-index:1;}
+.pq cite{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;letter-spacing:.5px;font-style:normal;position:relative;z-index:1;}
+.bq-row{display:flex;align-items:center;gap:0;margin:6px 0;background:var(--glass);border:1px solid var(--gb);border-radius:8px;overflow:hidden;}
+.bq-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mid);padding:10px 16px;width:200px;flex-shrink:0;}
+.bq-bar-wrap{flex:1;padding:10px 16px 10px 0;display:flex;align-items:center;gap:10px;}
+.bq-bar{height:6px;border-radius:3px;background:var(--ac);}
+.bq-score{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--ac);width:28px;text-align:right;}
+.bq-total{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:8px;margin-top:8px;}
+.bq-total-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;}
+.bq-total-val{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:var(--ac);}
+.fin-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;}
+.fin-table th{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:1px solid var(--gb);}
+.fin-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--mid);}
+.fin-table td:first-child{color:var(--text);font-weight:600;}
+.fin-table td.up{color:var(--green);}
+.fin-table td.dn{color:var(--red);}
+.fin-table tr:hover td{background:rgba(255,255,255,0.02);}
+.ib{background:var(--acl);border:1px solid rgba(59,130,246,0.25);border-radius:10px;padding:18px 22px;margin:22px 0;}
+.ib.risk{background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.2);}
+.ib.warn{background:rgba(245,158,11,0.07);border-color:rgba(245,158,11,0.2);}
+.ib.good{background:rgba(16,185,129,0.07);border-color:rgba(16,185,129,0.2);}
+.il{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ac);text-transform:uppercase;margin-bottom:7px;}
+.ib.risk .il{color:var(--red);}
+.ib.warn .il{color:#f59e0b;}
+.ib.good .il{color:var(--green);}
+.it{font-size:14px;color:var(--mid);line-height:1.72;}
+.it strong{color:var(--text);}
+.verdict-box{margin:32px 0;padding:28px 32px;background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(59,130,246,0.03));border:1px solid rgba(59,130,246,0.3);border-radius:14px;backdrop-filter:blur(12px);}
+.verdict-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--ac);text-transform:uppercase;margin-bottom:10px;}
+.verdict-title{font-size:20px;font-weight:800;color:#fff;margin-bottom:10px;line-height:1.3;}
+.verdict-body{font-size:14px;color:var(--mid);line-height:1.8;}
+.fnav{max-width:860px;margin:0 auto;padding:0 52px 52px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+.fb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;padding:9px 15px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.fb:hover{color:#fff;border-color:rgba(255,255,255,0.2);}
+.fs{font-size:13px;font-weight:700;color:#fff;text-decoration:none;padding:9px 18px;background:var(--blue-d);border-radius:7px;transition:all .18s;}
+.fs:hover{background:var(--blue);}
+footer{background:rgba(11,21,38,0.9);border-top:1px solid var(--gb);padding:26px 52px;backdrop-filter:blur(10px);}
+.fi{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.fd{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,0.15);max-width:420px;line-height:1.6;}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease;}
+.rv.on{opacity:1;transform:translateY(0);}
+.geo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0;}
+.geo-card{background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:14px 18px;}
+.geo-name{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mid);margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase;}
+.geo-bar-row{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:12px;color:var(--dim);}
+.geo-bar-fill{height:5px;border-radius:3px;background:var(--ac);opacity:0.7;}
+.geo-bar-fill.fin{background:var(--amber);}
+.geo-val{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text);font-weight:600;min-width:38px;}
+@media(max-width:768px){nav,footer,.fnav{padding-left:18px;padding-right:18px;}.hero,.body{padding-left:18px;padding-right:18px;}h1{font-size:28px;}.scorecard{grid-template-columns:1fr 1fr;}.geo-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="pw">
+<nav>
+  <a href="index.html" class="logo"><img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCABAAMADASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAYHAwQCBQgBCf/EADoQAAEDAwIEAgcGBAcAAAAAAAECAwQABREGEgcTITFBURQic4GTstEIFTI1VGElM3GRCRcjQ2Jysf/EABsBAAEFAQEAAAAAAAAAAAAAAAACAwQFBgEH/8QANBEAAQQAAwQFCwUAAAAAAAAAAQACAxEEEiEFMUFRE3GBscEGFSIjMlJhYpGh8BQWQlPR/9oADAMBAAIRAxEAPwDyWkVkQnNcUCtqO0pxaUIGVKOAPM1MY0uNBMuNLihusgaqf2nT8GIwnnMofeI9ZSxkZ8gK3/u63/oYvwU/StfD5JzuYHPcAeSqH7VYDQFqsuSfKuKmqs/7ut/6GL8JP0r4bbbz3gRfhJ+lO/tGX+wfQpHnZvuqrForEpOKnGqbBHREXNhI5ZR1WgdiPMeVQx1NZvaOzpcDL0cnYeassNiWztzNWsRXyuahXCqwqUEpSlcXUpSlCEpSlCEpSlCEpSlCEpSlCEpSlCFnbFdrYk/xWH7dHzCuqa713Fh/NYnt0fMKn4IeuZ1jvUaf2CrJpSrJ4R6Bt15gzdW6ykuW7SduSQ48DtVIc6AIR3PQkdgSThI6k49bxWJjw0Zkk3fcngAOJKykUTpXZWqtq7+5aOv9t0dB1XOh8i2TnuTHUtWFrO0qCtvfaQk4Pj7xVv2/g5pa3XU6xmali3DQMdky0rSvc66U/wC0raMHr06dTjbgE5qs+LOvZ2utRKlKCo1rj/6dvhjASy2OxIHTce5/sOgFQIdonGTBuGHoj2iQdPlHzc+Xan34boWEybzuHj1KBXcZtMz2C/lNVi+Ks+7flUv2C/lNVlI71nPK4etj6j3qw2T7LlKuE/C/U/E+5ToGmBCL0JpLrvpL3LG0nAx0OetS7WP2Z+JeldL3HUd1Fm9Bt7Cn3+VMKl7R3wNvU1Pf8PoNnVWrw6opbNsb3EdwN5zUJ4sxuDbOkVjh/wAStY6gvbjzbaYM7m8pxsnCu7CAT5DPuNYZxOalejcqPpX6CaE4f6eZtemoFw4PaHtMCRHSiV9+PtPXNbhB/BhpW8noeq0nqegxUK4eaI4V2biTxI0yi26Wl6jjTUpscDURCo/KU0hYSkKCs4WpQO0FQAFczLtLxhSvdMyy6MtPFbTlk1ZwXsFmbv0ZcJcxliO9AckBO5PJASChWdwyQhR3DocZqDWLhlYuE+iuJ+qtY2K23Uw5SrfYWp8ZD6Tn+WtIWDgkuIBP/E0ZkUvP0PhxqeVEZlMsRi26gLRl8A4IyKj+oLPNsdyVb7glCX0pCiEq3DBGR1q09Vx9LvWXT51FdpsBYhDkiOkncNqc5wlX7VH9GWqwgagv7rSrrCtgPorb4/mDBIKgR/TuPdWkxOyoQ9sMWh3klwNCrNtAsKnhx0haZH7uVVxoa3Sr2lWW7Js1+4d3a5tadt1vlx3W29zDKR0Kk9QcdOhINanEe22+JrWyx4sGMwy60yXG22glKiXCDkDv0qFLsssj6RrwRpz4kjwUlmNzPyFtHX7AHxUU0zYZmoJT0aG5HbWyyXlF5RSCAR2wD161hRZrkuyLvSYxMBtfLU9vT0V06YznxHhVpJstn/zMusP7rhejN2wOIa5CdiVer6wGMA/vWrab0hnhC7NNntbgYkJaLC2ctuYKRvUM9VeOamDZETQWyOogP1HHLXCt3eo5x7yQWCwcv3VUUqeuQYuptAibbrbEj3SFL2PIjtBG9Cz6vbwGR38jWnxOj261v2+xQYzCHYcdJlPIQAtxxQH4j3Pn76r5dnujiMub0aBB53w6xRvqUtmLD3iOtbN/CvwKHUpSq5S1nartrCf4rD9uj5hXToNbsF8sSGnk9S2sKHuOal4V4ZI1x4EJiVuZpAVrVKtT67vF90nZdLuNx4lstLQQhqMFJD68Y5jgzgq7nt3Uo+NQ6DLYmxkvsLCkqHvB8jWevYCyKfLJoa1B8Vkcz2W3dzWcTJghKgiW+IilhamA4eWVDsrb2z+9YKUp4ADckWtW7/lUz2C/lNVi+etT/VdwaiWx1neC88koSnPXB7n+1V46qsD5WTMdO1jTqBqr7ZTCGEnirL+z5xcTwkvF2nq06L4m4xksFozPR9gCic52LznOMYFSHUfHDh/Ms0mPY+BGnbJc1JBi3BqQ2pUZwEFKwBHSTgjtkf1qilmuB71jCBdq5BXp2X9prSErUtu1xK4UIlaxhx0x0zHLqoNIQCd2xO0gHBVg7cjcep8entf2jLW/qLVzup+HcO6WLUzyXnIZkjnMENIQU83YN6TsSeySD2NeeqUnKF21dnFDjJI16NI6T0VplOnrbY5jSrWwZJfdU+MJb9YgYAzjHXOc5qw/t9a1kOnTugi6jnsMJuFzDZITzVJ2oT/T8ZwfMV5Wgy5UGYzMhSXosllYW08ysoW2odlJUOoI8xWW8XS53m4OXG8XGZcZruOZIlPKdcXgYGVKJJ6dKMqLU0VxAtUiBCi3LSEecYjIaQt2SD2ABIGzpnFaVv1uxAvMt+JYY7VsmNJbft4c9U4BGQdvfqfCobSrM7WxTiHFwsfBt8uWunNQxgYACK0PxP8AqtRyfbJ/CS8rtVoTbGEPpSWw6XCo7kHcSRnxx7q6ocQYL8aE7ctNMTbnCSEsyFO4GR2URj348/KoO3NmNw1w25b6Izh3LZS4QhR8ynsewrBT0u2JjlMelNAOgo0SQaqhV6JDNnxiw7XWxqb1AG+7U4TxAxquZfjac+kxBG5PpH4e3rbtvXt2xWjpfVke22GRYrpZ0XOC85zNvOLZSeniAfIeVRWlR/OeJzZy7XXgP5b9K4p39HDly1y4nhuVicHphj3u8zkIEe1txlOvIKioIAVlAz44G6oNep7t0u0q4PfjkOqWR5ZPQe4dKxMy5bEd2OzKfbZeGHW0OEJX/wBgOh99YaTNjDJh2QcGkntP53rseHDJXS86H0SlKVCUlckmsyFVrg1yBpQNJJC7CLLeYVuZecaJ8UKI/wDK203a4fr5XxVfWunC65BypMeKkYKa4jtTTomuNkLuPvaf+uk/FV9a4Ku1w/Xyviq+tdXzD518K6cONm98/UpPQM5LO88pxRWtZUo9yTkmtdas1xKq4k1Ec8u1KeDaXwmvlDSkFKSlKVxdSlKUISlKUISlKUISlKUISlKUISlKUIX/2Q==" alt="EasyEquity" style="height:30px;display:block;"></a>
+  <a href="index.html#reports" class="nb">← Back to Reports</a>
+</nav>
+
+<div class="hero">
+  <div class="ew rv">
+    <span class="etag">E-Commerce · FinTech</span>
+    <span class="edate">Mar 2026 · Stock Report</span>
+    <span class="verdict-pill">WATCH</span>
+  </div>
+  <h1 class="rv">MELI — <span class="hl">MercadoLibre</span></h1>
+  <div class="sub rv">The Amazon + PayPal of Latin America — 25 years old, structurally dominant, and still in the early innings of a continent's digital transformation. The story is compelling; the margin pressure is real; the patience required is high.</div>
+
+  <div class="scorecard rv">
+    <div class="sc"><div class="sv">$1,769</div><div class="sl">Current Price</div></div>
+    <div class="sc"><div class="sv">$89.7B</div><div class="sl">Market Cap</div></div>
+    <div class="sc"><div class="sv red">43.93×</div><div class="sl">P/E (Fwd: 22.6×)</div></div>
+    <div class="sc"><div class="sv">18/30</div><div class="sl">BQ Score</div></div>
+  </div>
+</div>
+
+<div class="body">
+
+<h2 class="rv">What Does MELI Do?</h2>
+<p class="p rv">MercadoLibre, founded in 1999 in Montevideo, Uruguay and headquartered in Buenos Aires, is the dominant digital commerce and fintech ecosystem across Latin America. It operates across 18 countries for e-commerce and 8 countries for its financial platform, serving a region of over 650 million people that remains almost a decade behind the US in e-commerce penetration.</p>
+
+<p class="p rv">The business is best understood as <strong>five interlocking platforms</strong>: the Marketplace (buy/sell), Mercado Pago (digital payments &amp; wallet), Mercado Envios (logistics &amp; last-mile delivery), Mercado Crédito (consumer and merchant lending), and Mercado Ads (advertising). Every product reinforces the others — a seller uses the marketplace, ships via Envios, gets paid through Pago, and borrows through Crédito. This flywheel is the moat.</p>
+
+<div class="ib rv">
+  <div class="il">The Flywheel in Numbers</div>
+  <div class="it"><strong>121 million</strong> unique marketplace buyers · <strong>78 million</strong> Mercado Pago monthly active users · Items sold per unique buyer growing <strong>+15% YoY</strong> · Fintech MAUs growing <strong>+27% YoY</strong> · FinTech AUM grew from $2B → $19B in 3 years · Credit portfolio grew <strong>91% YoY</strong> to $9.3B · Advertising revenue up <strong>67%</strong> in Q4 2025.</div>
+</div>
+
+<h2 class="rv">BQ Score — Business Quality</h2>
+<div class="rv">
+  <div class="bq-row"><div class="bq-label">Revenue Growth</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-row"><div class="bq-label">Gross Margin</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:33%"></div><div class="bq-score">2</div></div></div>
+  <div class="bq-row"><div class="bq-label">Operating Cost Control</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:66%"></div><div class="bq-score">4</div></div></div>
+  <div class="bq-row"><div class="bq-label">Operating Margin</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:33%"></div><div class="bq-score">2</div></div></div>
+  <div class="bq-row"><div class="bq-label">Net Income</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-row"><div class="bq-label">Free Cash Flow</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:66%"></div><div class="bq-score">4</div></div></div>
+  <div class="bq-row"><div class="bq-label">Overall Quality</div><div class="bq-bar-wrap"><div class="bq-bar" style="width:50%"></div><div class="bq-score">3</div></div></div>
+  <div class="bq-total"><div class="bq-total-label">BQ Total Score</div><div class="bq-total-val">18 / 30</div></div>
+</div>
+
+<h2 class="rv">Revenue Breakdown — Geography &amp; Segment</h2>
+<p class="p rv">Revenue grew <strong>39% in FY2025</strong> (annual) and accelerated to <strong>45% in Q4 2025</strong>. Brazil is the dominant market at 53% of revenue. The split between Commerce and Fintech has been shifting toward Fintech as Mercado Pago scales.</p>
+
+<div class="geo-grid rv">
+  <div class="geo-card">
+    <div class="geo-name">Brazil — 53% of Revenue (+33%)</div>
+    <div class="geo-bar-row"><span style="width:80px;display:inline-block">Commerce 60%</span><div class="geo-bar-fill" style="width:60px"></div><div class="geo-val">+30%</div></div>
+    <div class="geo-bar-row"><span style="width:80px;display:inline-block">Fintech 40%</span><div class="geo-bar-fill fin" style="width:40px"></div><div class="geo-val">+38%</div></div>
+  </div>
+  <div class="geo-card">
+    <div class="geo-name">Mexico — 22% of Revenue (+39%)</div>
+    <div class="geo-bar-row"><span style="width:80px;display:inline-block">Commerce 67%</span><div class="geo-bar-fill" style="width:67px"></div><div class="geo-val">+36%</div></div>
+    <div class="geo-bar-row"><span style="width:80px;display:inline-block">Fintech 33%</span><div class="geo-bar-fill fin" style="width:33px"></div><div class="geo-val">+44%</div></div>
+  </div>
+  <div class="geo-card">
+    <div class="geo-name">Argentina — 21% of Revenue (+56%)</div>
+    <div class="geo-bar-row"><span style="width:80px;display:inline-block">Commerce 33%</span><div class="geo-bar-fill" style="width:33px"></div><div class="geo-val">+45%</div></div>
+    <div class="geo-bar-row"><span style="width:80px;display:inline-block">Fintech 67%</span><div class="geo-bar-fill fin" style="width:67px"></div><div class="geo-val">+63%</div></div>
+  </div>
+  <div class="geo-card">
+    <div class="geo-name">Other Countries — 4% of Revenue (+41%)</div>
+    <div class="geo-bar-row"><span style="width:80px;display:inline-block">Commerce 75%</span><div class="geo-bar-fill" style="width:75px"></div><div class="geo-val">+39%</div></div>
+    <div class="geo-bar-row"><span style="width:80px;display:inline-block">Fintech 25%</span><div class="geo-bar-fill fin" style="width:25px"></div><div class="geo-val">+47%</div></div>
+  </div>
+</div>
+
+<h2 class="rv">Financial Performance — Quarterly Trend</h2>
+<table class="fin-table rv">
+  <tr><th>Period</th><th>Rev Growth</th><th>Gross Margin</th><th>Op Margin</th><th>OCF Margin</th></tr>
+  <tr><td>FY2024 (10K)</td><td class="up">+37%</td><td>46.4%</td><td class="dn">12.56% (-14%)</td><td class="up">38.16%</td></tr>
+  <tr><td>Q1 2025 (Mar)</td><td class="up">+37%</td><td>46.68%</td><td>12.85%</td><td class="dn">17.37% (-50%)</td></tr>
+  <tr><td>Q2 2025 (Jun)</td><td class="up">+34%</td><td class="dn">45.56% (-2%)</td><td class="dn">12.15% (-15%)</td><td>—</td></tr>
+  <tr><td>Q3 2025 (Sep)</td><td class="up">+39%</td><td class="dn">43.31% (-5%)</td><td class="dn">9.7% (-7%)</td><td>—</td></tr>
+  <tr><td>Q4 2025 (Dec)</td><td class="up">+45%</td><td class="dn">43.2% (-5%)</td><td class="dn">10.1% (-25%)</td><td>—</td></tr>
+  <tr><td>FY2025 (10K)</td><td class="up">+39%</td><td class="dn">44.4% (-3%)</td><td class="dn">11.11% (-11%)</td><td class="up">43.75% (+11%)</td></tr>
+</table>
+
+<p class="p rv">The margin compression is the central tension of this stock. Revenue is accelerating beautifully — but gross margins have declined from 46.4% (FY2024) to 44.4% (FY2025), and operating margins fell from 12.56% to 11.11% YoY. The CFO has been explicit about this tradeoff: invest aggressively now, harvest margins later. Critically, <strong>operating cash flow margin recovered to 43.75% in FY2025</strong>, showing the underlying cash generation remains strong despite reported margin pressure.</p>
+
+<div class="pq rv">
+  <p>We do not solve for short-term margin optimization. Our plan for 2026 will be consistent with this bold and disciplined approach to investing in long-term growth.</p>
+  <cite>— MercadoLibre Management, Q4 2025 Earnings</cite>
+</div>
+
+<h2 class="rv">Valuation</h2>
+<table class="fin-table rv">
+  <tr><th>Metric</th><th>MELI</th><th>Industry</th><th>Rank (out of 40 peers)</th></tr>
+  <tr><td>P/E</td><td class="dn">43.93×</td><td>30.58×</td><td>16/40</td></tr>
+  <tr><td>Fwd P/E</td><td>22.58×</td><td>—</td><td>14/40</td></tr>
+  <tr><td>PEG Ratio</td><td class="up">0.61</td><td>—</td><td class="up">6/40 ✓</td></tr>
+  <tr><td>P/Sales</td><td>3.04×</td><td>—</td><td>30/40</td></tr>
+  <tr><td>P/Book</td><td class="dn">13.00×</td><td>—</td><td>31/40</td></tr>
+  <tr><td>P/FCF</td><td class="up">11.03×</td><td>—</td><td class="up">7/40 ✓</td></tr>
+</table>
+
+<p class="p rv">The headline P/E of 43.93× looks expensive against an industry average of 30.58×. But the <strong>PEG of 0.61 and P/FCF of 11×</strong> tell a different story — for the growth rate MELI is delivering (39% revenue, 31.75% expected 2026), it is not obviously overpriced. The stock has pulled back significantly from its high of $2,645 to $1,769 — a 33% drawdown — which has improved the entry setup materially.</p>
+
+<div class="ib good rv">
+  <div class="il">Return Quality</div>
+  <div class="it">ROE: <strong>35.99%</strong> (rank 3/40) · ROIC: <strong>15.04%</strong> (rank 6/40) · ROA: <strong>5.89%</strong> · P/FCF: <strong>11.03×</strong> (rank 7/40). The capital is being deployed productively — returns on equity and invested capital are class-leading for the peer group. Management has reinvested aggressively since IPO with no dividend, compounding returns instead.</div>
+</div>
+
+<h2 class="rv">Analyst Consensus</h2>
+<table class="fin-table rv">
+  <tr><th>Analysts</th><th>Verdict</th><th>Low Target</th><th>High Target</th><th>Avg Target</th><th>Upside (vs $1,769)</th></tr>
+  <tr><td>26 analysts (25 Buy : 1 Hold)</td><td class="up">Strong Buy</td><td>$2,190</td><td>$3,500</td><td class="up">$2,684.92</td><td class="up">+51.8%</td></tr>
+</table>
+
+<p class="p rv">25 out of 26 analysts rate MELI a Buy — one of the strongest conviction readings in the sector. The consensus target of $2,684 implies over 51% upside from current levels. Revenue growth expectations: <strong>+31.75% in 2026</strong>, <strong>+23.86% in 2027</strong>. Recent earnings surprises have been mixed (two misses, one beat, one in-line), which explains part of the stock's underperformance from its highs.</p>
+
+<h2 class="rv">The Opportunity — Why Latin America Still Has Decades of Runway</h2>
+
+<div class="ib rv">
+  <div class="il">The E-Commerce Gap</div>
+  <div class="it">E-commerce penetration in Latin America sits at mid-teens as a percentage of total retail — <strong>almost a decade behind the US</strong>. The market is forecast to grow 54% from $151B (2023) to $232B by 2028. MercadoLibre holds approximately <strong>26% market share</strong> as of 2023 and is the clear infrastructure layer of this expansion.</div>
+</div>
+
+<div class="ib rv">
+  <div class="il">The FinTech Underbanked Opportunity</div>
+  <div class="it">In Mexico, only about half the population has a bank account — fewer still have a credit card. Mercado Pago is filling this gap at scale. Its credit portfolio grew <strong>90% YoY</strong> to $9.3B. AUM grew from $2B to $19B in three years. The AI assistant now resolves <strong>87% of user interactions</strong> without human intervention. This is infrastructure-level financial inclusion.</div>
+</div>
+
+<div class="ib rv">
+  <div class="il">Logistics Efficiency as Competitive Moat</div>
+  <div class="it">Unit shipping cost fell <strong>11% in FY2025</strong> as logistics scale drives down per-unit costs. MercadoLibre invested <strong>$5.8B in Brazil alone in 2025</strong> (+47.8% YoY), which lowered the free-shipping threshold and drove a <strong>34% GMV jump</strong> with fastest unique buyer growth since early 2021. Building this network is expensive — and almost impossible for a new entrant to replicate.</div>
+</div>
+
+<h2 class="rv">Key Risks</h2>
+
+<div class="ib risk rv">
+  <div class="il">Risk 1 — Margin Compression Continuing</div>
+  <div class="it">Gross margin has declined four consecutive quarters (46.4% → 44.4%). Management has explicitly guided that they will continue to invest aggressively in 2026 — meaning margin pressure is a feature, not a bug, of the near-term outlook. If revenue growth slows before margins recover, the stock could face a sharp re-rating downward from its current premium valuation.</div>
+</div>
+
+<div class="ib risk rv">
+  <div class="il">Risk 2 — Bad Debt &amp; Credit Portfolio</div>
+  <div class="it">The 91% growth in the credit portfolio is impressive — but it also carries meaningful NPL risk. Management says the portfolio is well-provisioned, and The Patient Investor notes the EBIT impact is primarily driven by bad debt provisions (approximately 2.5× impact). A macro downturn in Latin America could stress the credit book significantly.</div>
+</div>
+
+<div class="ib warn rv">
+  <div class="il">Risk 3 — FX &amp; Macro (Argentina &amp; Brazil)</div>
+  <div class="it">The CFO specifically flagged peso devaluation and higher tax rates in Argentina as headwinds to net profit in Q3 2025. Brazil's macro environment is volatile. Despite Argentina contributing 21% of revenue with 56% growth, currency devaluation can render nominal growth meaningless in dollar terms. FX remains a persistent and uncontrollable variable.</div>
+</div>
+
+<div class="ib warn rv">
+  <div class="il">Risk 4 — Valuation Premium at Risk</div>
+  <div class="it">At 43.93× P/E vs an industry average of 30.58×, MELI trades at a meaningful premium. The PEG ratio justifies the premium if growth delivers — but <strong>two consecutive earnings misses</strong> have already shaken confidence. Any sustained slowdown or further earnings disappointment could compress the multiple sharply. The stock is already 33% below its all-time high.</div>
+</div>
+
+<div class="ib warn rv">
+  <div class="il">Risk 5 — Competitive Pressure</div>
+  <div class="it">While MercadoLibre is dominant, it is not without competition. Amazon has been expanding in Latin America. Local fintech players and regional banks are building competing digital wallets. Shopee (Sea Limited) has made inroads in some markets. The moat is wide but not impenetrable, and the competitive landscape is intensifying.</div>
+</div>
+
+<div class="verdict-box rv">
+  <div class="verdict-label">Easy Equity Verdict</div>
+  <div class="verdict-title">Structurally exceptional business — watch for a clean entry after margin stabilisation.</div>
+  <div class="verdict-body">MercadoLibre is one of the most compelling long-term compounders outside the US. The flywheel is real, the TAM is massive, and management has earned credibility by reinvesting rather than extracting since IPO. The platform's network effects deepen every quarter — more buyers attract more sellers, more payments grow the credit book, better logistics lowers costs and increases GMV. The long-term trajectory is clear.<br><br>The near-term picture is more complex. Margins are under deliberate pressure. Two earnings misses have damaged near-term sentiment. The credit portfolio carries real risk. And the valuation, while not extreme on a PEG basis, leaves no room for disappointment.<br><br>For a long-term investor, the 33% drawdown from highs has created a meaningfully better entry point. The PEG of 0.61 and P/FCF of 11× suggest the market may be mispricing the long-term cash generation. Watch for gross margin stabilisation above 44% and two consecutive quarters of operating margin recovery before building a full position. Even growing at the market rate, this business likely sustains 15–20% long-term growth — and that is a rare thing at this scale.</div>
+</div>
+
+</div>
+
+<div class="fnav">
+  <a href="index.html#reports" class="fb">← All Reports</a>
+  <a href="https://himanrbfintalk.substack.com" target="_blank" class="fs">Follow on Substack →</a>
+</div>
+<footer><div class="fi"><img src="data:image/png;base64,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" alt="EasyEquity" style="height:24px;display:block;opacity:0.7;"><div class="fd">For informational purposes only. Not financial advice. Always conduct your own research before making investment decisions. Past performance does not guarantee future results.</div></div></footer>
+</div>
+<script>
+(function(){const c=document.getElementById('cv');const x=c.getContext('2d');let W,H,n=[];const N=50;function r(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}function i(){n=[];for(let k=0;k<N;k++)n.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,r:Math.random()*1.3+0.3});}function d(){x.clearRect(0,0,W,H);for(let a=0;a<N;a++){for(let b=a+1;b<N;b++){const dx=n[a].x-n[b].x,dy=n[a].y-n[b].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<120){x.beginPath();x.moveTo(n[a].x,n[a].y);x.lineTo(n[b].x,n[b].y);x.strokeStyle=`rgba(148,163,184,${(1-dist/120)*.12})`;x.lineWidth=.5;x.stroke();}}x.beginPath();x.arc(n[a].x,n[a].y,n[a].r,0,Math.PI*2);x.fillStyle='rgba(203,213,225,0.4)';x.fill();n[a].x+=n[a].vx;n[a].y+=n[a].vy;if(n[a].x<0||n[a].x>W)n[a].vx*=-1;if(n[a].y<0||n[a].y>H)n[a].vy*=-1;}requestAnimationFrame(d);}window.addEventListener('resize',()=>{r();i();});r();i();d();})();
+const o=new IntersectionObserver(e=>e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('on');}),{threshold:0.06});document.querySelectorAll('.rv').forEach(el=>o.observe(el));
+</script>
+</body>
+</html>
