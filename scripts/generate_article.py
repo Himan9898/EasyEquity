@@ -62,72 +62,60 @@ def search_news(topic: str) -> str:
 
 
 # ── STEP 2: CALL GEMINI API (free) ───────────────────────────────────
-def generate_article(topic: str, news_context: str) -> dict:
+def generate_article(topic: str) -> dict:
 
     prompt = f"""You are the writer for EasyEquity, a stock research and financial education website.
 Write a sharp, plain-English financial article published today ({TODAY}).
-
 Tone: intelligent but accessible. Like a smart friend who works in finance.
-Style: direct sentences, no fluff, clear takeaways. Connect news back to what it means for investors.
+Style: direct sentences, no fluff, clear takeaways. Connect the topic to what it means for everyday investors.
 
 Topic: {topic}
 
-Latest news headlines for context:
-{news_context}
-
-Return ONLY valid JSON — no markdown, no backticks, no explanation. Just the raw JSON object:
+Return ONLY raw JSON — absolutely no markdown, no backticks, no explanation before or after:
 {{
-  "title": "Article title (compelling, 6-12 words)",
+  "title": "Article title (6-12 words)",
   "subtitle": "One sentence hook (20-30 words)",
   "tag": "One of: Geopolitics | Markets | Fed Watch | EM Focus | Macro | Finance 101",
   "read_time": "X min read",
   "sections": [
     {{
       "heading": "Section heading",
-      "body": "3-5 paragraphs separated by <br><br>. Use <strong> for emphasis. No h tags.",
+      "body": "2-3 paragraphs separated by <br><br>. Use <strong> for key terms. No h tags.",
       "callout": null
     }},
     {{
       "heading": "Section heading",
       "body": "...",
-      "callout": {{
-        "label": "KEY INSIGHT",
-        "text": "2-3 sentence key data point or insight."
-      }}
+      "callout": {{"label": "KEY INSIGHT", "text": "One key insight in 2 sentences."}}
     }}
   ],
-  "key_takeaway": "2-3 sentence bottom line for investors.",
+  "key_takeaway": "2 sentence bottom line for investors.",
   "slug": "short-url-slug"
 }}
 
-Write 4-5 sections. Aim for 600-800 words total. Use real numbers from the news context."""
+Write 4 sections. Keep it concise — 400-500 words total."""
 
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
     headers = {"Content-Type": "application/json"}
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "temperature": 0.7,
-            "maxOutputTokens": 4096,
-        }
+        "generationConfig": {"temperature": 0.7, "maxOutputTokens": 2048}
     }
 
-    for attempt in range(3):
+    for attempt in range(4):
         try:
             r = requests.post(url, headers=headers, json=payload, timeout=90)
             r.raise_for_status()
             break
-        except requests.exceptions.HTTPError as e:
-            if r.status_code == 429 and attempt < 2:
-                wait = 30 * (attempt + 1)
-                print(f"Rate limited — waiting {wait}s before retry {attempt+2}/3...")
+        except requests.exceptions.HTTPError:
+            if r.status_code == 429 and attempt < 3:
+                wait = 20 * (attempt + 1)
+                print(f"Rate limited — waiting {wait}s before retry {attempt+2}/4...")
                 time.sleep(wait)
             else:
                 raise
 
     raw = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
-
-    # Strip any accidental markdown fences
     raw = re.sub(r"^```json\s*", "", raw, flags=re.MULTILINE)
     raw = re.sub(r"^```\s*", "", raw, flags=re.MULTILINE)
     raw = raw.strip().strip("`")
@@ -278,12 +266,8 @@ def main():
     logo_b64  = (repo_root / "logo.b64").read_text().strip() if (repo_root / "logo.b64").exists() else ""
 
     print(f"Topic today: {TOPIC}")
-
-    print("Searching for news...")
-    news = search_news(TOPIC)
-
     print("Calling Gemini API...")
-    article = generate_article(TOPIC, news)
+    article = generate_article(TOPIC)
     print(f"Title: {article['title']}")
 
     slug     = re.sub(r"[^a-z0-9\-]", "", article.get("slug", "article").lower().replace(" ", "-"))
