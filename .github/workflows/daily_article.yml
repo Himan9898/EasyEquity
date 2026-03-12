@@ -1,0 +1,46 @@
+name: Daily Article Generator (Free)
+
+on:
+  schedule:
+    - cron: '0 7 * * *'   # Every day at 7am UTC = 12:30pm India time
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Custom topic (optional)'
+        required: false
+        default: ''
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run article generator
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
+          CUSTOM_TOPIC:   ${{ github.event.inputs.topic }}
+        run: python scripts/generate_article.py
+
+      - name: Commit and push
+        run: |
+          git config user.name  "EasyEquity Bot"
+          git config user.email "bot@easyequity.jo3.org"
+          git add -A
+          git diff --staged --quiet || git commit -m "Auto article $(date +'%Y-%m-%d')"
+          git push
