@@ -9,6 +9,7 @@ import os
 import sys
 import json
 import re
+import time
 import datetime
 import requests
 from pathlib import Path
@@ -43,14 +44,14 @@ def search_news(topic: str) -> str:
 
     url = "https://google.serper.dev/news"
     headers = {"X-API-KEY": SERPER_API_KEY, "Content-Type": "application/json"}
-    payload = {"q": topic, "num": 8}
+    payload = {"q": topic, "num": 3}  # reduced to 3
 
     try:
         r = requests.post(url, headers=headers, json=payload, timeout=15)
         r.raise_for_status()
         articles = r.json().get("news", [])
         lines = []
-        for a in articles[:8]:
+        for a in articles[:3]:
             lines.append(f"- {a.get('title','')} ({a.get('source','')}, {a.get('date','')}): {a.get('snippet','')}")
         result = "\n".join(lines)
         print(f"Found {len(articles)} news articles")
@@ -111,8 +112,18 @@ Write 4-5 sections. Aim for 600-800 words total. Use real numbers from the news 
         }
     }
 
-    r = requests.post(url, headers=headers, json=payload, timeout=90)
-    r.raise_for_status()
+    for attempt in range(3):
+        try:
+            r = requests.post(url, headers=headers, json=payload, timeout=90)
+            r.raise_for_status()
+            break
+        except requests.exceptions.HTTPError as e:
+            if r.status_code == 429 and attempt < 2:
+                wait = 30 * (attempt + 1)
+                print(f"Rate limited — waiting {wait}s before retry {attempt+2}/3...")
+                time.sleep(wait)
+            else:
+                raise
 
     raw = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
 
