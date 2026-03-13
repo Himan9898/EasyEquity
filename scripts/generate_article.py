@@ -18,7 +18,7 @@ from pathlib import Path
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 SERPER_API_KEY = os.environ.get("SERPER_API_KEY", "")
 # Free Gemini model — no cost, no credit card needed
-GEMINI_MODEL   = "gemini-1.5-flash-8b"
+GEMINI_MODEL   = "gemini-2.5-flash-lite"
 TODAY          = datetime.date.today().strftime("%b %d, %Y")
 SLUG_DATE      = datetime.date.today().strftime("%Y-%m-%d")
 
