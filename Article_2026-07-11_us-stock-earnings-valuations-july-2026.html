@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>US Stocks: Earnings Power vs. Sky-High Prices | Easy Equity</title>
+<meta name="description" content="Are corporate profits justifying today's lofty stock market valuations, or are we due for a reality check?">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0f1117;--glass:rgba(255,255,255,0.04);--gb:rgba(255,255,255,0.09);--blue:#3b82f6;--blue-d:#1a4fd6;--ac:#3b82f6;--acl:rgba(59,130,246,0.1);--text:#f1f5f9;--mid:rgba(241,245,249,0.65);--dim:rgba(241,245,249,0.35);}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.7;}
+#cv{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.pw{position:relative;z-index:1;}
+nav{background:rgba(15,17,23,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--gb);padding:0 52px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.nb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.nb:hover{color:#fff;border-color:rgba(255,255,255,0.2);background:var(--glass);}
+.hero{padding:64px 52px 44px;max-width:860px;margin:0 auto;}
+.ew{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.etag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:4px;font-weight:500;background:var(--acl);color:var(--ac);border:1px solid var(--ac);opacity:0.85;}
+.edate{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);}
+.etime{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);}
+h1{font-family:'Playfair Display',serif;font-size:44px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:16px;}
+.sub{font-size:17px;color:var(--mid);line-height:1.65;margin-bottom:26px;font-style:italic;border-left:3px solid var(--ac);padding-left:16px;}
+.body{max-width:720px;margin:0 auto;padding:0 52px 80px;}
+h2{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.3px;margin:44px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--gb);}
+.p{font-size:15px;color:var(--mid);line-height:1.82;margin-bottom:18px;}
+.p strong{color:var(--text);font-weight:700;}
+.ib{background:var(--acl);border:1px solid rgba(59,130,246,0.3);border-radius:10px;padding:20px 24px;margin:26px 0;}
+.il{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ac);text-transform:uppercase;margin-bottom:7px;}
+.it{font-size:14px;color:var(--mid);line-height:1.72;}
+.it strong{color:var(--text);}
+.verdict-box{margin:36px 0;padding:28px 32px;background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(59,130,246,0.03));border:1px solid rgba(59,130,246,0.3);border-radius:14px;}
+.verdict-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--ac);text-transform:uppercase;margin-bottom:10px;}
+.verdict-body{font-size:14px;color:var(--mid);line-height:1.8;}
+.fnav{max-width:720px;margin:0 auto;padding:0 52px 52px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+.fb{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);text-decoration:none;padding:9px 15px;border:1px solid var(--gb);border-radius:7px;transition:all .18s;}
+.fb:hover{color:#fff;border-color:rgba(255,255,255,0.2);}
+.fs{font-size:13px;font-weight:700;color:#fff;text-decoration:none;padding:9px 18px;background:var(--blue-d);border-radius:7px;transition:all .18s;}
+.fs:hover{background:var(--blue);}
+footer{background:rgba(11,21,38,0.9);border-top:1px solid var(--gb);padding:26px 52px;backdrop-filter:blur(10px);}
+.fi{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.fd{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,0.15);max-width:420px;line-height:1.6;}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease;}
+.rv.on{opacity:1;transform:translateY(0);}
+@media(max-width:768px){nav,footer,.fnav{padding-left:18px;padding-right:18px;}.hero,.body{padding-left:18px;padding-right:18px;}h1{font-size:28px;}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="pw">
+<nav>
+  <a href="index.html" class="logo"><span style="color:#fff;font-weight:800;font-size:17px;">Easy<b style='color:#3b82f6'>Equity</b></span></a>
+  <a href="index.html#articles" class="nb">← Back to Articles</a>
+</nav>
+<div class="hero">
+  <div class="ew rv">
+    <span class="etag">Markets</span>
+    <span class="edate">Jul 11, 2026</span>
+    <span class="etime">4 min read</span>
+  </div>
+  <h1 class="rv">US Stocks: Earnings Power vs. Sky-High Prices</h1>
+  <div class="sub rv">Are corporate profits justifying today's lofty stock market valuations, or are we due for a reality check?</div>
+</div>
+<div class="body">
+<h2 class="rv">The Earnings Engine: Still Humming?</h2>
+<div class="p rv">The US stock market has been on a tear, but the real question for investors is: are companies actually earning enough to justify these prices? So far in 2026, corporate earnings have shown resilience. Many companies, particularly in technology and healthcare, have continued to deliver solid profit growth. This is driven by ongoing innovation, strong consumer demand for certain products and services, and effective cost management.  <br><br>  However, the pace of this growth is starting to face headwinds. Inflation, while moderating, still impacts input costs. Global supply chain hiccups, though improved, can still cause disruptions. And the higher interest rate environment, even if stable, makes borrowing more expensive for businesses, potentially squeezing margins.</div>
+<h2 class="rv">Valuation: The Price of Admission</h2>
+<div class="p rv">When we talk about <strong>valuation</strong>, we're essentially asking: how much are investors willing to pay for each dollar of a company's earnings? Right now, many stocks are trading at historically high <strong>price-to-earnings (P/E) ratios</strong>. This means investors are paying a premium, expecting future earnings growth to be substantial.  <br><br>  This elevated valuation isn't necessarily a bad thing on its own. If companies can consistently deliver on those high growth expectations, the market can continue to climb. But it does leave less room for error. A slight miss on earnings, or a slowdown in growth, could lead to a sharper pullback than we've seen in more reasonably valued markets.</div>
+<div class="ib rv">
+  <div class="il">KEY INSIGHT</div>
+  <div class="it">High valuations mean stock prices are more sensitive to earnings disappointments. Investors are paying for future growth, so that growth needs to materialize.</div>
+</div>
+<h2 class="rv">Sector Divergence: Not All Stocks Are Created Equal</h2>
+<div class="p rv">It's crucial to remember that the 'stock market' isn't a single entity. Performance is highly uneven. The tech sector, with its dominant players, continues to be a major driver. Companies with strong recurring revenue models and significant pricing power are faring better.  <br><br>  Conversely, sectors more sensitive to consumer spending on discretionary items, or those heavily reliant on borrowing, might be showing less robust earnings and facing tougher valuation multiples. As an investor, understanding these sector differences is key to navigating the current landscape.</div>
+<h2 class="rv">What This Means for You</h2>
+<div class="p rv">For everyday investors, this environment calls for a balanced approach. Don't chase every hot stock just because the market is up. Focus on companies with solid fundamentals, proven profitability, and reasonable valuations relative to their growth prospects.  <br><br>  Diversification across different sectors and asset classes remains your best defense. Be wary of overly optimistic projections and understand that market corrections, while uncomfortable, are a normal part of investing. Focus on your long-term goals and avoid making emotional decisions based on short-term market noise. The earnings engine is still running, but it's important to ensure the price you're paying is justified by the power it's generating.</div>
+
+<div class="verdict-box rv">
+  <div class="verdict-label">Key Takeaway</div>
+  <div class="verdict-body">US stocks currently trade at high valuations, demanding strong and consistent earnings growth from companies. Investors should prioritize fundamentals and diversification to navigate this environment.</div>
+</div>
+</div>
+<div class="fnav">
+  <a href="index.html#articles" class="fb">← All Articles</a>
+  <a href="https://himanrbfintalk.substack.com" target="_blank" class="fs">Follow on Substack →</a>
+</div>
+<footer><div class="fi"><div class="fd">For informational purposes only. Not financial advice. Always do your own research.</div></div></footer>
+</div>
+<script>
+(function(){const c=document.getElementById('cv');const x=c.getContext('2d');let W,H,n=[];const N=50;function r(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}function i(){n=[];for(let k=0;k<N;k++)n.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,r:Math.random()*1.3+0.3});}function d(){x.clearRect(0,0,W,H);for(let a=0;a<N;a++){for(let b=a+1;b<N;b++){const dx=n[a].x-n[b].x,dy=n[a].y-n[b].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<120){x.beginPath();x.moveTo(n[a].x,n[a].y);x.lineTo(n[b].x,n[b].y);x.strokeStyle=`rgba(148,163,184,${(1-dist/120)*.12})`;x.lineWidth=.5;x.stroke();}}x.beginPath();x.arc(n[a].x,n[a].y,n[a].r,0,Math.PI*2);x.fillStyle='rgba(203,213,225,0.4)';x.fill();n[a].x+=n[a].vx;n[a].y+=n[a].vy;if(n[a].x<0||n[a].x>W)n[a].vx*=-1;if(n[a].y<0||n[a].y>H)n[a].vy*=-1;}requestAnimationFrame(d);}window.addEventListener('resize',()=>{r();i();});r();i();d();})();
+const o=new IntersectionObserver(e=>e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('on');}),{threshold:0.06});document.querySelectorAll('.rv').forEach(el=>o.observe(el));
+</script>
+</body>
+</html>
